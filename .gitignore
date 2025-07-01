@@ -1,0 +1,20 @@
+# Arquivos de modelo MATLAB grandes
+*.mat
+!config_caminhos.mat
+
+# Arquivos temporários do MATLAB
+*.asv
+*.autosave
+
+# Arquivos de cache
+*.mexa64
+*.mexw64
+*.mex
+
+# Diretórios de saída
+resultados/
+modelos_salvos/
+*.log
+
+# Arquivos grandes específicos
+1/unet_256_final.mat
