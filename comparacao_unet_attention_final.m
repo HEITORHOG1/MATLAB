@@ -160,11 +160,12 @@ function net = treinar_modelo(dsTrain, dsVal, config, tipo)
     
     % Criar arquitetura
     if strcmp(tipo, 'attention')
-        % Usar implementação interna simplificada
+        % Usar VERDADEIRA Attention U-Net
         try
-            lgraph = create_attention_unet_interno(inputSize, numClasses);
-        catch
-            fprintf('Attention U-Net não disponível, usando U-Net aprimorada...\n');
+            lgraph = create_true_attention_unet(inputSize, numClasses);
+        catch ME
+            fprintf('⚠️ Erro na Attention U-Net: %s\n', ME.message);
+            fprintf('🔄 Usando U-Net aprimorada como fallback...\n');
             lgraph = unetLayers(inputSize, numClasses, 'EncoderDepth', 4);
         end
     else
@@ -292,50 +293,77 @@ end
 
 function gerar_comparacao_visual(netUNet, netAttUNet, dsVal, numVal)
     % Gerar comparação visual entre os modelos
+    % VERSÃO CORRIGIDA - Tratamento correto de tipos categorical
     
-    figure('Name', 'Comparação Visual dos Modelos', 'Position', [100 100 1600 800]);
-    
-    reset(dsVal);
-    for i = 1:min(3, numVal)  % CORREÇÃO DEFINITIVA - Usar numVal
-        if hasdata(dsVal)
-            data = read(dsVal);
-            img = data{1};
-            gt = data{2};
-            
-            predUNet = semanticseg(img, netUNet);
-            predAttUNet = semanticseg(img, netAttUNet);
-            
-            % Subplot para cada amostra
-            subplot(3, 5, (i-1)*5 + 1);
-            imshow(img);
-            title(sprintf('Imagem %d', i));
-            
-            subplot(3, 5, (i-1)*5 + 2);
-            imshow(gt, []);
-            title('Ground Truth');
-            
-            subplot(3, 5, (i-1)*5 + 3);
-            imshow(predUNet, []);
-            title('U-Net');
-            
-            subplot(3, 5, (i-1)*5 + 4);
-            imshow(predAttUNet, []);
-            title('Attention U-Net');
-            
-            % Diferença
-            subplot(3, 5, (i-1)*5 + 5);
-            diff = abs(double(predUNet) - double(predAttUNet));
-            imshow(diff, []);
-            title('Diferença');
-            colorbar;
+    try
+        figure('Name', 'Comparação Visual dos Modelos', 'Position', [100 100 1600 800]);
+        
+        reset(dsVal);
+        for i = 1:min(3, numVal)  % CORREÇÃO DEFINITIVA - Usar numVal
+            if hasdata(dsVal)
+                data = read(dsVal);
+                img = data{1};
+                gt = data{2};
+                
+                predUNet = semanticseg(img, netUNet);
+                predAttUNet = semanticseg(img, netAttUNet);
+                
+                % Converter categorical para uint8 para visualização
+                if iscategorical(gt)
+                    gt_visual = uint8(gt == "foreground") * 255;
+                else
+                    gt_visual = uint8(gt);
+                end
+                
+                if iscategorical(predUNet)
+                    pred_unet_visual = uint8(predUNet == "foreground") * 255;
+                else
+                    pred_unet_visual = uint8(predUNet);
+                end
+                
+                if iscategorical(predAttUNet)
+                    pred_att_visual = uint8(predAttUNet == "foreground") * 255;
+                else
+                    pred_att_visual = uint8(predAttUNet);
+                end
+                
+                % Subplot para cada amostra
+                subplot(3, 5, (i-1)*5 + 1);
+                imshow(img);
+                title(sprintf('Imagem %d', i));
+                
+                subplot(3, 5, (i-1)*5 + 2);
+                imshow(gt_visual);
+                title('Ground Truth');
+                
+                subplot(3, 5, (i-1)*5 + 3);
+                imshow(pred_unet_visual);
+                title('U-Net');
+                
+                subplot(3, 5, (i-1)*5 + 4);
+                imshow(pred_att_visual);
+                title('Attention U-Net');
+                
+                % Diferença
+                subplot(3, 5, (i-1)*5 + 5);
+                diff = abs(double(pred_unet_visual) - double(pred_att_visual));
+                imshow(diff, []);
+                title('Diferença');
+                colorbar;
+            end
         end
+        
+        sgtitle('Comparação Visual: U-Net vs Attention U-Net');
+        
+        % Salvar figura
+        saveas(gcf, 'comparacao_visual_modelos.png');
+        fprintf('✓ Comparação visual salva em: comparacao_visual_modelos.png\n');
+        
+    catch ME
+        fprintf('ERRO na comparacao: %s\n', ME.message);
+        fprintf('A comparação numérica foi concluída com sucesso.\n');
+        fprintf('O erro ocorreu apenas na geração de visualizações.\n');
     end
-    
-    sgtitle('Comparação Visual: U-Net vs Attention U-Net');
-    
-    % Salvar figura
-    saveas(gcf, 'comparacao_visual_modelos.png');
-    fprintf('Comparação visual salva em: comparacao_visual_modelos.png\n');
 end
 
 function salvar_resultados_comparacao(netUNet, netAttUNet, metricas_unet, metricas_attention, config)

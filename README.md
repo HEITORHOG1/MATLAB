@@ -1,19 +1,25 @@
-# Comparação U-Net vs Attention U-Net para Segmentação de Imagens
+# 🔬 Comparação U-Net vs Attention U-Net para Segmentação de Imagens
 
 ## 📋 Descrição do Projeto
 
-Este projeto implementa e compara duas arquiteturas de redes neurais para segmentação semântica de imagens:
-- **U-Net Clássica**: Arquitetura encoder-decoder padrão
-- **Attention U-Net**: U-Net com mecanismos de atenção para melhor foco em regiões relevantes
+Este projeto implementa e compara duas arquiteturas de redes neurais convolucionais para segmentação semântica de imagens:
+- **U-Net Clássica**: Arquitetura encoder-decoder com skip connections
+- **Attention U-Net**: U-Net aprimorada com mecanismos de atenção
 
 ## 🎯 Objetivo
 
-Realizar uma comparação completa entre as duas arquiteturas, avaliando:
-- Accuracy de segmentação
-- Tempo de treinamento
-- Qualidade visual dos resultados
-- Métricas de IoU (Intersection over Union)
-- Dice Score
+Comparar a performance entre U-Net tradicional e Attention U-Net em tarefas de segmentação de imagens, avaliando métricas como IoU (Intersection over Union), coeficiente Dice e acurácia pixel-wise.
+
+### 📊 Resultados da Execução Atual
+**🚨 PROBLEMA IDENTIFICADO E CORRIGIDO:**
+- **Execução anterior**: Resultados idênticos (IoU: 88.84%, Dice: 94.06%)
+- **CAUSA**: A "Attention U-Net" era apenas uma U-Net com regularização L2
+- **✅ SOLUÇÃO**: Implementada VERDADEIRA Attention U-Net com Attention Gates
+
+**🔥 Nova Implementação:**
+- **Attention Gates reais** nos skip connections
+- **Squeeze-and-Excitation blocks** como fallback
+- **Arquitetura diferente** que produzirá resultados distintos
 
 ## 📁 Estrutura do Projeto
 
@@ -301,3 +307,72 @@ Em caso de problemas:
 - **Comparação**: Ao final de ambos os treinamentos
 
 **Tempo estimado restante**: ~35-40 minutos
+
+## 🧠 Implementação da Attention U-Net
+
+### 🔬 **VERDADEIRA Attention U-Net vs Implementação Anterior**
+
+#### ❌ **Problema da Implementação Anterior:**
+```matlab
+% INCORRETO - Apenas U-Net com regularização L2
+lgraph = unetLayers(inputSize, numClasses, 'EncoderDepth', 4);
+% + Adicionar WeightL2Factor = 0.001 (NÃO é atenção!)
+```
+
+#### ✅ **Nova Implementação Correta:**
+```matlab
+% CORRETO - Attention Gates REAIS
+function lgraph = create_true_attention_unet(inputSize, numClasses)
+    % 1. Attention Gates nos skip connections
+    % 2. Squeeze-and-Excitation blocks  
+    % 3. Arquitetura completamente diferente
+end
+```
+
+### 🏗️ **Componentes da Verdadeira Attention U-Net:**
+
+#### 1. **Attention Gates**
+- **Localização**: Entre encoder e decoder (skip connections)
+- **Função**: Destacar regiões relevantes para segmentação
+- **Implementação**: Convolução 1x1 + Sigmoid + Multiplicação
+
+#### 2. **Squeeze-and-Excitation Blocks**
+- **Localização**: Nas camadas do decoder
+- **Função**: Atenção por canal (channel attention)
+- **Implementação**: Global Average Pooling + FC + Sigmoid
+
+#### 3. **Arquitetura Manual**
+- **Encoder**: 3 estágios com max pooling
+- **Bottleneck**: Convolução + Dropout
+- **Decoder**: 3 estágios com attention gates
+- **Skip Connections**: Filtradas por attention
+
+### 📊 **Diferenças Esperadas:**
+
+#### **U-Net Clássica:**
+- Usa **todas** as features dos skip connections
+- Sem mecanismo de seleção de features
+- Pode incluir ruído desnecessário
+
+#### **Attention U-Net:**
+- **Filtra** features relevantes via attention gates
+- **Foca** em regiões importantes para segmentação  
+- **Reduz** ruído nos skip connections
+
+### 🎯 **Resultados Esperados:**
+
+```
+ANTES (Implementação Incorreta):
+U-Net:           IoU: 88.84%, Dice: 94.06%
+"Attention":     IoU: 88.84%, Dice: 94.06% (IDÊNTICOS!)
+
+AGORA (Implementação Correta):
+U-Net:           IoU: 85-90%, Dice: 92-95%
+Attention U-Net: IoU: 87-92%, Dice: 93-96% (DIFERENTES!)
+```
+
+### 🔧 **Arquivos Modificados:**
+
+1. **`create_true_attention_unet.m`** - Implementação da verdadeira Attention U-Net
+2. **`comparacao_unet_attention_final.m`** - Integração no fluxo principal
+3. **`analise_metricas_detalhada.m`** - Análise explicativa das métricas

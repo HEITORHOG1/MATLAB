@@ -177,26 +177,27 @@ function data = preprocessDataMelhorado(data, config, labelIDs, useAugmentation)
         % Converter para categorical - CORREÇÃO CRÍTICA
         classNames = ["background", "foreground"];
         % Garantir que os valores da máscara correspondem aos labelIDs
-        if length(labelIDs) == 2 && all(ismember(labelIDs, [0, 255]))        % Converter 255 para 1 para compatibilidade com categorical
-        mask(mask == 255) = 1;
-        labelIDs_cat = [0, 1];
-    else
-        labelIDs_cat = labelIDs;
-    end
-    
-    % Garantir que mask só tenha valores válidos
-    mask = uint8(mask);
-    uniqueVals = unique(mask(:));
-    
-    if length(uniqueVals) > length(labelIDs_cat)
-        % Binarizar se ainda há valores extras
-        threshold = mean(double(labelIDs_cat));
-        mask = uint8(mask > threshold);
-    end
-    
-    % Converter para categorical com classes corretas
-    classNames = ["background", "foreground"];
-    mask = categorical(mask, labelIDs_cat, classNames);
+        if length(labelIDs) == 2 && all(ismember(labelIDs, [0, 255]))
+            % Converter 255 para 1 para compatibilidade com categorical
+            mask(mask == 255) = 1;
+            labelIDs_cat = [0, 1];
+        else
+            labelIDs_cat = labelIDs;
+        end
+        
+        % Garantir que mask só tenha valores válidos
+        mask = uint8(mask);
+        uniqueVals = unique(mask(:));
+        
+        if length(uniqueVals) > length(labelIDs_cat)
+            % Binarizar se ainda há valores extras
+            threshold = mean(double(labelIDs_cat));
+            mask = uint8(mask > threshold);
+        end
+        
+        % Converter para categorical com classes corretas
+        classNames = ["background", "foreground"];
+        mask = categorical(mask, labelIDs_cat, classNames);
     end
     
     data = {img, mask};
