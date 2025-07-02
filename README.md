@@ -26,6 +26,8 @@ Comparar a performance entre U-Net tradicional e Attention U-Net em tarefas de s
 ```
 MATLAB/
 ├── README.md                              # Este arquivo
+├── CONFIG_PROJETO.md                      # 🔧 Manual de instruções (LEIA ANTES DE MODIFICAR)
+├── CONFIGURACAO_TECNICA.m                 # ⚙️ Configuração técnica para AI Assistant
 ├── .gitignore                            # Arquivos ignorados pelo Git
 ├── config_caminhos.mat                   # Configuração dos caminhos
 │
@@ -35,14 +37,55 @@ MATLAB/
 ├── converter_mascaras.m                  # Conversão de máscaras
 ├── teste_dados_segmentacao.m             # Teste de formato dos dados
 ├── treinar_unet_simples.m                # Teste rápido com U-Net
-├── create_attention_unet.m               # Criação da Attention U-Net
+├── create_working_attention_unet.m       # Criação da Attention U-Net (funcional)
+├── teste_attention_unet_real.m           # Teste robusto da Attention U-Net
 ├── funcoes_auxiliares.m                  # Funções de apoio
+├── analise_metricas_detalhada.m          # Análise detalhada de métricas
 │
-└── 📁 VERSÕES ANTERIORES
-    ├── 1/ ├── 2/ ├── 3/ ├── 4/          # Versões de desenvolvimento
+└── 📁 ARQUIVOS GERADOS
+    ├── modelo_unet.mat                   # Modelo U-Net treinado
+    ├── resultados_comparacao.mat         # Resultados das comparações
+    └── relatorio_comparacao.txt          # Relatório textual
 ```
 
-## 🚀 Como Executar
+## � Arquivos de Configuração Especiais
+
+### 📋 **CONFIG_PROJETO.md** - Manual de Instruções
+**🎯 PARA DESENVOLVEDORES E AI ASSISTANTS**
+- **Objetivo**: Manual completo com regras e diretrizes do projeto
+- **Conteúdo**: Estrutura, dependências, problemas conhecidos, soluções
+- **Quando usar**: **SEMPRE ler antes de modificar qualquer código**
+- **Localização**: Raiz do projeto
+
+### ⚙️ **CONFIGURACAO_TECNICA.m** - Configuração Técnica  
+**🤖 ESPECIAL PARA AI ASSISTANTS**
+- **Objetivo**: Configuração técnica em formato MATLAB legível por IA
+- **Conteúdo**: Dependências, métricas esperadas, validações automáticas
+- **Quando usar**: Para contexto técnico e validação do projeto
+- **Função especial**: `validar_projeto()` - verifica integridade
+
+### 🎯 **Como Usar os Arquivos de Configuração:**
+
+```matlab
+% 1. Para desenvolvedores humanos:
+open('CONFIG_PROJETO.md')              % Ler manual completo
+
+% 2. Para AI Assistants:
+run('CONFIGURACAO_TECNICA.m')          % Carregar contexto técnico
+validar_projeto()                      % Verificar integridade
+
+% 3. Para usuários finais:
+executar_comparacao()                  % Executar projeto diretamente
+```
+
+### ⚠️ **REGRA IMPORTANTE:**
+**NUNCA modificar o projeto sem antes ler os arquivos de configuração!**
+- ✅ Evita duplicação de código
+- ✅ Mantém o projeto organizado  
+- ✅ Previne quebra de funcionalidades
+- ✅ Garante uso das implementações corretas
+
+## �🚀 Como Executar
 
 ### 1. Configuração Inicial
 ```matlab
@@ -272,13 +315,43 @@ Oktay, O., et al. (2018). Attention u-net: Learning where to look for the pancre
 ## 👨‍💻 Desenvolvimento
 
 ### Versão Atual
-- **Versão**: 1.0 (Definitiva)
+- **Versão**: 1.1 (Enxugada)
 - **Data**: Julho 2025
-- **Status**: Funcional e testado
+- **Status**: ✅ **Projeto otimizado e funcional**
+
+### Melhorias na v1.1
+- ✅ **Removidas 4 pastas de versões antigas** (1/, 2/, 3/, 4/)
+- ✅ **Removidas implementações duplicadas** da Attention U-Net
+- ✅ **Removidos scripts de correção temporários**
+- ✅ **Estrutura mais limpa e organizada**
+- ✅ **Apenas arquivos essenciais mantidos**
+
+### Arquivos Principais (15 arquivos essenciais):
+```
+📜 SCRIPTS PRINCIPAIS (9 arquivos):
+├── executar_comparacao.m              # Script principal
+├── comparacao_unet_attention_final.m  # Comparação completa  
+├── converter_mascaras.m               # Conversão de máscaras
+├── teste_dados_segmentacao.m          # Teste de dados
+├── treinar_unet_simples.m             # Teste U-Net
+├── create_working_attention_unet.m    # Attention U-Net funcional
+├── teste_attention_unet_real.m        # Teste Attention U-Net
+├── funcoes_auxiliares.m               # Funções auxiliares
+└── analise_metricas_detalhada.m       # Análise de métricas
+
+📁 ARQUIVOS DE DADOS/CONFIGURAÇÃO (6 arquivos):
+├── README.md                          # Documentação
+├── .gitignore                         # Git
+├── config_caminhos.mat               # Configurações salvas
+├── modelo_unet.mat                   # Modelo treinado
+├── resultados_comparacao.mat         # Resultados
+└── relatorio_comparacao.txt          # Relatório
+```
 
 ### Histórico de Versões
-- **v0.1-0.4**: Desenvolvimento inicial (pastas 1/, 2/, 3/, 4/)
-- **v1.0**: Versão definitiva com correções completas
+- **v0.1-0.4**: Desenvolvimento inicial (removidas)
+- **v1.0**: Versão funcional com correções
+- **v1.1**: **Versão enxugada e otimizada** ⭐
 
 ## 🤝 Contribuição
 

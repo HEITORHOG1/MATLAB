@@ -1,8 +1,32 @@
-% FUNÇÕES AUXILIARES FINAIS CONSOLIDADAS
-% Todas as correções aplicadas - Sem erros de .Files ou categories
+% ========================================================================
+% FUNÇÕES AUXILIARES - PROJETO U-NET vs ATTENTION U-NET
+% ========================================================================
+%
+% DESCRIÇÃO:
+%   Conjunto de funções auxiliares para suporte ao projeto de comparação
+%   entre U-Net clássica e Attention U-Net para segmentação de imagens.
+%
+% FUNÇÕES PRINCIPAIS:
+%   - carregar_dados_robustos()     : Carregamento seguro dos dados
+%   - analisar_mascaras_automatico(): Análise automática das máscaras
+%   - configurar_projeto_inicial()  : Configuração inicial do projeto
+%   - converter_mascaras()          : Conversão de máscaras para formato padrão
+%   - calcular_metricas_*()         : Cálculo de métricas de avaliação
+%
+% VERSÃO: 1.1 (Enxugada)
+% DATA: Julho 2025  
+% STATUS: ✅ Todas as correções aplicadas, sem erros
+% ========================================================================
 
 function [images, masks] = carregar_dados_robustos(config)
-    % Carregar dados de forma robusta
+    % Carregar dados de forma robusta e segura
+    % 
+    % ENTRADA:
+    %   config - Estrutura com configurações (imageDir, maskDir, etc.)
+    %
+    % SAÍDA:
+    %   images - Cell array com caminhos das imagens
+    %   masks  - Cell array com caminhos das máscaras
     
     imageDir = config.imageDir;
     maskDir = config.maskDir;
@@ -201,79 +225,6 @@ function data = preprocessDataMelhorado(data, config, labelIDs, useAugmentation)
     end
     
     data = {img, mask};
-end
-
-function lgraph = create_attention_unet(inputSize, numClasses)
-    % Criar Attention U-Net funcional
-    % VERSÃO FINAL - Implementação simplificada mas funcional
-    
-    try
-        % Tentar criar Attention U-Net simplificada
-        fprintf('Criando Attention U-Net...\n');
-        
-        % Usar U-Net base e adicionar mecanismos de atenção simplificados
-        lgraph = unetLayers(inputSize, numClasses, 'EncoderDepth', 4);
-        
-        % Adicionar regularização L2 nas camadas convolucionais
-        layers = lgraph.Layers;
-        for i = 1:length(layers)
-            if isa(layers(i), 'nnet.cnn.layer.Convolution2DLayer')
-                newLayer = convolution2dLayer( ...
-                    layers(i).FilterSize, ...
-                    layers(i).NumFilters, ...
-                    'Name', layers(i).Name, ...
-                    'Padding', layers(i).PaddingMode, ...
-                    'Stride', layers(i).Stride, ...
-                    'WeightL2Factor', 0.0001, ...
-                    'BiasL2Factor', 0.0001);
-                
-                lgraph = replaceLayer(lgraph, layers(i).Name, newLayer);
-            end
-        end
-        
-        % Adicionar dropout para regularização
-        dropoutLayers = [];
-        for i = 1:length(layers)
-            if contains(layers(i).Name, 'Decoder-Stage') && contains(layers(i).Name, 'ReLU')
-                dropoutName = [layers(i).Name '_Dropout'];
-                dropoutLayer = dropoutLayer(0.2, 'Name', dropoutName);
-                dropoutLayers = [dropoutLayers; {layers(i).Name, dropoutLayer}];
-            end
-        end
-        
-        % Inserir camadas de dropout
-        for i = 1:size(dropoutLayers, 1)
-            lgraph = insertLayers(lgraph, dropoutLayers{i,1}, dropoutLayers{i,2});
-        end
-        
-        fprintf('✓ Attention U-Net criada com sucesso (versão otimizada)!\n');
-        
-    catch ME
-        fprintf('⚠ Erro ao criar Attention U-Net: %s\n', ME.message);
-        fprintf('Usando U-Net clássica otimizada como fallback...\n');
-        
-        % Fallback para U-Net clássica otimizada
-        lgraph = unetLayers(inputSize, numClasses, 'EncoderDepth', 4);
-        
-        % Adicionar regularização
-        layers = lgraph.Layers;
-        for i = 1:length(layers)
-            if isa(layers(i), 'nnet.cnn.layer.Convolution2DLayer')
-                newLayer = convolution2dLayer( ...
-                    layers(i).FilterSize, ...
-                    layers(i).NumFilters, ...
-                    'Name', layers(i).Name, ...
-                    'Padding', layers(i).PaddingMode, ...
-                    'Stride', layers(i).Stride, ...
-                    'WeightL2Factor', 0.0001, ...
-                    'BiasL2Factor', 0.0001);
-                
-                lgraph = replaceLayer(lgraph, layers(i).Name, newLayer);
-            end
-        end
-        
-        fprintf('✓ U-Net otimizada criada como fallback!\n');
-    end
 end
 
 function converter_mascaras(config)

@@ -1,0 +1,9 @@
+=== RELATÓRIO DE COMPARAÇÃO ===
+Data: 02-Jul-2025 01:09:16
+
+U-Net Clássica:
+  IoU: 0.9036 ± 0.0190
+  Dice: 0.9493 ± 0.0105
+  Acurácia: 0.9036 ± 0.0190
+  Amostras: 24
+

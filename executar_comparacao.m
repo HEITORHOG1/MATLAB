@@ -1,12 +1,38 @@
 function executar_comparacao()
-    % Script principal para comparacao U-Net vs Attention U-Net
-    % VERSÃO DEFINITIVA - TODOS OS ERROS CORRIGIDOS
+    % ========================================================================
+    % SCRIPT PRINCIPAL: COMPARACAO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % DESCRIÇÃO:
+    %   Script principal para comparação entre U-Net clássica e Attention U-Net
+    %   em tarefas de segmentação semântica de imagens.
+    %
+    % FUNCIONALIDADES:
+    %   1. Teste de formato dos dados (verificação de compatibilidade)
+    %   2. Conversão de máscaras (padronização para formato binário)
+    %   3. Teste rápido com U-Net simples (validação inicial)
+    %   4. Comparação completa U-Net vs Attention U-Net (análise principal)
+    %   5. Execução automática de todos os passos
+    %   6. Teste específico da Attention U-Net
+    %
+    % USO:
+    %   >> executar_comparacao()
+    %
+    % ESTRUTURA DO PROJETO (v1.1 - Enxugada):
+    %   - 15 arquivos essenciais (removidas versões antigas e duplicatas)
+    %   - Scripts organizados por funcionalidade
+    %   - Implementação funcional da Attention U-Net
+    %
+    % VERSÃO: 1.1 (Enxugada e Otimizada)
+    % DATA: Julho 2025
+    % STATUS: ✅ Funcional e Testado
+    % ========================================================================
     
     clc;
     fprintf('=====================================\n');
     fprintf('   COMPARACAO U-NET vs ATTENTION U-NET\n');
     fprintf('      Script de Execucao Principal     \n');
-    fprintf('      (Versão Definitiva)              \n');
+    fprintf('      (Versão 1.1 - Enxugada)         \n');
     fprintf('=====================================\n\n');
     
     % Verificar se existe configuração salva
@@ -27,6 +53,7 @@ function executar_comparacao()
         fprintf('4. Comparacao completa U-Net vs Attention U-Net\n');
         fprintf('5. Executar todos os passos em sequencia\n');
         fprintf('6. NOVO: Comparacao com validacao cruzada\n');
+        fprintf('7. TESTE: Verificar Attention U-Net\n');
         fprintf('0. Sair\n\n');
         
         opcao = input('Opcao: ');
@@ -129,6 +156,15 @@ function executar_comparacao()
                 try
                     validacao_cruzada_k_fold(config);
                     fprintf('✓ Validação cruzada concluída!\n');
+                catch ME
+                    fprintf('❌ Erro: %s\n', ME.message);
+                end
+                
+            case 7
+                fprintf('\n=== TESTE ESPECÍFICO ATTENTION U-NET ===\n');
+                try
+                    teste_attention_unet_real();
+                    fprintf('✓ Teste Attention U-Net concluído!\n');
                 catch ME
                     fprintf('❌ Erro: %s\n', ME.message);
                 end
@@ -275,7 +311,7 @@ function resultado = treinar_e_avaliar_fold(images, masks, trainIdx, testIdx, co
     numClasses = config.numClasses;
     
     if strcmp(tipo_modelo, 'attention')
-        lgraph = create_attention_unet(inputSize, numClasses);
+        lgraph = create_working_attention_unet(inputSize, numClasses);
     else
         lgraph = unetLayers(inputSize, numClasses, 'EncoderDepth', 4);
     end

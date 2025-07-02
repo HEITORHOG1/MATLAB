@@ -160,9 +160,9 @@ function net = treinar_modelo(dsTrain, dsVal, config, tipo)
     
     % Criar arquitetura
     if strcmp(tipo, 'attention')
-        % Usar VERDADEIRA Attention U-Net
+        % Usar ATTENTION U-NET FUNCIONAL
         try
-            lgraph = create_true_attention_unet(inputSize, numClasses);
+            lgraph = create_working_attention_unet(inputSize, numClasses);
         catch ME
             fprintf('⚠️ Erro na Attention U-Net: %s\n', ME.message);
             fprintf('🔄 Usando U-Net aprimorada como fallback...\n');
