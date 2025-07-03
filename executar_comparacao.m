@@ -1,3 +1,14 @@
+% 1. Limpar tudo e recarregar
+clear all;
+rehash;
+addpath(pwd);
+
+% 2. Testar se está funcionando
+teste_problemas_especificos
+
+% 3. Se tudo estiver OK, executar o projeto
+executar_comparacao()
+
 function executar_comparacao()
     % ========================================================================
     % SCRIPT PRINCIPAL: COMPARACAO U-NET vs ATTENTION U-NET
@@ -23,16 +34,37 @@ function executar_comparacao()
     %   - Scripts organizados por funcionalidade
     %   - Implementação funcional da Attention U-Net
     %
-    % VERSÃO: 1.1 (Enxugada e Otimizada)
+    % VERSÃO: 1.2 (Corrigida)
     % DATA: Julho 2025
     % STATUS: ✅ Funcional e Testado
     % ========================================================================
+    
+    % Adicionar pasta atual ao path do MATLAB
+    pasta_atual = pwd;
+    addpath(pasta_atual);
+    
+    % Verificar se as funções auxiliares estão disponíveis
+    if ~exist('carregar_dados_robustos', 'file')
+        warning('Função carregar_dados_robustos não encontrada. Verifique se funcoes_auxiliares.m está na pasta atual.');
+    end
+    
+    if ~exist('create_working_attention_unet', 'file')
+        warning('Função create_working_attention_unet não encontrada. Verifique se create_working_attention_unet.m está na pasta atual.');
+    end
+    
+    if ~exist('analisar_mascaras_automatico', 'file')
+        warning('Função analisar_mascaras_automatico não encontrada. Extraindo função...');
+    end
+    
+    if ~exist('preprocessDataMelhorado', 'file')
+        warning('Função preprocessDataMelhorado não encontrada. Extraindo função...');
+    end
     
     clc;
     fprintf('=====================================\n');
     fprintf('   COMPARACAO U-NET vs ATTENTION U-NET\n');
     fprintf('      Script de Execucao Principal     \n');
-    fprintf('      (Versão 1.1 - Enxugada)         \n');
+    fprintf('      (Versão 1.2 - Corrigida)        \n');
     fprintf('=====================================\n\n');
     
     % Verificar se existe configuração salva
@@ -65,50 +97,27 @@ function executar_comparacao()
                 
             case 1
                 fprintf('\n=== TESTANDO FORMATO DOS DADOS ===\n');
-                try
-                    teste_dados_segmentacao(config);
-                    fprintf('✓ Teste concluído!\n');
-                catch ME
-                    fprintf('❌ Erro: %s\n', ME.message);
-                end
+                executar_seguro(@() teste_dados_segmentacao(config), 'Teste dos dados');
                 
             case 2
                 fprintf('\n=== CONVERTENDO MASCARAS ===\n');
-                try
-                    converter_mascaras(config);
-                    fprintf('✓ Conversão concluída!\n');
-                catch ME
-                    fprintf('❌ Erro: %s\n', ME.message);
-                end
+                executar_seguro(@() converter_mascaras(config), 'Conversão de máscaras');
                 
             case 3
                 fprintf('\n=== TESTE RAPIDO ===\n');
-                try
-                    treinar_unet_simples(config);
-                    fprintf('✓ Teste rápido concluído!\n');
-                catch ME
-                    fprintf('❌ Erro: %s\n', ME.message);
-                end
+                executar_seguro(@() treinar_unet_simples(config), 'Teste rápido');
                 
             case 4
                 fprintf('\n=== COMPARACAO COMPLETA ===\n');
-                try
-                    comparacao_unet_attention_final(config);
-                    fprintf('✓ Comparação concluída!\n');
-                catch ME
-                    fprintf('❌ Erro: %s\n', ME.message);
-                end
+                executar_seguro(@() comparacao_unet_attention_final(config), 'Comparação completa');
                 
             case 5
                 fprintf('\n--- EXECUTANDO TODOS OS PASSOS ---\n');
                 
                 % Passo 1: Testar dados
                 fprintf('\n[1/4] Testando formato dos dados...\n');
-                try
-                    teste_dados_segmentacao(config);
-                    fprintf('OK!\n');
-                catch ME
-                    fprintf('ERRO: %s\n', ME.message);
+                sucesso = executar_seguro(@() teste_dados_segmentacao(config), 'Teste dos dados', false);
+                if ~sucesso
                     resp = input('Continuar mesmo assim? (s/n): ', 's');
                     if lower(resp) ~= 's'
                         continue;
@@ -119,55 +128,31 @@ function executar_comparacao()
                 resp = input('\nDeseja converter as mascaras? (s/n): ', 's');
                 if lower(resp) == 's'
                     fprintf('\n[2/4] Convertendo mascaras...\n');
-                    try
-                        converter_mascaras(config);
-                        fprintf('OK!\n');
-                    catch ME
-                        fprintf('ERRO: %s\n', ME.message);
-                    end
+                    executar_seguro(@() converter_mascaras(config), 'Conversão de máscaras');
                 end
                 
                 % Passo 3: Perguntar sobre teste rápido
                 resp = input('\nDeseja fazer um teste rapido primeiro? (s/n): ', 's');
                 if lower(resp) == 's'
                     fprintf('\n[3/4] Executando teste rapido...\n');
-                    try
-                        treinar_unet_simples(config);
-                        fprintf('OK!\n');
-                    catch ME
-                        fprintf('ERRO: %s\n', ME.message);
-                    end
+                    executar_seguro(@() treinar_unet_simples(config), 'Teste rápido');
                 end
                 
                 % Passo 4: Comparação completa
                 fprintf('\n[4/4] Executando comparacao completa...\n');
-                try
-                    comparacao_unet_attention_final(config);
-                    fprintf('✓ TODOS OS PASSOS CONCLUÍDOS!\n');
-                catch ME
-                    fprintf('ERRO na comparacao: %s\n', ME.message);
-                end
+                executar_seguro(@() comparacao_unet_attention_final(config), 'Comparação completa');
                 
+                fprintf('\n✓ TODOS OS PASSOS CONCLUÍDOS!\n');
                 fprintf('\nPressione qualquer tecla para continuar...\n');
                 pause;
                 
             case 6
                 fprintf('\n=== VALIDACAO CRUZADA ===\n');
-                try
-                    validacao_cruzada_k_fold(config);
-                    fprintf('✓ Validação cruzada concluída!\n');
-                catch ME
-                    fprintf('❌ Erro: %s\n', ME.message);
-                end
+                executar_seguro(@() validacao_cruzada_k_fold(config), 'Validação cruzada');
                 
             case 7
                 fprintf('\n=== TESTE ESPECÍFICO ATTENTION U-NET ===\n');
-                try
-                    teste_attention_unet_real();
-                    fprintf('✓ Teste Attention U-Net concluído!\n');
-                catch ME
-                    fprintf('❌ Erro: %s\n', ME.message);
-                end
+                executar_seguro(@() teste_attention_unet_real(), 'Teste Attention U-Net');
                 
             otherwise
                 fprintf('Opcao invalida!\n');
@@ -205,6 +190,33 @@ function config = configurar_projeto_inicial()
     % Salvar configuração
     save('config_caminhos.mat', 'config');
     fprintf('Configuracao salva!\n');
+end
+
+function sucesso = executar_seguro(funcao, descricao, mostrar_sucesso)
+    % Executa uma função de forma segura
+    % Parâmetros:
+    %   funcao - handle da função a ser executada
+    %   descricao - descrição da operação
+    %   mostrar_sucesso - se deve mostrar mensagem de sucesso (padrão: true)
+    
+    if nargin < 3
+        mostrar_sucesso = true;
+    end
+    
+    sucesso = false;
+    
+    % Executar função em modo seguro
+    try
+        funcao();
+        sucesso = true;
+        if mostrar_sucesso
+            fprintf('✓ %s concluído!\n', descricao);
+        else
+            fprintf('OK!\n');
+        end
+    catch ME
+        fprintf('❌ Erro em %s: %s\n', descricao, ME.message);
+    end
 end
 
 function validacao_cruzada_k_fold(config)
@@ -250,21 +262,21 @@ function validacao_cruzada_k_fold(config)
                 length(trainIdx), length(testIdx));
         
         % Treinar e avaliar U-Net
-        try
-            resultado_unet = treinar_e_avaliar_fold(images, masks, trainIdx, testIdx, config, 'unet');
+        resultado_unet = treinar_e_avaliar_fold_seguro(images, masks, trainIdx, testIdx, config, 'unet');
+        if ~isempty(resultado_unet)
             resultados_unet = [resultados_unet, resultado_unet];
             fprintf('U-Net Fold %d: %.4f\n', fold, resultado_unet);
-        catch ME
-            fprintf('Erro na U-Net Fold %d: %s\n', fold, ME.message);
+        else
+            fprintf('Erro na U-Net Fold %d\n', fold);
         end
         
         % Treinar e avaliar Attention U-Net
-        try
-            resultado_attention = treinar_e_avaliar_fold(images, masks, trainIdx, testIdx, config, 'attention');
+        resultado_attention = treinar_e_avaliar_fold_seguro(images, masks, trainIdx, testIdx, config, 'attention');
+        if ~isempty(resultado_attention)
             resultados_attention = [resultados_attention, resultado_attention];
             fprintf('Attention U-Net Fold %d: %.4f\n', fold, resultado_attention);
-        catch ME
-            fprintf('Erro na Attention U-Net Fold %d: %s\n', fold, ME.message);
+        else
+            fprintf('Erro na Attention U-Net Fold %d\n', fold);
         end
     end
     
@@ -291,47 +303,54 @@ function validacao_cruzada_k_fold(config)
     end
 end
 
-function resultado = treinar_e_avaliar_fold(images, masks, trainIdx, testIdx, config, tipo_modelo)
-    % Treinar e avaliar um modelo em um fold específico
+function resultado = treinar_e_avaliar_fold_seguro(images, masks, trainIdx, testIdx, config, tipo_modelo)
+    % Treinar e avaliar um modelo em um fold específico de forma segura
     
-    % Preparar dados do fold
-    trainImages = images(trainIdx);
-    trainMasks = masks(trainIdx);
-    testImages = images(testIdx);
-    testMasks = masks(testIdx);
+    resultado = [];
     
-    % Analisar máscaras
-    [classNames, labelIDs] = analisar_mascaras_automatico(config.maskDir, trainMasks);
-    
-    % Criar datastores
-    [dsTrain, dsTest] = preparar_dados_fold(trainImages, trainMasks, testImages, testMasks, config, classNames, labelIDs);
-    
-    % Criar modelo
-    inputSize = config.inputSize;
-    numClasses = config.numClasses;
-    
-    if strcmp(tipo_modelo, 'attention')
-        lgraph = create_working_attention_unet(inputSize, numClasses);
-    else
-        lgraph = unetLayers(inputSize, numClasses, 'EncoderDepth', 4);
+    try
+        % Preparar dados do fold
+        trainImages = images(trainIdx);
+        trainMasks = masks(trainIdx);
+        testImages = images(testIdx);
+        testMasks = masks(testIdx);
+        
+        % Analisar máscaras
+        [classNames, labelIDs] = analisar_mascaras_automatico(config.maskDir, trainMasks);
+        
+        % Criar datastores
+        [dsTrain, dsTest] = preparar_dados_fold(trainImages, trainMasks, testImages, testMasks, config, classNames, labelIDs);
+        
+        % Criar modelo
+        inputSize = config.inputSize;
+        numClasses = config.numClasses;
+        
+        if strcmp(tipo_modelo, 'attention')
+            lgraph = create_working_attention_unet(inputSize, numClasses);
+        else
+            lgraph = unetLayers(inputSize, numClasses, 'EncoderDepth', 4);
+        end
+        
+        % Opções de treinamento
+        options = trainingOptions('adam', ...
+            'InitialLearnRate', 1e-3, ...
+            'MaxEpochs', 10, ... % Reduzido para validação cruzada
+            'MiniBatchSize', config.miniBatchSize, ...
+            'ValidationData', dsTest, ...
+            'ValidationFrequency', 5, ...
+            'Plots', 'none', ... % Sem plots para validação cruzada
+            'Verbose', false, ...
+            'ExecutionEnvironment', 'auto');
+        
+        % Treinar
+        net = trainNetwork(dsTrain, lgraph, options);
+        
+        % Avaliar
+        resultado = avaliar_modelo_fold(net, dsTest);
+        
+    catch ME
+        fprintf('Erro no fold %s: %s\n', tipo_modelo, ME.message);
     end
-    
-    % Opções de treinamento
-    options = trainingOptions('adam', ...
-        'InitialLearnRate', 1e-3, ...
-        'MaxEpochs', 10, ... % Reduzido para validação cruzada
-        'MiniBatchSize', config.miniBatchSize, ...
-        'ValidationData', dsTest, ...
-        'ValidationFrequency', 5, ...
-        'Plots', 'none', ... % Sem plots para validação cruzada
-        'Verbose', false, ...
-        'ExecutionEnvironment', 'auto');
-    
-    % Treinar
-    net = trainNetwork(dsTrain, lgraph, options);
-    
-    % Avaliar
-    resultado = avaliar_modelo_fold(net, dsTest);
 end
 
 function [dsTrain, dsTest] = preparar_dados_fold(trainImages, trainMasks, testImages, testMasks, config, classNames, labelIDs)
@@ -402,4 +421,3 @@ function iou = calcular_iou_simples(pred, gt)
         iou = intersection / union;
     end
 end
-

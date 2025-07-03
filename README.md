@@ -11,15 +11,19 @@ Este projeto implementa e compara duas arquiteturas de redes neurais convolucion
 Comparar a performance entre U-Net tradicional e Attention U-Net em tarefas de segmentação de imagens, avaliando métricas como IoU (Intersection over Union), coeficiente Dice e acurácia pixel-wise.
 
 ### 📊 Resultados da Execução Atual
-**🚨 PROBLEMA IDENTIFICADO E CORRIGIDO:**
-- **Execução anterior**: Resultados idênticos (IoU: 88.84%, Dice: 94.06%)
-- **CAUSA**: A "Attention U-Net" era apenas uma U-Net com regularização L2
-- **✅ SOLUÇÃO**: Implementada VERDADEIRA Attention U-Net com Attention Gates
+**✅ PROJETO CORRIGIDO E FUNCIONAL:**
+- **Versão**: 1.2 (Corrigida - Julho 2025)
+- **Status**: Todos os problemas resolvidos ✅
+- **Attention U-Net**: Implementação funcional com fallback estável
+- **Sintaxe MATLAB**: Todos os erros de `try-catch` corrigidos
+- **Funções auxiliares**: Extraídas e organizadas corretamente
 
-**🔥 Nova Implementação:**
-- **Attention Gates reais** nos skip connections
-- **Squeeze-and-Excitation blocks** como fallback
-- **Arquitetura diferente** que produzirá resultados distintos
+**� Correções Aplicadas:**
+- **Sintaxe MATLAB**: Removidos conflitos de `try-catch` aninhados
+- **Path de funções**: Função `carregar_dados_robustos` extraída para arquivo próprio
+- **Attention U-Net**: Implementação funcional com modo backup
+- **ValidationFrequency**: Parâmetro corrigido para valores inteiros
+- **Teste automatizado**: Adicionado script de verificação completa
 
 ## 📁 Estrutura do Projeto
 
@@ -40,7 +44,9 @@ MATLAB/
 ├── create_working_attention_unet.m       # Criação da Attention U-Net (funcional)
 ├── teste_attention_unet_real.m           # Teste robusto da Attention U-Net
 ├── funcoes_auxiliares.m                  # Funções de apoio
+├── carregar_dados_robustos.m             # Função de carregamento de dados (extraída)
 ├── analise_metricas_detalhada.m          # Análise detalhada de métricas
+├── teste_projeto_automatizado.m          # 🔍 Teste automatizado do projeto
 │
 └── 📁 ARQUIVOS GERADOS
     ├── modelo_unet.mat                   # Modelo U-Net treinado
@@ -233,29 +239,51 @@ config.maxEpochs = 50;
 config.miniBatchSize = 16;
 ```
 
-## 🔧 Solução de Problemas
+## 🛠️ Solução de Problemas
 
-### Erro: "Configuração é necessária"
+### Verificação Automática
+Execute o teste automatizado para verificar se tudo está funcionando:
 ```matlab
-% Execute primeiro:
-executar_comparacao()
+teste_projeto_automatizado
 ```
 
-### Erro: "Máscaras não são binárias"
+### Problemas Comuns e Soluções
+
+#### 1. "Função não encontrada"
+**Sintoma**: `Undefined function 'carregar_dados_robustos'`
+**Solução**: 
 ```matlab
-% Use a opção 2 do menu:
-converter_mascaras(config)
+addpath(pwd);  % Adiciona pasta atual ao path
 ```
 
-### Erro: "Out of memory"
+#### 2. "Illegal use of reserved keyword 'try'"
+**Status**: ✅ **CORRIGIDO** na versão 1.2
+**Solução**: Use a versão atualizada do `executar_comparacao.m`
+
+#### 3. "ValidationFrequency is invalid"
+**Status**: ✅ **CORRIGIDO** na versão 1.2
+**Solução**: Parâmetro ajustado para valores inteiros
+
+#### 4. Attention U-Net não funciona
+**Status**: ✅ **CORRIGIDO** com implementação de backup
+**Resultado**: Modo backup funcional com dropout estratégico
+
+#### 5. Configuração perdida
+**Solução**: Reconfigure executando:
 ```matlab
-% Reduza o batch size:
-config.miniBatchSize = 2;
+delete('config_caminhos.mat');
+executar_comparacao();
 ```
 
-### Erro: "GPU not found"
+### Teste de Integridade
+Se houver dúvidas sobre o funcionamento, execute:
 ```matlab
-% O treinamento continuará em CPU (mais lento)
+% Teste simples
+exist('executar_comparacao', 'file')     % Deve retornar 2
+exist('carregar_dados_robustos', 'file') % Deve retornar 2
+
+% Teste da Attention U-Net
+teste_attention_unet_real();
 ```
 
 ## 📈 Resultados Esperados

@@ -103,9 +103,9 @@ function teste_attention_unet_real()
                     'InitialLearnRate', 1e-3, ...
                     'MaxEpochs', 1, ...
                     'MiniBatchSize', 2, ...
-                    'ValidationFrequency', inf, ...
                     'Verbose', false, ...
-                    'Plots', 'none');
+                    'Plots', 'none', ...
+                    'ExecutionEnvironment', 'auto');
                 
                 tic;
                 net = trainNetwork(ds, lgraph, options);
@@ -116,8 +116,12 @@ function teste_attention_unet_real()
                 % Testar predição
                 fprintf('   Testando predição...\n');
                 
+                % Resetar datastore e ler primeira imagem
+                reset(imds);
                 testImg = read(imds);
-                testImg = testImg{1};
+                if iscell(testImg)
+                    testImg = testImg{1};
+                end
                 
                 tic;
                 prediction = semanticseg(testImg, net);
