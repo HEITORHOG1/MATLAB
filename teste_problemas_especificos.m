@@ -7,7 +7,7 @@ fprintf('  TESTE ESPECÍFICO DOS PROBLEMAS\n');
 fprintf('========================================\n\n');
 
 % Limpar workspace e recarregar tudo
-clear all;
+clear;
 rehash;
 addpath(pwd);
 

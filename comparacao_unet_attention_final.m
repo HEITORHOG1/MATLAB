@@ -94,7 +94,7 @@ function comparacao_unet_attention_final(config)
     
     % Treinar U-Net clássica
     fprintf('=== TREINANDO U-NET CLASSICA ===\n');
-    fprintf('Inicio: %s\n', datestr(now));
+    fprintf('Inicio: %s\n', string(datetime("now")));
     fprintf('Treinando U-Net classica...\n');
     
     try
@@ -107,7 +107,7 @@ function comparacao_unet_attention_final(config)
     
     % Treinar Attention U-Net
     fprintf('\n=== TREINANDO ATTENTION U-NET ===\n');
-    fprintf('Inicio: %s\n', datestr(now));
+    fprintf('Inicio: %s\n', string(datetime("now")));
     fprintf('Treinando Attention U-Net...\n');
     
     try
@@ -149,7 +149,7 @@ function comparacao_unet_attention_final(config)
     salvar_resultados_comparacao(netUNet, netAttUNet, metricas_unet, metricas_attention, config);
     
     fprintf('\n✓ COMPARACAO CONCLUIDA!\n');
-    fprintf('Fim: %s\n', datestr(now));
+    fprintf('Fim: %s\n', string(datetime("now")));
 end
 
 function net = treinar_modelo(dsTrain, dsVal, config, tipo)
@@ -193,9 +193,29 @@ function metricas = avaliar_modelo_completo(net, dsVal, nomeModelo)
     fprintf('Avaliando %s...\n', nomeModelo);
     
     reset(dsVal);
-    ious = [];
-    dices = [];
-    accuracies = [];
+    
+    % Estimar número de amostras para pré-alocação
+    numAmostras = 100; % Estimativa padrão
+    try
+        % Tentar contar o número real de amostras
+        tempDs = copy(dsVal);
+        reset(tempDs);
+        count = 0;
+        while hasdata(tempDs) && count < 1000 % Limite para evitar loop infinito
+            read(tempDs);
+            count = count + 1;
+        end
+        if count > 0
+            numAmostras = count;
+        end
+    catch
+        % Se falhar, usar estimativa padrão
+    end
+    
+    % Pré-alocar arrays
+    ious = zeros(1, numAmostras);
+    dices = zeros(1, numAmostras);
+    accuracies = zeros(1, numAmostras);
     
     contador = 0;
     while hasdata(dsVal)
@@ -211,15 +231,20 @@ function metricas = avaliar_modelo_completo(net, dsVal, nomeModelo)
         dice = calcular_dice_simples_interno(pred, gt);
         acc = calcular_accuracy_simples_interno(pred, gt);
         
-        ious = [ious, iou];
-        dices = [dices, dice];
-        accuracies = [accuracies, acc];
+        ious(contador + 1) = iou;
+        dices(contador + 1) = dice;
+        accuracies(contador + 1) = acc;
         
         contador = contador + 1;
         if mod(contador, 10) == 0
             fprintf('  Processadas: %d amostras\n', contador);
         end
     end
+    
+    % Cortar arrays para o tamanho real
+    ious = ious(1:contador);
+    dices = dices(1:contador);
+    accuracies = accuracies(1:contador);
     
     % Calcular estatísticas
     metricas = struct();
@@ -398,7 +423,7 @@ function gerar_relatorio_texto(metricas_unet, metricas_attention)
     fid = fopen('relatorio_comparacao.txt', 'w');
     
     fprintf(fid, '=== RELATÓRIO DE COMPARAÇÃO ===\n');
-    fprintf(fid, 'Data: %s\n\n', datestr(now));
+    fprintf(fid, 'Data: %s\n\n', string(datetime("now")));
     
     fprintf(fid, 'U-Net Clássica:\n');
     fprintf(fid, '  IoU: %.4f ± %.4f\n', metricas_unet.iou_mean, metricas_unet.iou_std);
@@ -456,10 +481,8 @@ function [images, masks] = carregar_dados_robustos_interno(config)
     fprintf('Total de máscaras encontradas: %d\n', length(masks));
 end
 
-function [classNames, labelIDs] = analisar_mascaras_automatico_interno(maskDir, maskFiles)
+function [classNames, labelIDs] = analisar_mascaras_automatico_interno(~, ~)
     % Analisar máscaras automaticamente para determinar classes - implementação interna
-    
-    fprintf('Analisando máscaras em: %s\n', maskDir);
     
     % Para segmentação binária simples
     classNames = {'background', 'foreground'};
@@ -469,7 +492,7 @@ function [classNames, labelIDs] = analisar_mascaras_automatico_interno(maskDir, 
     fprintf('Label IDs: %s\n', mat2str(labelIDs));
 end
 
-function dataOut = preprocessDataMelhorado_interno(data, config, labelIDs, isTraining)
+function dataOut = preprocessDataMelhorado_interno(data, config, ~, isTraining)
     % Pré-processar dados de forma melhorada - implementação interna
     
     try

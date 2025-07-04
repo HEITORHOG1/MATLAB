@@ -1,14 +1,3 @@
-% 1. Limpar tudo e recarregar
-clear all;
-rehash;
-addpath(pwd);
-
-% 2. Testar se está funcionando
-teste_problemas_especificos
-
-% 3. Se tudo estiver OK, executar o projeto
-executar_comparacao()
-
 function executar_comparacao()
     % ========================================================================
     % SCRIPT PRINCIPAL: COMPARACAO U-NET vs ATTENTION U-NET
@@ -29,9 +18,9 @@ function executar_comparacao()
     % USO:
     %   >> executar_comparacao()
     %
-    % ESTRUTURA DO PROJETO (v1.1 - Enxugada):
-    %   - 15 arquivos essenciais (removidas versões antigas e duplicatas)
-    %   - Scripts organizados por funcionalidade
+    % ESTRUTURA DO PROJETO (v1.2 - Corrigida):
+    %   - Arquivos organizados e sem duplicatas
+    %   - Scripts com encoding correto
     %   - Implementação funcional da Attention U-Net
     %
     % VERSÃO: 1.2 (Corrigida)
@@ -45,7 +34,7 @@ function executar_comparacao()
     
     % Verificar se as funções auxiliares estão disponíveis
     if ~exist('carregar_dados_robustos', 'file')
-        warning('Função carregar_dados_robustos não encontrada. Verifique se funcoes_auxiliares.m está na pasta atual.');
+        warning('Função carregar_dados_robustos não encontrada. Verifique se carregar_dados_robustos.m está na pasta atual.');
     end
     
     if ~exist('create_working_attention_unet', 'file')
@@ -53,11 +42,11 @@ function executar_comparacao()
     end
     
     if ~exist('analisar_mascaras_automatico', 'file')
-        warning('Função analisar_mascaras_automatico não encontrada. Extraindo função...');
+        warning('Função analisar_mascaras_automatico não encontrada. Verifique se analisar_mascaras_automatico.m está na pasta atual.');
     end
     
     if ~exist('preprocessDataMelhorado', 'file')
-        warning('Função preprocessDataMelhorado não encontrada. Extraindo função...');
+        warning('Função preprocessDataMelhorado não encontrada. Verifique se preprocessDataMelhorado.m está na pasta atual.');
     end
     
     clc;
@@ -246,8 +235,11 @@ function validacao_cruzada_k_fold(config)
     indices = randperm(numSamples);
     foldSize = floor(numSamples / k);
     
-    resultados_unet = [];
-    resultados_attention = [];
+    % Pré-alocar arrays para evitar warnings
+    resultados_unet = zeros(1, k);
+    resultados_attention = zeros(1, k);
+    num_sucessos_unet = 0;
+    num_sucessos_attention = 0;
     
     for fold = 1:k
         fprintf('\n--- FOLD %d/%d ---\n', fold, k);
@@ -264,7 +256,8 @@ function validacao_cruzada_k_fold(config)
         % Treinar e avaliar U-Net
         resultado_unet = treinar_e_avaliar_fold_seguro(images, masks, trainIdx, testIdx, config, 'unet');
         if ~isempty(resultado_unet)
-            resultados_unet = [resultados_unet, resultado_unet];
+            num_sucessos_unet = num_sucessos_unet + 1;
+            resultados_unet(num_sucessos_unet) = resultado_unet;
             fprintf('U-Net Fold %d: %.4f\n', fold, resultado_unet);
         else
             fprintf('Erro na U-Net Fold %d\n', fold);
@@ -273,12 +266,17 @@ function validacao_cruzada_k_fold(config)
         % Treinar e avaliar Attention U-Net
         resultado_attention = treinar_e_avaliar_fold_seguro(images, masks, trainIdx, testIdx, config, 'attention');
         if ~isempty(resultado_attention)
-            resultados_attention = [resultados_attention, resultado_attention];
+            num_sucessos_attention = num_sucessos_attention + 1;
+            resultados_attention(num_sucessos_attention) = resultado_attention;
             fprintf('Attention U-Net Fold %d: %.4f\n', fold, resultado_attention);
         else
             fprintf('Erro na Attention U-Net Fold %d\n', fold);
         end
     end
+    
+    % Cortar arrays para o tamanho real
+    resultados_unet = resultados_unet(1:num_sucessos_unet);
+    resultados_attention = resultados_attention(1:num_sucessos_attention);
     
     % Calcular estatísticas finais
     if ~isempty(resultados_unet) && ~isempty(resultados_attention)
@@ -377,7 +375,11 @@ function resultado = avaliar_modelo_fold(net, dsTest)
     % Avaliar modelo em dados de teste
     
     reset(dsTest);
-    ious = [];
+    
+    % Estimar número de amostras para pré-alocação
+    numAmostras = 50; % Estimativa padrão
+    ious = zeros(1, numAmostras);
+    contador = 0;
     
     while hasdata(dsTest)
         data = read(dsTest);
@@ -389,9 +391,19 @@ function resultado = avaliar_modelo_fold(net, dsTest)
         
         % Calcular IoU
         iou = calcular_iou_simples(pred, gt);
-        ious = [ious, iou];
+        
+        contador = contador + 1;
+        
+        % Expandir array se necessário
+        if contador > length(ious)
+            ious = [ious, zeros(1, numAmostras)];
+        end
+        
+        ious(contador) = iou;
     end
     
+    % Cortar array para o tamanho real
+    ious = ious(1:contador);
     resultado = mean(ious);
 end
 

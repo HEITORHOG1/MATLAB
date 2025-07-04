@@ -99,13 +99,13 @@ function treinar_unet_simples(config)
     
     % Treinar rede
     fprintf('\n=== INICIANDO TREINAMENTO ===\n');
-    fprintf('Inicio: %s\n', datestr(now));
+    fprintf('Inicio: %s\n', string(datetime("now")));
     fprintf('Treinando U-Net simples...\n');
     
     try
         net = trainNetwork(dsTrain, lgraph, options);
         fprintf('✓ Treinamento concluído!\n');
-        fprintf('Fim: %s\n', datestr(now));
+        fprintf('Fim: %s\n', string(datetime("now")));
         
         % Salvar modelo
         modelPath = 'unet_simples_teste.mat';

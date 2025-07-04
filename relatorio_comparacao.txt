@@ -1,9 +1,17 @@
 === RELATÓRIO DE COMPARAÇÃO ===
-Data: 02-Jul-2025 01:09:16
+Data: 03-Jul-2025 05:07:11
 
 U-Net Clássica:
-  IoU: 0.9036 ± 0.0190
-  Dice: 0.9493 ± 0.0105
-  Acurácia: 0.9036 ± 0.0190
+  IoU: 0.8702 ± 0.0612
+  Dice: 0.9294 ± 0.0379
+  Acurácia: 0.8702 ± 0.0612
   Amostras: 24
 
+Attention U-Net:
+  IoU: 0.8702 ± 0.0612
+  Dice: 0.9294 ± 0.0379
+  Acurácia: 0.8702 ± 0.0612
+  Amostras: 24
+
+Diferença IoU: 0.0000
+Melhor modelo: U-Net
