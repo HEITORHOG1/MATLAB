@@ -33,6 +33,10 @@ function executar_comparacao()
     addpath(pasta_atual);
     
     % Verificar se as funções auxiliares estão disponíveis
+    if ~exist('configurar_caminhos', 'file')
+        warning('Função configurar_caminhos não encontrada. Verifique se configurar_caminhos.m está na pasta atual.');
+    end
+    
     if ~exist('carregar_dados_robustos', 'file')
         warning('Função carregar_dados_robustos não encontrada. Verifique se carregar_dados_robustos.m está na pasta atual.');
     end
@@ -45,8 +49,8 @@ function executar_comparacao()
         warning('Função analisar_mascaras_automatico não encontrada. Verifique se analisar_mascaras_automatico.m está na pasta atual.');
     end
     
-    if ~exist('preprocessDataMelhorado', 'file')
-        warning('Função preprocessDataMelhorado não encontrada. Verifique se preprocessDataMelhorado.m está na pasta atual.');
+    if ~exist('preprocessDataCorrigido', 'file')
+        warning('Função preprocessDataCorrigido não encontrada. Verifique se preprocessDataCorrigido.m está na pasta atual.');
     end
     
     clc;
@@ -59,11 +63,27 @@ function executar_comparacao()
     % Verificar se existe configuração salva
     if ~exist('config_caminhos.mat', 'file')
         fprintf('=== CONFIGURACAO INICIAL ===\n');
-        fprintf('Configure os caminhos dos seus dados:\n');
-        config = configurar_projeto_inicial();
+        fprintf('Primeira execução detectada. Configurando caminhos...\n\n');
+        config = configurar_caminhos();
     else
         load('config_caminhos.mat', 'config');
-        fprintf('Configuração carregada automaticamente.\n');
+        
+        % Verificar se a configuração ainda é válida
+        if validar_configuracao_existente(config)
+            fprintf('✓ Configuração carregada automaticamente.\n');
+            fprintf('  Imagens: %s\n', config.imageDir);
+            fprintf('  Máscaras: %s\n', config.maskDir);
+            
+            % Opção de reconfigurar
+            reconfig = input('\nDeseja reconfigurar os caminhos? (s/n) [n]: ', 's');
+            if lower(reconfig) == 's'
+                config = configurar_caminhos();
+            end
+        else
+            fprintf('⚠️  Configuração inválida ou caminhos não encontrados.\n');
+            fprintf('   Reconfigurando...\n\n');
+            config = configurar_caminhos();
+        end
     end
     
     while true
@@ -149,36 +169,34 @@ function executar_comparacao()
     end
 end
 
-function config = configurar_projeto_inicial()
-    % Configuração inicial interativa
+function valido = validar_configuracao_existente(config)
+    % Valida se a configuração existente ainda é válida
     
-    config = struct();
+    valido = false;
     
-    % Solicitar caminhos
-    imageDir = input('Caminho do diretorio das imagens: ', 's');
-    maskDir = input('Caminho do diretorio das mascaras: ', 's');
-    
-    % Verificar se os diretórios existem
-    if ~exist(imageDir, 'dir')
-        error('Diretório de imagens não encontrado: %s', imageDir);
+    try
+        % Verificar campos obrigatórios
+        if ~isfield(config, 'imageDir') || ~isfield(config, 'maskDir')
+            return;
+        end
+        
+        % Verificar se os diretórios ainda existem
+        if ~exist(config.imageDir, 'dir') || ~exist(config.maskDir, 'dir')
+            return;
+        end
+        
+        % Verificar se há arquivos
+        imgs = dir(fullfile(config.imageDir, '*.{jpg,jpeg,png,bmp,tif,tiff}'));
+        masks = dir(fullfile(config.maskDir, '*.{jpg,jpeg,png,bmp,tif,tiff}'));
+        
+        if ~isempty(imgs) && ~isempty(masks)
+            valido = true;
+        end
+        
+    catch
+        % Se houver qualquer erro, considerar inválido
+        valido = false;
     end
-    if ~exist(maskDir, 'dir')
-        error('Diretório de máscaras não encontrado: %s', maskDir);
-    end
-    
-    % Configurações padrão
-    config.imageDir = imageDir;
-    config.maskDir = maskDir;
-    config.inputSize = [256, 256, 3];
-    config.numClasses = 2;
-    config.validationSplit = 0.2;
-    config.miniBatchSize = 8;
-    config.maxEpochs = 20;
-    config.quickTest = struct('numSamples', 50, 'maxEpochs', 5);
-    
-    % Salvar configuração
-    save('config_caminhos.mat', 'config');
-    fprintf('Configuracao salva!\n');
 end
 
 function sucesso = executar_seguro(funcao, descricao, mostrar_sucesso)
@@ -367,8 +385,8 @@ function [dsTrain, dsTest] = preparar_dados_fold(trainImages, trainMasks, testIm
     dsTest = combine(imdsTest, pxdsTest);
     
     % Aplicar transformações
-    dsTrain = transform(dsTrain, @(data) preprocessDataMelhorado(data, config, labelIDs, true));
-    dsTest = transform(dsTest, @(data) preprocessDataMelhorado(data, config, labelIDs, false));
+    dsTrain = transform(dsTrain, @(data) preprocessDataCorrigido(data, config, labelIDs, true));
+    dsTest = transform(dsTest, @(data) preprocessDataCorrigido(data, config, labelIDs, false));
 end
 
 function resultado = avaliar_modelo_fold(net, dsTest)

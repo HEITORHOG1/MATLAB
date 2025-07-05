@@ -68,8 +68,8 @@ function treinar_unet_simples(config)
     dsVal = combine(imdsVal, pxdsVal);
     
     % Aplicar transformações
-    dsTrain = transform(dsTrain, @(data) preprocessDataMelhorado(data, config, labelIDs, true));
-    dsVal = transform(dsVal, @(data) preprocessDataMelhorado(data, config, labelIDs, false));
+    dsTrain = transform(dsTrain, @(data) preprocessDataCorrigido(data, config, labelIDs, true));
+    dsVal = transform(dsVal, @(data) preprocessDataCorrigido(data, config, labelIDs, false));
     
     % CORREÇÃO DEFINITIVA - Não usar .Files
     fprintf('Dados preparados:\n');
