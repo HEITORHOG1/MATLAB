@@ -1,5 +1,16 @@
 function dice = calcular_dice_simples(pred, gt)
-    % Calcular coeficiente Dice - Versão Final
+    % ========================================================================
+    % CÁLCULO DE DICE - PROJETO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
+    % DESCRIÇÃO:
+    %   Calcular coeficiente Dice - Versão Final
+    % ========================================================================
     
     try
         % Converter para binário

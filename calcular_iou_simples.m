@@ -1,5 +1,16 @@
 function iou = calcular_iou_simples(pred, gt)
-    % Calcular IoU (Intersection over Union) - Versão Final
+    % ========================================================================
+    % CÁLCULO DE IoU - PROJETO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
+    % DESCRIÇÃO:
+    %   Calcular IoU (Intersection over Union) - Versão Final
+    % ========================================================================
     
     try
         % Converter para binário

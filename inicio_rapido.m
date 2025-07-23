@@ -3,6 +3,11 @@ function inicio_rapido()
     % INÍCIO RÁPIDO - Projeto U-Net vs Attention U-Net
     % ========================================================================
     % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
     % DESCRIÇÃO:
     %   Função de início rápido que verifica a configuração e executa
     %   automaticamente os passos necessários.

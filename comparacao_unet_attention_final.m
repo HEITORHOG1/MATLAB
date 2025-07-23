@@ -1,6 +1,17 @@
 function comparacao_unet_attention_final(config)
-    % Comparacao completa entre U-Net e Attention U-Net
-    % VERSÃO DEFINITIVA - TODOS OS ERROS CORRIGIDOS
+    % ========================================================================
+    % COMPARACAO COMPLETA U-NET vs ATTENTION U-NET - VERSÃO FINAL
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final - TODOS OS ERROS CORRIGIDOS
+    %
+    % DESCRIÇÃO:
+    %   Comparação completa entre U-Net clássica e Attention U-Net com
+    %   análise detalhada de métricas e visualizações
+    % ========================================================================
     
     if nargin < 1
         error('Configuração é necessária. Execute primeiro: executar_comparacao()');

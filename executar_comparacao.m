@@ -3,6 +3,11 @@ function executar_comparacao()
     % SCRIPT PRINCIPAL: COMPARACAO U-NET vs ATTENTION U-NET
     % ========================================================================
     % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
     % DESCRIÇÃO:
     %   Script principal para comparação entre U-Net clássica e Attention U-Net
     %   em tarefas de segmentação semântica de imagens.

@@ -3,11 +3,13 @@ function data = preprocessDataCorrigido(data, config, labelIDs, useAugmentation)
     % PREPROCESSAMENTO CORRIGIDO - VERSÃO CRÍTICA
     % ========================================================================
     % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 2.0 - Correção Crítica
+    %
     % CORREÇÃO CRÍTICA: Remove conversão para categorical que causa erros
     % Mantém máscaras como numéricas para compatibilidade com trainNetwork
-    %
-    % VERSÃO: 2.0 - Correção Crítica
-    % DATA: Julho 2025
     % ========================================================================
     
     try

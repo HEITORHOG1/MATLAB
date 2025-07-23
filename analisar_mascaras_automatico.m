@@ -1,5 +1,16 @@
 function [classNames, labelIDs] = analisar_mascaras_automatico(maskDir, masks)
-    % Analisar máscaras automaticamente
+    % ========================================================================
+    % ANALISADOR AUTOMÁTICO DE MÁSCARAS - PROJETO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
+    % DESCRIÇÃO:
+    %   Analisar máscaras automaticamente para determinar formato e classes
+    % ========================================================================
     
     fprintf('Analisando formato das máscaras...\n');
     

@@ -1,5 +1,15 @@
 function [images, masks] = carregar_dados_robustos(config)
-    % Carregar dados de forma robusta e segura
+    % ========================================================================
+    % CARREGAMENTO ROBUSTO DE DADOS - PROJETO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
+    % DESCRIÇÃO:
+    %   Carregar dados de forma robusta e segura com validação completa
     % 
     % ENTRADA:
     %   config - Estrutura com configurações (imageDir, maskDir, etc.)

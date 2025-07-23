@@ -3,6 +3,11 @@ function executar_testes_completos()
     % TESTE COMPLETO DO PROJETO - Diagnóstico e Correção
     % ========================================================================
     % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
     % DESCRIÇÃO:
     %   Executa uma bateria completa de testes para identificar e corrigir
     %   todos os problemas do projeto U-Net vs Attention U-Net.

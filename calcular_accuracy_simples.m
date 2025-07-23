@@ -1,5 +1,16 @@
 function acc = calcular_accuracy_simples(pred, gt)
-    % Calcular acurácia pixel-wise - Versão Final
+    % ========================================================================
+    % CÁLCULO DE ACCURACY - PROJETO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
+    % DESCRIÇÃO:
+    %   Calcular acurácia pixel-wise - Versão Final
+    % ========================================================================
     
     try
         % Converter para binário

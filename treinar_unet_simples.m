@@ -1,6 +1,16 @@
 function treinar_unet_simples(config)
-    % Treinamento simples da U-Net para teste rapido
-    % VERSÃO DEFINITIVA - TODOS OS ERROS CORRIGIDOS
+    % ========================================================================
+    % TREINAMENTO U-NET SIMPLES - PROJETO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final - TODOS OS ERROS CORRIGIDOS
+    %
+    % DESCRIÇÃO:
+    %   Treinamento simples da U-Net para teste rápido e validação
+    % ========================================================================
     
     if nargin < 1
         error('Configuração é necessária. Execute primeiro: executar_comparacao()');

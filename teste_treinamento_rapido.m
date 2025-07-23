@@ -3,6 +3,11 @@ function teste_treinamento_rapido()
     % TESTE RÁPIDO DE TREINAMENTO - Pós Correção
     % ========================================================================
     % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
     % DESCRIÇÃO:
     %   Teste super rápido do treinamento após correção crítica
     %

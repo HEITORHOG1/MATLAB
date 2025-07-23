@@ -3,6 +3,11 @@ function config = configurar_caminhos()
     % CONFIGURACAO DE CAMINHOS - PROJETO U-NET vs ATTENTION U-NET
     % ========================================================================
     % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
     % DESCRIÇÃO:
     %   Função para configurar os caminhos das imagens e máscaras de forma
     %   portável e reutilizável em diferentes computadores.

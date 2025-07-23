@@ -3,9 +3,11 @@
 % U-Net vs Attention U-Net - Status Completo
 % =========================================================================
 %
-% VERSÃO: 1.2 Final
-% DATA: Julho 2025
-% STATUS: 100% FUNCIONAL E TESTADO
+% AUTOR: Heitor Oliveira Gonçalves
+% LinkedIn: https://www.linkedin.com/in/heitorhog/
+% Data: Julho 2025
+% Versão: 1.2 Final
+% Status: 100% FUNCIONAL E TESTADO
 %
 % =========================================================================
 

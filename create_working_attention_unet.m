@@ -2,9 +2,16 @@ function lgraph = create_working_attention_unet(inputSize, numClasses)
     % ========================================================================
     % ATTENTION U-NET FUNCIONAL - VERSÃO SIMPLIFICADA MAS EFETIVA
     % ========================================================================
-    % Esta versão cria uma U-Net modificada com características que simulam
-    % mecanismos de atenção de forma funcional e produzem resultados diferentes
-    % da U-Net clássica.
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final
+    %
+    % DESCRIÇÃO:
+    %   Esta versão cria uma U-Net modificada com características que simulam
+    %   mecanismos de atenção de forma funcional e produzem resultados diferentes
+    %   da U-Net clássica.
     % ========================================================================
     
     fprintf('🔥 Criando Attention U-Net FUNCIONAL (versão simplificada)...\n');

@@ -121,3 +121,14 @@ Quando executar `executar_comparacao()`, você verá:
 ---
 
 **🎉 Pronto para usar!** Execute `executar_comparacao()` e escolha a opção 5 para execução automática completa.
+
+## 👨‍💻 Autor
+
+**Heitor Oliveira Gonçalves**  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/heitorhog/)
+
+📧 Conecte-se comigo no LinkedIn: [linkedin.com/in/heitorhog](https://www.linkedin.com/in/heitorhog/)
+
+---
+
+**Desenvolvido por:** Heitor Oliveira Gonçalves - Projeto U-Net vs Attention U-Net

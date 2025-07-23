@@ -1,7 +1,16 @@
+% ========================================================================
 % TESTE AUTOMATIZADO - VERIFICAÇÃO DO PROJETO
+% ========================================================================
+% 
+% AUTOR: Heitor Oliveira Gonçalves
+% LinkedIn: https://www.linkedin.com/in/heitorhog/
+% Data: Julho 2025
+% Versão: 1.2 Final
 %
-% Este script verifica se todas as correções foram aplicadas com sucesso
-% e se o projeto está funcionando corretamente.
+% DESCRIÇÃO:
+%   Este script verifica se todas as correções foram aplicadas com sucesso
+%   e se o projeto está funcionando corretamente.
+% ========================================================================
 
 fprintf('========================================\n');
 fprintf('    TESTE AUTOMATIZADO DO PROJETO\n');

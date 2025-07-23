@@ -2,11 +2,14 @@
 % TESTE FINAL DE INTEGRIDADE - PROJETO U-NET vs ATTENTION U-NET
 % ========================================================================
 % 
-% Script para verificar se todas as correções foram aplicadas e se o
-% projeto está funcionando corretamente após a limpeza e correção.
+% AUTOR: Heitor Oliveira Gonçalves
+% LinkedIn: https://www.linkedin.com/in/heitorhog/
+% Data: Julho 2025
+% Versão: 1.2 Final
 %
-% VERSÃO: 1.0
-% DATA: Julho 2025
+% DESCRIÇÃO:
+%   Script para verificar se todas as correções foram aplicadas e se o
+%   projeto está funcionando corretamente após a limpeza e correção.
 % ========================================================================
 
 clc;

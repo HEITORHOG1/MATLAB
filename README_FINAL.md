@@ -170,4 +170,14 @@ Em um dataset típico de segmentação:
 **Versão:** 1.2 Final  
 **Data:** Julho 2025  
 **Licença:** MIT  
-**Maintainer:** Projeto U-Net vs Attention U-Net
+
+## 👨‍💻 Autor
+
+**Heitor Oliveira Gonçalves**  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/heitorhog/)
+
+📧 Conecte-se comigo no LinkedIn: [linkedin.com/in/heitorhog](https://www.linkedin.com/in/heitorhog/)
+
+---
+
+**Maintainer:** Heitor Oliveira Gonçalves - Projeto U-Net vs Attention U-Net

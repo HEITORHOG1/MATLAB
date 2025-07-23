@@ -1,6 +1,16 @@
 function converter_mascaras(config)
-    % Script para converter mascaras para formato padrao
-    % VERSÃO DEFINITIVA - TODOS OS ERROS CORRIGIDOS
+    % ========================================================================
+    % CONVERSOR DE MÁSCARAS - PROJETO U-NET vs ATTENTION U-NET
+    % ========================================================================
+    % 
+    % AUTOR: Heitor Oliveira Gonçalves
+    % LinkedIn: https://www.linkedin.com/in/heitorhog/
+    % Data: Julho 2025
+    % Versão: 1.2 Final - TODOS OS ERROS CORRIGIDOS
+    %
+    % DESCRIÇÃO:
+    %   Script para converter máscaras para formato padrão binário
+    % ========================================================================
     
     if nargin < 1
         error('Configuração é necessária. Execute primeiro: executar_comparacao()');
