@@ -21,6 +21,8 @@ Este projeto implementa uma comparação completa entre U-Net clássica e Attent
    - **Opção 3**: Teste rápido com U-Net
    - **Opção 5**: Execução automática completa
 
+📖 **Para instruções detalhadas, consulte**: [docs/user_guide.md](docs/user_guide.md)
+
 ## 📁 Estrutura dos Dados
 
 ```
@@ -59,6 +61,34 @@ seus_dados/
 - **Visualizações**: Comparações visuais dos resultados
 - **Relatórios**: Relatórios detalhados de performance
 
+## 📁 Estrutura do Projeto
+
+```
+projeto/
+├── src/                    # Código fonte organizado
+│   ├── core/              # Componentes principais
+│   ├── data/              # Carregamento e preprocessamento
+│   ├── models/            # Arquiteturas de modelos
+│   ├── evaluation/        # Métricas e análises
+│   ├── visualization/     # Gráficos e relatórios
+│   └── utils/             # Utilitários
+├── tests/                 # Sistema de testes
+│   ├── unit/              # Testes unitários
+│   ├── integration/       # Testes de integração
+│   └── performance/       # Testes de performance
+├── docs/                  # Documentação
+│   ├── user_guide.md      # Guia detalhado do usuário
+│   └── examples/          # Exemplos de uso
+├── config/                # Configurações
+├── output/                # Resultados gerados
+│   ├── models/            # Modelos salvos
+│   ├── reports/           # Relatórios
+│   └── visualizations/    # Gráficos
+└── img/                   # Dados de exemplo
+    ├── original/          # Imagens originais
+    └── masks/             # Máscaras de segmentação
+```
+
 ## 📋 Arquivos Principais
 
 | Arquivo | Descrição |
@@ -79,10 +109,10 @@ O projeto inclui um sistema completo de testes automatizados:
 % Executar todos os testes (recomendado na primeira vez)
 >> executar_testes_completos()
 
-% Testes específicos
->> teste_final_integridade()        % Teste de integridade
->> teste_projeto_automatizado()     % Teste automatizado
->> teste_treinamento_rapido()       % Teste de treinamento
+% Testes específicos (agora em tests/)
+>> addpath('tests'); teste_final_integridade()        % Teste de integridade
+>> addpath('tests'); teste_projeto_automatizado()     % Teste automatizado
+>> addpath('tests'); teste_treinamento_rapido()       % Teste de treinamento
 ```
 
 ### Testes Realizados (24 testes - 100% aprovação):
