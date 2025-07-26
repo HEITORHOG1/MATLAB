@@ -33,29 +33,32 @@ function executar_comparacao()
     % STATUS: ✅ Funcional e Testado
     % ========================================================================
     
-    % Adicionar pasta atual ao path do MATLAB
+    % Adicionar pasta atual e subdiretórios ao path do MATLAB
     pasta_atual = pwd;
     addpath(pasta_atual);
-    
+    addpath(fullfile(pasta_atual, 'scripts'));
+    addpath(fullfile(pasta_atual, 'utils'));
+    addpath(fullfile(pasta_atual, 'legacy'));
+    8
     % Verificar se as funções auxiliares estão disponíveis
     if ~exist('configurar_caminhos', 'file')
-        warning('Função configurar_caminhos não encontrada. Verifique se configurar_caminhos.m está na pasta atual.');
+        warning('Função configurar_caminhos não encontrada. Verifique se configurar_caminhos.m está na pasta scripts/.');
     end
     
     if ~exist('carregar_dados_robustos', 'file')
-        warning('Função carregar_dados_robustos não encontrada. Verifique se carregar_dados_robustos.m está na pasta atual.');
+        warning('Função carregar_dados_robustos não encontrada. Verifique se carregar_dados_robustos.m está na pasta utils/.');
     end
     
     if ~exist('create_working_attention_unet', 'file')
-        warning('Função create_working_attention_unet não encontrada. Verifique se create_working_attention_unet.m está na pasta atual.');
+        warning('Função create_working_attention_unet não encontrada. Verifique se create_working_attention_unet.m está na pasta legacy/.');
     end
     
     if ~exist('analisar_mascaras_automatico', 'file')
-        warning('Função analisar_mascaras_automatico não encontrada. Verifique se analisar_mascaras_automatico.m está na pasta atual.');
+        warning('Função analisar_mascaras_automatico não encontrada. Verifique se analisar_mascaras_automatico.m está na pasta utils/.');
     end
     
     if ~exist('preprocessDataCorrigido', 'file')
-        warning('Função preprocessDataCorrigido não encontrada. Verifique se preprocessDataCorrigido.m está na pasta atual.');
+        warning('Função preprocessDataCorrigido não encontrada. Verifique se preprocessDataCorrigido.m está na pasta utils/.');
     end
     
     clc;
@@ -69,7 +72,15 @@ function executar_comparacao()
     if ~exist('config_caminhos.mat', 'file')
         fprintf('=== CONFIGURACAO INICIAL ===\n');
         fprintf('Primeira execução detectada. Configurando caminhos...\n\n');
-        config = configurar_caminhos();
+        
+        % Tentar usar configuração automática primeiro
+        try
+            config = configurar_caminhos_automatico();
+        catch
+            % Se a automática falhar, usar a manual
+            fprintf('Configuração automática falhou, usando manual...\n');
+            config = configurar_caminhos();
+        end
     else
         load('config_caminhos.mat', 'config');
         
@@ -78,16 +89,18 @@ function executar_comparacao()
             fprintf('✓ Configuração carregada automaticamente.\n');
             fprintf('  Imagens: %s\n', config.imageDir);
             fprintf('  Máscaras: %s\n', config.maskDir);
-            
-            % Opção de reconfigurar
-            reconfig = input('\nDeseja reconfigurar os caminhos? (s/n) [n]: ', 's');
-            if lower(reconfig) == 's'
-                config = configurar_caminhos();
-            end
+            fprintf('  Configuração válida e será usada.\n\n');
         else
             fprintf('⚠️  Configuração inválida ou caminhos não encontrados.\n');
-            fprintf('   Reconfigurando...\n\n');
-            config = configurar_caminhos();
+            fprintf('   Reconfigurando automaticamente...\n\n');
+            
+            % Sempre usar configuração automática
+            try
+                config = configurar_caminhos_automatico();
+            catch ME
+                fprintf('❌ Erro na configuração automática: %s\n', ME.message);
+                error('Falha na configuração de caminhos');
+            end
         end
     end
     
@@ -191,8 +204,21 @@ function valido = validar_configuracao_existente(config)
         end
         
         % Verificar se há arquivos
-        imgs = dir(fullfile(config.imageDir, '*.{jpg,jpeg,png,bmp,tif,tiff}'));
-        masks = dir(fullfile(config.maskDir, '*.{jpg,jpeg,png,bmp,tif,tiff}'));
+        imgs = dir(fullfile(config.imageDir, '*.jpg'));
+        if isempty(imgs)
+            imgs = dir(fullfile(config.imageDir, '*.jpeg'));
+        end
+        if isempty(imgs)
+            imgs = dir(fullfile(config.imageDir, '*.png'));
+        end
+        
+        masks = dir(fullfile(config.maskDir, '*.jpg'));
+        if isempty(masks)
+            masks = dir(fullfile(config.maskDir, '*.jpeg'));
+        end
+        if isempty(masks)
+            masks = dir(fullfile(config.maskDir, '*.png'));
+        end
         
         if ~isempty(imgs) && ~isempty(masks)
             valido = true;
