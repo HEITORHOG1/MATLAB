@@ -198,15 +198,17 @@ function iou = calcular_iou_simples(pred, gt)
     % Calcular IoU simples
     
     try
-        % Converter para binário
+        % Converter para binário - LÓGICA CORRIGIDA
         if iscategorical(pred)
-            predBinary = double(pred) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            predBinary = pred == "foreground";
         else
             predBinary = pred > 0;
         end
         
         if iscategorical(gt)
-            gtBinary = double(gt) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            gtBinary = gt == "foreground";
         else
             gtBinary = gt > 0;
         end
@@ -229,17 +231,19 @@ function acc = calcular_accuracy_simples(pred, gt)
     % Calcular acurácia simples
     
     try
-        % Converter para mesmo formato
+        % Converter para mesmo formato - LÓGICA CORRIGIDA
         if iscategorical(pred)
-            predVals = double(pred);
+            % CORRETO: Usar comparação com categoria "foreground" para consistência
+            predVals = double(pred == "foreground");
         else
-            predVals = pred;
+            predVals = double(pred > 0);
         end
         
         if iscategorical(gt)
-            gtVals = double(gt);
+            % CORRETO: Usar comparação com categoria "foreground" para consistência
+            gtVals = double(gt == "foreground");
         else
-            gtVals = gt;
+            gtVals = double(gt > 0);
         end
         
         % Calcular acurácia

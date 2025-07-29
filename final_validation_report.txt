@@ -1,0 +1,32 @@
+========================================================================
+                    FINAL VALIDATION REPORT
+========================================================================
+
+Validation Date: 28-Jul-2025 15:15:51
+MATLAB Version: 24.1.0.2537033 (R2024a)
+
+SUMMARY:
+--------
+Tests Passed: 2
+Tests Failed: 4
+Warnings: 0
+
+OVERALL RESULT: ❌ FAILED
+Some validation tests failed. Review details above.
+
+VALIDATION DETAILS:
+-------------------
+1. Utility Classes: Verified DataTypeConverter, PreprocessingValidator, and VisualizationHelper
+2. Categorical Conversion: Tested categorical to binary and visualization conversions
+3. Metrics Calculation: Validated realistic metric values with test data
+4. Preprocessing Pipeline: Confirmed categorical data handling in preprocessing
+5. Visualization Generation: Tested image and mask visualization preparation
+
+SYSTEM STATUS:
+--------------
+REQUIRES ATTENTION
+Some tests failed and need to be addressed.
+
+========================================================================
+                         END OF REPORT
+========================================================================

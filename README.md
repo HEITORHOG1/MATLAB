@@ -9,8 +9,10 @@ Este projeto implementa uma comparação completa entre U-Net clássica e Attent
 
 1. **Execute o script principal:**
    ```matlab
-   >> executar_comparacao()
+   >> executar_comparacao
    ```
+   
+   ⚠️ **IMPORTANTE**: Use APENAS `executar_comparacao.m` como ponto de entrada único!
 
 2. **Configure seus dados** (primeira execução):
    - O sistema detectará automaticamente os caminhos ou pedirá configuração manual
@@ -195,7 +197,9 @@ Em um dataset típico de segmentação:
 
 ---
 
-**Para começar:** `>> executar_comparacao()`
+**Para começar:** `>> executar_comparacao`
+
+📋 **Consulte `COMO_EXECUTAR.md` para instruções detalhadas**
 
 **Versão:** 1.2 Final  
 **Data:** Julho 2025  

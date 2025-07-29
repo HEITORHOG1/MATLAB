@@ -461,13 +461,13 @@ function iou = calcular_iou_simples(pred, gt)
     
     % Converter para binário
     if iscategorical(pred)
-        predBinary = double(pred) > 1;
+        predBinary = (pred == "foreground");
     else
         predBinary = pred > 0;
     end
     
     if iscategorical(gt)
-        gtBinary = double(gt) > 1;
+        gtBinary = (gt == "foreground");
     else
         gtBinary = gt > 0;
     end

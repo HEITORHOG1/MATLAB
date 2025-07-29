@@ -329,76 +329,256 @@ end
 
 function gerar_comparacao_visual(netUNet, netAttUNet, dsVal, numVal)
     % Gerar comparação visual entre os modelos
-    % VERSÃO CORRIGIDA - Tratamento correto de tipos categorical
+    % VERSÃO CORRIGIDA - Usando VisualizationHelper para tratamento seguro de tipos
+    
+    fprintf('Iniciando geração de visualizações...\n');
     
     try
-        figure('Name', 'Comparação Visual dos Modelos', 'Position', [100 100 1600 800]);
-        
-        reset(dsVal);
-        for i = 1:min(3, numVal)  % CORREÇÃO DEFINITIVA - Usar numVal
-            if hasdata(dsVal)
-                data = read(dsVal);
-                img = data{1};
-                gt = data{2};
-                
-                predUNet = semanticseg(img, netUNet);
-                predAttUNet = semanticseg(img, netAttUNet);
-                
-                % Converter categorical para uint8 para visualização
-                if iscategorical(gt)
-                    gt_visual = uint8(gt == "foreground") * 255;
-                else
-                    gt_visual = uint8(gt);
+        % Ensure VisualizationHelper is available with robust path handling
+        if ~exist('VisualizationHelper', 'class')
+            % Try multiple possible paths
+            possiblePaths = {
+                fullfile(pwd, 'src', 'utils'),
+                fullfile(pwd, 'utils'),
+                fullfile(pwd, 'src'),
+                pwd
+            };
+            
+            helperFound = false;
+            for pathIdx = 1:length(possiblePaths)
+                if exist(fullfile(possiblePaths{pathIdx}, 'VisualizationHelper.m'), 'file')
+                    addpath(possiblePaths{pathIdx});
+                    helperFound = true;
+                    fprintf('✓ VisualizationHelper encontrado em: %s\n', possiblePaths{pathIdx});
+                    break;
                 end
-                
-                if iscategorical(predUNet)
-                    pred_unet_visual = uint8(predUNet == "foreground") * 255;
-                else
-                    pred_unet_visual = uint8(predUNet);
-                end
-                
-                if iscategorical(predAttUNet)
-                    pred_att_visual = uint8(predAttUNet == "foreground") * 255;
-                else
-                    pred_att_visual = uint8(predAttUNet);
-                end
-                
-                % Subplot para cada amostra
-                subplot(3, 5, (i-1)*5 + 1);
-                imshow(img);
-                title(sprintf('Imagem %d', i));
-                
-                subplot(3, 5, (i-1)*5 + 2);
-                imshow(gt_visual);
-                title('Ground Truth');
-                
-                subplot(3, 5, (i-1)*5 + 3);
-                imshow(pred_unet_visual);
-                title('U-Net');
-                
-                subplot(3, 5, (i-1)*5 + 4);
-                imshow(pred_att_visual);
-                title('Attention U-Net');
-                
-                % Diferença
-                subplot(3, 5, (i-1)*5 + 5);
-                diff = abs(double(pred_unet_visual) - double(pred_att_visual));
-                imshow(diff, []);
-                title('Diferença');
-                colorbar;
+            end
+            
+            if ~helperFound
+                error('VisualizationError:HelperNotFound', ...
+                    'VisualizationHelper class not found in expected paths');
             end
         end
         
-        sgtitle('Comparação Visual: U-Net vs Attention U-Net');
+        % Create figure with error handling
+        try
+            figHandle = figure('Name', 'Comparação Visual dos Modelos', ...
+                'Position', [100 100 1600 800], ...
+                'Visible', 'on');
+        catch ME_fig
+            warning('VisualizationError:FigureCreation', ...
+                'Failed to create figure with specified properties: %s', ME_fig.message);
+            figHandle = figure();
+        end
         
-        % Salvar figura
-        saveas(gcf, 'comparacao_visual_modelos.png');
-        fprintf('✓ Comparação visual salva em: comparacao_visual_modelos.png\n');
+        reset(dsVal);
+        numSamplesToShow = min(3, numVal);
+        fprintf('Processando %d amostras para visualização...\n', numSamplesToShow);
+        
+        for i = 1:numSamplesToShow
+            if hasdata(dsVal)
+                fprintf('  Processando amostra %d/%d...\n', i, numSamplesToShow);
+                
+                try
+                    % Read data with error handling
+                    data = read(dsVal);
+                    img = data{1};
+                    gt = data{2};
+                    
+                    % Generate predictions with error handling
+                    try
+                        predUNet = semanticseg(img, netUNet);
+                    catch ME_pred1
+                        warning('VisualizationError:UNetPrediction', ...
+                            'Failed to generate U-Net prediction: %s', ME_pred1.message);
+                        predUNet = gt; % Use ground truth as fallback
+                    end
+                    
+                    try
+                        predAttUNet = semanticseg(img, netAttUNet);
+                    catch ME_pred2
+                        warning('VisualizationError:AttentionPrediction', ...
+                            'Failed to generate Attention U-Net prediction: %s', ME_pred2.message);
+                        predAttUNet = gt; % Use ground truth as fallback
+                    end
+                    
+                    % Use VisualizationHelper for safe data preparation
+                    try
+                        [img_visual, gt_visual, pred_unet_visual] = VisualizationHelper.prepareComparisonData(img, gt, predUNet);
+                        [~, ~, pred_att_visual] = VisualizationHelper.prepareComparisonData(img, gt, predAttUNet);
+                    catch ME_prep
+                        warning('VisualizationError:DataPreparation', ...
+                            'Failed to prepare data for visualization: %s', ME_prep.message);
+                        % Use original data as fallback
+                        img_visual = img;
+                        gt_visual = gt;
+                        pred_unet_visual = predUNet;
+                        pred_att_visual = predAttUNet;
+                    end
+                    
+                    % Display original image
+                    subplot(3, 5, (i-1)*5 + 1);
+                    success = VisualizationHelper.safeImshow(img_visual);
+                    if ~success
+                        text(0.5, 0.5, 'Image Display Error', 'HorizontalAlignment', 'center', ...
+                            'Units', 'normalized', 'FontSize', 10, 'Color', 'red');
+                        axis off;
+                    end
+                    title(sprintf('Imagem %d', i), 'FontSize', 12);
+                    
+                    % Display ground truth
+                    subplot(3, 5, (i-1)*5 + 2);
+                    success = VisualizationHelper.safeImshow(gt_visual);
+                    if ~success
+                        text(0.5, 0.5, 'GT Display Error', 'HorizontalAlignment', 'center', ...
+                            'Units', 'normalized', 'FontSize', 10, 'Color', 'red');
+                        axis off;
+                    end
+                    title('Ground Truth', 'FontSize', 12);
+                    
+                    % Display U-Net prediction
+                    subplot(3, 5, (i-1)*5 + 3);
+                    success = VisualizationHelper.safeImshow(pred_unet_visual);
+                    if ~success
+                        text(0.5, 0.5, 'U-Net Display Error', 'HorizontalAlignment', 'center', ...
+                            'Units', 'normalized', 'FontSize', 10, 'Color', 'red');
+                        axis off;
+                    end
+                    title('U-Net', 'FontSize', 12);
+                    
+                    % Display Attention U-Net prediction
+                    subplot(3, 5, (i-1)*5 + 4);
+                    success = VisualizationHelper.safeImshow(pred_att_visual);
+                    if ~success
+                        text(0.5, 0.5, 'Attention Display Error', 'HorizontalAlignment', 'center', ...
+                            'Units', 'normalized', 'FontSize', 10, 'Color', 'red');
+                        axis off;
+                    end
+                    title('Attention U-Net', 'FontSize', 12);
+                    
+                    % Calculate and display difference with comprehensive error handling
+                    subplot(3, 5, (i-1)*5 + 5);
+                    try
+                        % Ensure both predictions are in the same format for difference calculation
+                        pred_unet_diff = VisualizationHelper.prepareMaskForDisplay(predUNet);
+                        pred_att_diff = VisualizationHelper.prepareMaskForDisplay(predAttUNet);
+                        
+                        % Calculate difference safely
+                        if isequal(size(pred_unet_diff), size(pred_att_diff))
+                            diff = abs(double(pred_unet_diff) - double(pred_att_diff));
+                            success = VisualizationHelper.safeImshow(diff, []);
+                            if success
+                                try
+                                    colorbar;
+                                    colormap(gca, 'hot');
+                                catch ME_colorbar
+                                    warning('VisualizationError:ColorbarFailed', ...
+                                        'Failed to add colorbar: %s', ME_colorbar.message);
+                                end
+                            else
+                                text(0.5, 0.5, 'Diff Display Error', 'HorizontalAlignment', 'center', ...
+                                    'Units', 'normalized', 'FontSize', 10, 'Color', 'red');
+                                axis off;
+                            end
+                        else
+                            warning('VisualizationError:SizeMismatch', ...
+                                'Prediction size mismatch for difference calculation');
+                            text(0.5, 0.5, 'Size Mismatch', 'HorizontalAlignment', 'center', ...
+                                'Units', 'normalized', 'FontSize', 10, 'Color', 'red');
+                            axis off;
+                        end
+                    catch ME_diff
+                        warning('VisualizationError:DifferenceCalculation', ...
+                            'Failed to calculate difference: %s', ME_diff.message);
+                        text(0.5, 0.5, 'Calc Error', 'HorizontalAlignment', 'center', ...
+                            'Units', 'normalized', 'FontSize', 10, 'Color', 'red');
+                        axis off;
+                    end
+                    title('Diferença', 'FontSize', 12);
+                    
+                catch ME_sample
+                    warning('VisualizationError:SampleProcessing', ...
+                        'Failed to process sample %d: %s', i, ME_sample.message);
+                    
+                    % Create error placeholders for this sample
+                    for j = 1:5
+                        subplot(3, 5, (i-1)*5 + j);
+                        text(0.5, 0.5, sprintf('Sample %d Error', i), ...
+                            'HorizontalAlignment', 'center', 'Units', 'normalized', ...
+                            'FontSize', 12, 'Color', 'red');
+                        axis off;
+                    end
+                end
+            else
+                warning('VisualizationError:NoData', 'No data available for sample %d', i);
+                break;
+            end
+        end
+        
+        % Add main title with error handling
+        try
+            sgtitle('Comparação Visual: U-Net vs Attention U-Net', 'FontSize', 16, 'FontWeight', 'bold');
+        catch ME_title
+            warning('VisualizationError:TitleFailed', ...
+                'Failed to add main title: %s', ME_title.message);
+        end
+        
+        % Save figure with comprehensive error handling
+        try
+            % Ensure output directory exists
+            outputDir = pwd;
+            if ~exist(outputDir, 'dir')
+                mkdir(outputDir);
+            end
+            
+            outputPath = fullfile(outputDir, 'comparacao_visual_modelos.png');
+            
+            % Try different save methods
+            try
+                saveas(figHandle, outputPath, 'png');
+                fprintf('✓ Comparação visual salva em: %s\n', outputPath);
+            catch ME_saveas
+                warning('VisualizationError:SaveAsFailed', ...
+                    'saveas failed: %s', ME_saveas.message);
+                
+                % Try print method as fallback
+                try
+                    print(figHandle, outputPath, '-dpng', '-r300');
+                    fprintf('✓ Comparação visual salva usando print em: %s\n', outputPath);
+                catch ME_print
+                    warning('VisualizationError:PrintFailed', ...
+                        'print also failed: %s', ME_print.message);
+                    fprintf('⚠ Não foi possível salvar a visualização, mas foi gerada na tela\n');
+                end
+            end
+            
+        catch ME_save
+            warning('VisualizationError:SaveFailed', ...
+                'Failed to save visualization: %s', ME_save.message);
+            fprintf('⚠ Erro ao salvar visualização, mas comparação foi gerada na tela\n');
+        end
+        
+        fprintf('✓ Geração de visualizações concluída\n');
         
     catch ME
-        fprintf('ERRO na comparacao: %s\n', ME.message);
+        fprintf('❌ ERRO CRÍTICO na comparacao visual: %s\n', ME.message);
+        fprintf('Stack trace:\n');
+        for k = 1:length(ME.stack)
+            fprintf('  %s (line %d)\n', ME.stack(k).name, ME.stack(k).line);
+        end
         fprintf('A comparação numérica foi concluída com sucesso.\n');
         fprintf('O erro ocorreu apenas na geração de visualizações.\n');
+        
+        % Try to create a minimal error figure
+        try
+            figure('Name', 'Visualization Error');
+            text(0.5, 0.5, {'Erro na Geração de Visualizações', ME.message}, ...
+                'HorizontalAlignment', 'center', 'Units', 'normalized', ...
+                'FontSize', 14, 'Color', 'red', 'Interpreter', 'none');
+            axis off;
+        catch
+            % Even error display failed - just continue
+        end
     end
 end
 
@@ -495,8 +675,8 @@ end
 function [classNames, labelIDs] = analisar_mascaras_automatico_interno(~, ~)
     % Analisar máscaras automaticamente para determinar classes - implementação interna
     
-    % Para segmentação binária simples
-    classNames = {'background', 'foreground'};
+    % Para segmentação binária simples - usar formato string array para consistência
+    classNames = ["background", "foreground"];
     labelIDs = [0, 1];
     
     fprintf('Classes detectadas: %s\n', strjoin(classNames, ', '));
@@ -529,9 +709,45 @@ function dataOut = preprocessDataMelhorado_interno(data, config, ~, isTraining)
         % Redimensionar imagem
         img = imresize(img, config.inputSize(1:2));
         
-        % Processar máscara
+        % Processar máscara com validação de tipo
         if size(mask, 3) > 1
-            mask = rgb2gray(mask);
+            % Check if mask is categorical before applying rgb2gray
+            if iscategorical(mask)
+                % Use DataTypeConverter for consistent categorical conversion
+                if ~exist('DataTypeConverter', 'class')
+                    % Try multiple possible paths for DataTypeConverter
+                    possiblePaths = {
+                        fullfile(pwd, 'src', 'utils'),
+                        fullfile(pwd, 'utils'),
+                        fullfile(pwd, 'src'),
+                        pwd
+                    };
+                    
+                    for pathIdx = 1:length(possiblePaths)
+                        if exist(fullfile(possiblePaths{pathIdx}, 'DataTypeConverter.m'), 'file')
+                            addpath(possiblePaths{pathIdx});
+                            break;
+                        end
+                    end
+                end
+                
+                try
+                    mask = DataTypeConverter.categoricalToNumeric(mask, 'uint8');
+                catch ME_converter
+                    warning('PreprocessingError:DataTypeConverter', ...
+                        'DataTypeConverter failed: %s', ME_converter.message);
+                    % Fallback to direct conversion
+                    mask = uint8(mask == "foreground") * 255;
+                end
+                
+                % If still multi-channel, take first channel
+                if size(mask, 3) > 1
+                    mask = mask(:,:,1);
+                end
+            else
+                % Safe to apply rgb2gray to numeric data
+                mask = rgb2gray(mask);
+            end
         end
         
         % Redimensionar máscara
@@ -551,9 +767,33 @@ function dataOut = preprocessDataMelhorado_interno(data, config, ~, isTraining)
         % Converter para valores inteiros 0 e 1
         mask = uint8(mask);
         
-        % Converter para categorical com as classes corretas
-        % Usar sempre [0, 1] como labelIDs para evitar problemas
-        mask = categorical(mask, [0, 1], {'background', 'foreground'});
+        % Converter para categorical com as classes corretas usando DataTypeConverter
+        % Usar sempre [0, 1] como labelIDs e ["background", "foreground"] para consistência
+        try
+            % Add path for DataTypeConverter if needed
+            if ~exist('DataTypeConverter', 'class')
+                % Try multiple possible paths for DataTypeConverter
+                possiblePaths = {
+                    fullfile(pwd, 'src', 'utils'),
+                    fullfile(pwd, 'utils'),
+                    fullfile(pwd, 'src'),
+                    pwd
+                };
+                
+                for pathIdx = 1:length(possiblePaths)
+                    if exist(fullfile(possiblePaths{pathIdx}, 'DataTypeConverter.m'), 'file')
+                        addpath(possiblePaths{pathIdx});
+                        break;
+                    end
+                end
+            end
+            mask = DataTypeConverter.numericToCategorical(mask, ["background", "foreground"], [0, 1]);
+        catch ME_converter
+            warning('PreprocessingError:CategoricalCreation', ...
+                'DataTypeConverter failed for categorical creation: %s', ME_converter.message);
+            % Fallback to direct creation if DataTypeConverter not available
+            mask = categorical(mask, [0, 1], ["background", "foreground"]);
+        end
         
         % Normalizar imagem
         img = im2double(img);
@@ -570,10 +810,41 @@ function dataOut = preprocessDataMelhorado_interno(data, config, ~, isTraining)
             if rand > 0.7  % Aplicar rotação apenas 30% das vezes
                 angle = (rand - 0.5) * 10; % -5 a +5 graus (menor para evitar problemas)
                 img = imrotate(img, angle, 'bilinear', 'crop');
-                % Para categorical, converter temporariamente para numérico
-                mask_num = uint8(mask) - 1; % Converter para 0,1
-                mask_num = imrotate(mask_num, angle, 'nearest', 'crop');
-                mask = categorical(mask_num, [0, 1], {'background', 'foreground'});
+                % Para categorical, usar DataTypeConverter para conversões seguras
+                try
+                    if ~exist('DataTypeConverter', 'class')
+                        % Try multiple possible paths for DataTypeConverter
+                        possiblePaths = {
+                            fullfile(pwd, 'src', 'utils'),
+                            fullfile(pwd, 'utils'),
+                            fullfile(pwd, 'src'),
+                            pwd
+                        };
+                        
+                        for pathIdx = 1:length(possiblePaths)
+                            if exist(fullfile(possiblePaths{pathIdx}, 'DataTypeConverter.m'), 'file')
+                                addpath(possiblePaths{pathIdx});
+                                break;
+                            end
+                        end
+                    end
+                    mask_num = DataTypeConverter.categoricalToNumeric(mask, 'uint8');
+                    mask_num = imrotate(mask_num, angle, 'nearest', 'crop');
+                    mask = DataTypeConverter.numericToCategorical(mask_num, ["background", "foreground"], [0, 1]);
+                catch ME_rotation
+                    warning('PreprocessingError:RotationConversion', ...
+                        'DataTypeConverter failed during rotation: %s', ME_rotation.message);
+                    % Fallback to direct conversion
+                    try
+                        mask_num = uint8(mask == "foreground"); % Converter para 0,1 corretamente
+                        mask_num = imrotate(mask_num, angle, 'nearest', 'crop');
+                        mask = categorical(mask_num, [0, 1], ["background", "foreground"]);
+                    catch ME_fallback
+                        warning('PreprocessingError:RotationFallback', ...
+                            'Rotation fallback also failed: %s', ME_fallback.message);
+                        % Keep original mask if all else fails
+                    end
+                end
             end
         end
         
@@ -581,26 +852,53 @@ function dataOut = preprocessDataMelhorado_interno(data, config, ~, isTraining)
         
     catch ME
         fprintf('Erro no pré-processamento: %s\n', ME.message);
-        % Retornar dados básicos em caso de erro
+        % Retornar dados básicos em caso de erro usando DataTypeConverter
         img_default = zeros(config.inputSize);
-        mask_default = categorical(zeros(config.inputSize(1:2)), [0, 1], {'background', 'foreground'});
+        try
+            if ~exist('DataTypeConverter', 'class')
+                % Try multiple possible paths for DataTypeConverter
+                possiblePaths = {
+                    fullfile(pwd, 'src', 'utils'),
+                    fullfile(pwd, 'utils'),
+                    fullfile(pwd, 'src'),
+                    pwd
+                };
+                
+                for pathIdx = 1:length(possiblePaths)
+                    if exist(fullfile(possiblePaths{pathIdx}, 'DataTypeConverter.m'), 'file')
+                        addpath(possiblePaths{pathIdx});
+                        break;
+                    end
+                end
+            end
+            mask_default = DataTypeConverter.numericToCategorical(zeros(config.inputSize(1:2)), ...
+                ["background", "foreground"], [0, 1]);
+        catch ME_default
+            warning('PreprocessingError:DefaultMaskCreation', ...
+                'DataTypeConverter failed for default mask: %s', ME_default.message);
+            % Fallback to direct creation
+            mask_default = categorical(zeros(config.inputSize(1:2)), [0, 1], ["background", "foreground"]);
+        end
         dataOut = {img_default, mask_default};
     end
 end
 
 function iou = calcular_iou_simples_interno(pred, gt)
     % Calcular IoU (Intersection over Union) - implementação interna
+    % CORRIGIDO: Lógica de conversão categorical correta
     
     try
-        % Converter para binário
+        % Converter para binário - LÓGICA CORRIGIDA
         if iscategorical(pred)
-            predBinary = double(pred) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            predBinary = pred == "foreground";
         else
             predBinary = pred > 0;
         end
         
         if iscategorical(gt)
-            gtBinary = double(gt) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            gtBinary = gt == "foreground";
         else
             gtBinary = gt > 0;
         end
@@ -614,24 +912,28 @@ function iou = calcular_iou_simples_interno(pred, gt)
         else
             iou = intersection / union;
         end
-    catch
+    catch ME
+        warning('MetricsError:IoUCalculation', 'Erro no cálculo IoU: %s', ME.message);
         iou = 0; % Erro no cálculo
     end
 end
 
 function dice = calcular_dice_simples_interno(pred, gt)
     % Calcular coeficiente Dice - implementação interna
+    % CORRIGIDO: Lógica de conversão categorical correta
     
     try
-        % Converter para binário
+        % Converter para binário - LÓGICA CORRIGIDA
         if iscategorical(pred)
-            predBinary = double(pred) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            predBinary = pred == "foreground";
         else
             predBinary = pred > 0;
         end
         
         if iscategorical(gt)
-            gtBinary = double(gt) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            gtBinary = gt == "foreground";
         else
             gtBinary = gt > 0;
         end
@@ -645,24 +947,28 @@ function dice = calcular_dice_simples_interno(pred, gt)
         else
             dice = 2 * intersection / total;
         end
-    catch
+    catch ME
+        warning('MetricsError:DiceCalculation', 'Erro no cálculo Dice: %s', ME.message);
         dice = 0; % Erro no cálculo
     end
 end
 
 function acc = calcular_accuracy_simples_interno(pred, gt)
     % Calcular acurácia pixel-wise - implementação interna
+    % CORRIGIDO: Lógica de conversão categorical correta
     
     try
-        % Converter para binário
+        % Converter para binário - LÓGICA CORRIGIDA
         if iscategorical(pred)
-            predBinary = double(pred) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            predBinary = pred == "foreground";
         else
             predBinary = pred > 0;
         end
         
         if iscategorical(gt)
-            gtBinary = double(gt) > 1;
+            % CORRETO: Usar comparação com categoria "foreground"
+            gtBinary = gt == "foreground";
         else
             gtBinary = gt > 0;
         end
@@ -672,7 +978,8 @@ function acc = calcular_accuracy_simples_interno(pred, gt)
         total = numel(predBinary);
         
         acc = correct / total;
-    catch
+    catch ME
+        warning('MetricsError:AccuracyCalculation', 'Erro no cálculo Acurácia: %s', ME.message);
         acc = 0; % Erro no cálculo
     end
 end

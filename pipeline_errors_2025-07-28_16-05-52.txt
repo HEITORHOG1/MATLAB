@@ -1,0 +1,77 @@
+=== LOG DE ERROS DO PIPELINE ===
+Data/Hora: 28-Jul-2025 16:05:52
+MATLAB Version: 24.1.0.2537033 (R2024a)
+================================
+
+[2025-07-28 16:05:52] INFO: Sistema de monitoramento iniciado
+[2025-07-28 16:05:52] INFO: Paths adicionados com sucesso
+[2025-07-28 16:05:52] INFO: Iniciando execução monitorada do pipeline
+[2025-07-28 16:05:52] INFO: Verificando dependências...
+[2025-07-28 16:05:52] DEBUG: Arquivo encontrado: src/utils/ErrorHandler.m
+[2025-07-28 16:05:52] DEBUG: Arquivo encontrado: src/utils/VisualizationHelper.m
+[2025-07-28 16:05:52] DEBUG: Arquivo encontrado: src/utils/DataTypeConverter.m
+[2025-07-28 16:05:52] DEBUG: Arquivo encontrado: src/utils/PreprocessingValidator.m
+[2025-07-28 16:05:52] DEBUG: Arquivo encontrado: executar_comparacao.m
+[2025-07-28 16:05:52] DEBUG: Arquivo encontrado: legacy/comparacao_unet_attention_final.m
+[2025-07-28 16:05:52] WARNING: Toolbox pode não estar disponível: Deep Learning Toolbox
+[2025-07-28 16:05:52] WARNING: Toolbox pode não estar disponível: Image Processing Toolbox
+[2025-07-28 16:05:52] WARNING: Toolbox pode não estar disponível: Computer Vision Toolbox
+[2025-07-28 16:05:52] SUCCESS: Dependências verificadas
+[2025-07-28 16:05:52] INFO: Configurando ambiente...
+[2025-07-28 16:05:52] INFO: Configuração criada com sucesso
+[2025-07-28 16:05:52] SUCCESS: Ambiente configurado
+[2025-07-28 16:05:52] INFO: Executando pipeline principal...
+[2025-07-28 16:05:52] INFO: Tentando executar executar_comparacao()...
+[2025-07-28 16:05:53] ERROR: Erro na execução do pipeline principal
+  Erro: Support for user input is required, which is not available on this platform.
+  Identificador: MATLAB:services:MissingRequiredCapability
+  Stack trace:
+    executar_comparacao (linha 118) em C:\Users\heito\Documents\MATLAB\executar_comparacao.m
+    execute_main_pipeline (linha 168) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    execute_with_monitoring (linha 81) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    monitor_pipeline_errors (linha 35) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+
+[2025-07-28 16:05:53] INFO: Tentando execução com dados sintéticos...
+[2025-07-28 16:05:53] INFO: Gerando dados sintéticos para teste...
+[2025-07-28 16:05:53] INFO: Dados sintéticos gerados: 10 amostras
+[2025-07-28 16:05:53] INFO: Testando visualização com dados...
+[2025-07-28 16:05:53] DEBUG: Imagem preparada: uint8, size: [256 256 3]
+[2025-07-28 16:05:53] DEBUG: Máscara preparada: uint8, size: [256 256]
+[2025-07-28 16:05:53] DEBUG: Dados de comparação preparados com sucesso
+[2025-07-28 16:05:53] SUCCESS: Teste de visualização concluído
+[2025-07-28 16:05:53] INFO: Testando conversão de dados...
+[2025-07-28 16:05:54] DEBUG: Conversão categórica: categorical -> uint8
+[2025-07-28 16:05:54] ERROR: Erro no teste de conversão
+  Erro: The class DataTypeConverter has no Constant property or Static method named 'categoricalToRGB'.
+  Identificador: MATLAB:subscripting:classHasNoPropertyOrMethod
+  Stack trace:
+    test_data_conversion_with_data (linha 299) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    execute_with_synthetic_data (linha 214) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    execute_main_pipeline (linha 184) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    execute_with_monitoring (linha 81) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    monitor_pipeline_errors (linha 35) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+
+[2025-07-28 16:05:54] INFO: Testando preprocessamento...
+[2025-07-28 16:05:54] DEBUG: Validação de par: true
+[2025-07-28 16:05:54] ERROR: Erro no teste de preprocessamento
+  Erro: The class PreprocessingValidator has no Constant property or Static method named 'validateCategoricalData'.
+  Identificador: MATLAB:subscripting:classHasNoPropertyOrMethod
+  Stack trace:
+    test_preprocessing_with_data (linha 320) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    execute_with_synthetic_data (linha 215) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    execute_main_pipeline (linha 184) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    execute_with_monitoring (linha 81) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+    monitor_pipeline_errors (linha 35) em C:\Users\heito\Documents\MATLAB\monitor_pipeline_errors.m
+
+[2025-07-28 16:05:54] SUCCESS: Pipeline principal executado
+[2025-07-28 16:05:54] INFO: Testando componentes individuais...
+[2025-07-28 16:05:54] INFO: Testando ErrorHandler...
+[2025-07-28 16:05:54] SUCCESS: ErrorHandler funcionando
+[2025-07-28 16:05:54] INFO: Testando VisualizationHelper...
+[2025-07-28 16:05:54] SUCCESS: VisualizationHelper funcionando
+[2025-07-28 16:05:54] INFO: Testando DataTypeConverter...
+[2025-07-28 16:05:54] SUCCESS: DataTypeConverter funcionando
+[2025-07-28 16:05:54] INFO: Testando PreprocessingValidator...
+[2025-07-28 16:05:54] SUCCESS: PreprocessingValidator funcionando
+[2025-07-28 16:05:54] SUCCESS: Componentes testados
+[2025-07-28 16:05:54] SUCCESS: Pipeline executado com sucesso!

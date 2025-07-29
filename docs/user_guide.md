@@ -99,6 +99,8 @@ O sistema validará automaticamente:
 >> executar_comparacao()
 ```
 
+**IMPORTANTE**: Use APENAS `executar_comparacao.m` como ponto de entrada único do sistema.
+
 ### Método 2: Execução por Etapas
 
 ```matlab
