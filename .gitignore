@@ -1,20 +1,193 @@
-# Arquivos de modelo MATLAB grandes
+# =============================================================================
+# .gitignore para Projeto U-Net vs Attention U-Net
+# Versão 1.3 - Sistema Robusto (28/07/2025)
+# =============================================================================
+
+# Arquivos de modelo MATLAB grandes (>100MB)
 *.mat
 !config_caminhos.mat
+!config_comparacao.mat
 
 # Arquivos temporários do MATLAB
 *.asv
 *.autosave
+*.m~
 
-# Arquivos de cache
+# Arquivos de cache e compilados
 *.mexa64
 *.mexw64
 *.mex
+*.mexmaci64
 
-# Diretórios de saída
+# =============================================================================
+# Diretórios de saída e resultados
+# =============================================================================
+
+# Resultados de execução
 resultados/
 modelos_salvos/
+output/
+results/
+
+# Dados gerados automaticamente
+data/images/
+data/masks/
+
+# Visualizações geradas
+*.png
+*.jpg
+*.jpeg
+!docs/images/
+comparacao_visual_modelos.png
+
+# =============================================================================
+# Logs e monitoramento
+# =============================================================================
+
+# Logs de erro e monitoramento
 *.log
+pipeline_errors_*.txt
+error_log_*.txt
+
+# Relatórios gerados
+relatorio_comparacao.txt
+resultados_comparacao.mat
+
+# =============================================================================
+# Arquivos específicos do sistema
+# =============================================================================
 
 # Arquivos grandes específicos
 1/unet_256_final.mat
+modelo_unet.mat
+modelo_attention_unet.mat
+
+# Configurações temporárias
+temp_config.mat
+workspace_backup.mat
+
+# =============================================================================
+# Sistema operacional
+# =============================================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Linux
+*~
+.nfs*
+
+# =============================================================================
+# IDEs e editores
+# =============================================================================
+
+# MATLAB
+*.mlx.autosave
+slprj/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+
+# =============================================================================
+# Dados de usuário (manter privados)
+# =============================================================================
+
+# Dados pessoais do usuário
+imagens_usuario/
+mascaras_usuario/
+dados_privados/
+
+# Configurações específicas do usuário
+user_config.mat
+personal_settings.mat
+
+# =============================================================================
+# Arquivos de backup
+# =============================================================================
+
+# Backups automáticos
+backup_*/
+*.backup
+*.bak
+
+# Versões antigas
+*_old.*
+*_backup.*
+*_v*.mat
+
+# =============================================================================
+# Arquivos de teste temporários
+# =============================================================================
+
+# Testes temporários
+test_*.png
+test_*.jpg
+test_*.mat
+temp_test_*
+
+# Dados sintéticos temporários
+synthetic_data/
+temp_images/
+temp_masks/
+
+# =============================================================================
+# Documentação gerada
+# =============================================================================
+
+# Documentação HTML gerada
+html/
+latex/
+
+# PDFs gerados automaticamente
+*.pdf
+!docs/*.pdf
+
+# =============================================================================
+# IMPORTANTE: Arquivos que DEVEM ser incluídos no Git
+# =============================================================================
+
+# Scripts principais (sempre incluir)
+!executar_pipeline_real.m
+!monitor_pipeline_errors.m
+!executar_comparacao_automatico.m
+!executar_comparacao.m
+
+# Utilitários do sistema (sempre incluir)
+!src/utils/*.m
+!legacy/*.m
+
+# Documentação (sempre incluir)
+!README.md
+!docs/*.md
+!*.md
+
+# Configurações do projeto (sempre incluir)
+!.gitignore
+!.kiro/
+
+# =============================================================================
+# Notas para desenvolvedores:
+# 
+# 1. Arquivos .mat são ignorados por padrão (podem ser grandes)
+# 2. Logs são ignorados (gerados automaticamente)
+# 3. Resultados são ignorados (gerados pelo pipeline)
+# 4. Scripts principais são sempre incluídos
+# 5. Documentação é sempre incluída
+# 
+# Para forçar inclusão de um arquivo .mat específico:
+# git add -f arquivo_especifico.mat
+# =============================================================================
