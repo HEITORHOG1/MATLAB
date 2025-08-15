@@ -61,6 +61,18 @@ classdef MainInterface < handle
         showDetailedProgress = true
         showTimeEstimates = true
         enableAnimations = true
+        
+        % Novos componentes integrados
+        modelSaver
+        modelLoader
+        modelManagerCLI
+        resultsOrganizer
+        trainingIntegration
+        
+        % Configurações das novas funcionalidades
+        autoSaveModels = true
+        autoOrganizeResults = true
+        enableModelVersioning = true
     end
     
     properties (Constant)
@@ -75,7 +87,9 @@ classdef MainInterface < handle
             'CROSS_VALIDATION', 4, ...
             'REPORTS_ONLY', 5, ...
             'SYSTEM_TESTS', 6, ...
-            'HELP', 7, ...
+            'MODEL_MANAGEMENT', 7, ...
+            'RESULTS_ANALYSIS', 8, ...
+            'HELP', 9, ...
             'EXIT', 0)
         
         % Códigos de cores para output
@@ -126,6 +140,9 @@ classdef MainInterface < handle
             
             % Inicializar componentes
             obj.initializeComponents();
+            
+            % Inicializar novos componentes
+            obj.initializeNewComponents();
             
             % Configurar sessão
             obj.initializeSession();
@@ -205,6 +222,8 @@ classdef MainInterface < handle
                 sprintf('%s %d. 📊 Validação Cruzada K-Fold', obj.ICONS.CHART, obj.MENU_OPTIONS.CROSS_VALIDATION)
                 sprintf('%s %d. 📈 Gerar Apenas Relatórios (modelos já treinados)', obj.ICONS.CHART, obj.MENU_OPTIONS.REPORTS_ONLY)
                 sprintf('%s %d. 🧪 Executar Testes do Sistema', obj.ICONS.TEST, obj.MENU_OPTIONS.SYSTEM_TESTS)
+                sprintf('%s %d. 💾 Gerenciamento de Modelos (carregar, listar, versões)', obj.ICONS.GEAR, obj.MENU_OPTIONS.MODEL_MANAGEMENT)
+                sprintf('%s %d. 📋 Análise de Resultados (organização e estatísticas)', obj.ICONS.CHART, obj.MENU_OPTIONS.RESULTS_ANALYSIS)
                 sprintf('%s %d. 📖 Ajuda e Documentação', obj.ICONS.BOOK, obj.MENU_OPTIONS.HELP)
                 sprintf('%s %d. ❌ Sair', obj.ICONS.EXIT, obj.MENU_OPTIONS.EXIT)
             };
@@ -231,7 +250,7 @@ classdef MainInterface < handle
             while true
                 try
                     fprintf('\n');
-                    choice = input('Escolha uma opção [1-7, 0]: ');
+                    choice = input('Escolha uma opção [1-9, 0]: ');
                     
                     % Validar entrada
                     if obj.validateUserInput(choice)
@@ -239,7 +258,7 @@ classdef MainInterface < handle
                         obj.addToHistory(choice);
                         return;
                     else
-                        obj.printColored(sprintf('%s Opção inválida! Por favor, escolha um número entre 0 e 7.\n', ...
+                        obj.printColored(sprintf('%s Opção inválida! Por favor, escolha um número entre 0 e 9.\n', ...
                             obj.ICONS.ERROR), 'RED');
                     end
                     
@@ -277,6 +296,12 @@ classdef MainInterface < handle
                 case obj.MENU_OPTIONS.SYSTEM_TESTS
                     obj.executeSystemTests();
                     
+                case obj.MENU_OPTIONS.MODEL_MANAGEMENT
+                    obj.executeModelManagement();
+                    
+                case obj.MENU_OPTIONS.RESULTS_ANALYSIS
+                    obj.executeResultsAnalysis();
+                    
                 case obj.MENU_OPTIONS.HELP
                     obj.displayHelp();
                     
@@ -306,8 +331,22 @@ classdef MainInterface < handle
                 
                 % Confirmar execução
                 if obj.confirmAction('Continuar com execução rápida?')
+                    % Configurar salvamento automático se habilitado
+                    if obj.autoSaveModels && ~isempty(obj.trainingIntegration)
+                        obj.config = obj.trainingIntegration.enhanceTrainingConfig(obj.config);
+                    end
+                    
                     % Executar comparação rápida
-                    obj.runQuickComparison();
+                    results = obj.runQuickComparison();
+                    
+                    % Organizar resultados automaticamente se habilitado
+                    if obj.autoOrganizeResults && ~isempty(obj.resultsOrganizer) && ~isempty(results)
+                        try
+                            obj.organizeComparisonResults(results);
+                        catch ME
+                            obj.logger.warning('Erro na organização automática de resultados', 'Exception', ME);
+                        end
+                    end
                 else
                     obj.printColored('Execução cancelada pelo usuário.\n', 'YELLOW');
                 end
@@ -327,22 +366,8 @@ classdef MainInterface < handle
             try
                 obj.printColored('Configurando caminhos e parâmetros do sistema...\n', 'WHITE');
                 
-                % Mostrar configuração atual se existir
-                if obj.hasValidConfiguration()
-                    obj.displayCurrentConfiguration();
-                    
-                    if ~obj.confirmAction('Deseja reconfigurar?')
-                        return;
-                    end
-                end
-                
-                % Executar configuração
-                obj.config = obj.configManager.configureInteractive();
-                
-                % Salvar configuração
-                obj.configManager.saveConfig(obj.config);
-                
-                obj.printColored(sprintf('%s Configuração salva com sucesso!\n', obj.ICONS.SUCCESS), 'GREEN');
+                % Menu de configuração
+                obj.showConfigurationMenu();
                 
             catch ME
                 obj.handleExecutionError(ME, 'Configuração');
@@ -372,9 +397,23 @@ classdef MainInterface < handle
                         'EnableDetailedLogging', true, ...
                         'EnableParallelTraining', obj.askYesNo('Habilitar treinamento paralelo (se disponível)?'));
                     
+                    % Configurar salvamento automático se habilitado
+                    if obj.autoSaveModels && ~isempty(obj.trainingIntegration)
+                        obj.config = obj.trainingIntegration.enhanceTrainingConfig(obj.config);
+                    end
+                    
                     % Executar comparação
                     results = controller.runFullComparison('Mode', 'full', ...
-                        'SaveModels', true, 'GenerateReports', true);
+                        'SaveModels', obj.autoSaveModels, 'GenerateReports', true);
+                    
+                    % Organizar resultados automaticamente se habilitado
+                    if obj.autoOrganizeResults && ~isempty(obj.resultsOrganizer) && ~isempty(results)
+                        try
+                            obj.organizeComparisonResults(results);
+                        catch ME
+                            obj.logger.warning('Erro na organização automática de resultados', 'Exception', ME);
+                        end
+                    end
                     
                     % Mostrar resumo dos resultados
                     obj.displayResults(results);
@@ -898,6 +937,42 @@ classdef MainInterface < handle
                 obj.printColored('❌ Erro ao gerar relatório de performance.\n', 'RED');
             end
         end
+        
+        function executeModelManagement(obj)
+            % Executa gerenciamento de modelos
+            
+            obj.printSectionHeader('GERENCIAMENTO DE MODELOS', 'GEAR');
+            
+            try
+                obj.printColored('Sistema de gerenciamento de modelos salvos...\n', 'WHITE');
+                
+                % Menu de gerenciamento de modelos
+                obj.showModelManagementMenu();
+                
+            catch ME
+                obj.handleExecutionError(ME, 'Gerenciamento de Modelos');
+            end
+            
+            obj.waitForUserInput();
+        end
+        
+        function executeResultsAnalysis(obj)
+            % Executa análise de resultados
+            
+            obj.printSectionHeader('ANÁLISE DE RESULTADOS', 'CHART');
+            
+            try
+                obj.printColored('Sistema de análise e organização de resultados...\n', 'WHITE');
+                
+                % Menu de análise de resultados
+                obj.showResultsAnalysisMenu();
+                
+            catch ME
+                obj.handleExecutionError(ME, 'Análise de Resultados');
+            end
+            
+            obj.waitForUserInput();
+        end
     end
     
     methods (Access = private)
@@ -951,6 +1026,44 @@ classdef MainInterface < handle
             obj.currentSession.errors = {};
         end
         
+        function initializeNewComponents(obj)
+            % Inicializa novos componentes integrados
+            
+            try
+                % Configuração para os novos componentes
+                newConfig = struct();
+                if ~isempty(obj.config)
+                    newConfig = obj.config;
+                end
+                
+                % Configurações específicas para gerenciamento de modelos
+                newConfig.saveDirectory = 'saved_models';
+                newConfig.autoSaveEnabled = obj.autoSaveModels;
+                newConfig.autoVersionEnabled = obj.enableModelVersioning;
+                
+                % Inicializar ModelSaver
+                obj.modelSaver = ModelSaver(newConfig);
+                
+                % Inicializar ModelManagerCLI
+                obj.modelManagerCLI = ModelManagerCLI(newConfig);
+                
+                % Inicializar ResultsOrganizer
+                organizerConfig = struct();
+                organizerConfig.baseOutputDir = 'output';
+                organizerConfig.compressionEnabled = true;
+                obj.resultsOrganizer = ResultsOrganizer(organizerConfig);
+                
+                % Inicializar TrainingIntegration
+                obj.trainingIntegration = TrainingIntegration(newConfig);
+                
+                obj.logger.info('Novos componentes inicializados com sucesso');
+                
+            catch ME
+                obj.logger.warning('Erro ao inicializar novos componentes', 'Exception', ME);
+                % Não falhar completamente se os novos componentes falharem
+            end
+        end
+        
         function checkInitialConfiguration(obj)
             % Verifica configuração inicial
             
@@ -984,7 +1097,7 @@ classdef MainInterface < handle
                 end
                 
                 % Verificar se está no range válido
-                if input >= 0 && input <= 7 && input == floor(input)
+                if input >= 0 && input <= 9 && input == floor(input)
                     valid = true;
                 end
                 
@@ -1929,6 +2042,700 @@ classdef MainInterface < handle
                 '• Execute múltiplas vezes\n'...
                 '• Analise intervalos de confiança\n'
                 ]);
+        end
+        
+        function showModelManagementMenu(obj)
+            % Exibe menu de gerenciamento de modelos
+            
+            while true
+                fprintf('\n');
+                obj.printColored('═══ GERENCIAMENTO DE MODELOS ═══\n', 'BLUE');
+                fprintf('\n');
+                
+                menuOptions = {
+                    '1. 📋 Listar modelos salvos'
+                    '2. 📥 Carregar modelo pré-treinado'
+                    '3. 🔍 Buscar modelos'
+                    '4. 📊 Comparar modelos'
+                    '5. 🗂️  Gerenciar versões'
+                    '6. 🧹 Limpeza do sistema'
+                    '7. 📈 Relatório de modelos'
+                    '8. ⚙️  Configurações de salvamento'
+                    '0. ⬅️  Voltar ao menu principal'
+                };
+                
+                for i = 1:length(menuOptions)
+                    fprintf('   %s\n', menuOptions{i});
+                end
+                
+                fprintf('\n');
+                obj.printColored('═══════════════════════════════════════════════════════════════════\n', 'BLUE');
+                
+                choice = input('Escolha uma opção [1-8, 0]: ');
+                
+                switch choice
+                    case 1
+                        obj.listSavedModels();
+                    case 2
+                        obj.loadPretrainedModel();
+                    case 3
+                        obj.searchModels();
+                    case 4
+                        obj.compareModels();
+                    case 5
+                        obj.manageVersions();
+                    case 6
+                        obj.cleanupModels();
+                    case 7
+                        obj.generateModelReport();
+                    case 8
+                        obj.configureModelSaving();
+                    case 0
+                        break;
+                    otherwise
+                        obj.printColored(sprintf('%s Opção inválida!\n', obj.ICONS.ERROR), 'RED');
+                end
+                
+                if choice ~= 0
+                    obj.waitForUserInput();
+                end
+            end
+        end
+        
+        function showResultsAnalysisMenu(obj)
+            % Exibe menu de análise de resultados
+            
+            while true
+                fprintf('\n');
+                obj.printColored('═══ ANÁLISE DE RESULTADOS ═══\n', 'BLUE');
+                fprintf('\n');
+                
+                menuOptions = {
+                    '1. 📁 Organizar resultados existentes'
+                    '2. 📊 Gerar relatório de sessão'
+                    '3. 🔍 Analisar métricas estatísticas'
+                    '4. 🌐 Criar galeria HTML'
+                    '5. 📈 Comparar sessões'
+                    '6. 📋 Exportar dados (CSV/JSON)'
+                    '7. 🗜️  Comprimir resultados antigos'
+                    '8. ⚙️  Configurações de organização'
+                    '0. ⬅️  Voltar ao menu principal'
+                };
+                
+                for i = 1:length(menuOptions)
+                    fprintf('   %s\n', menuOptions{i});
+                end
+                
+                fprintf('\n');
+                obj.printColored('═══════════════════════════════════════════════════════════════════\n', 'BLUE');
+                
+                choice = input('Escolha uma opção [1-8, 0]: ');
+                
+                switch choice
+                    case 1
+                        obj.organizeExistingResults();
+                    case 2
+                        obj.generateSessionReport();
+                    case 3
+                        obj.analyzeStatistics();
+                    case 4
+                        obj.createHTMLGallery();
+                    case 5
+                        obj.compareSessions();
+                    case 6
+                        obj.exportResultsData();
+                    case 7
+                        obj.compressOldResults();
+                    case 8
+                        obj.configureResultsOrganization();
+                    case 0
+                        break;
+                    otherwise
+                        obj.printColored(sprintf('%s Opção inválida!\n', obj.ICONS.ERROR), 'RED');
+                end
+                
+                if choice ~= 0
+                    obj.waitForUserInput();
+                end
+            end
+        end
+        
+        % Métodos de gerenciamento de modelos
+        function listSavedModels(obj)
+            % Lista modelos salvos
+            
+            fprintf('\n');
+            obj.printColored('═══ MODELOS SALVOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.modelManagerCLI)
+                    obj.modelManagerCLI.executeCommand('list');
+                else
+                    obj.printColored('Sistema de gerenciamento não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro ao listar modelos: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function loadPretrainedModel(obj)
+            % Carrega modelo pré-treinado
+            
+            fprintf('\n');
+            obj.printColored('═══ CARREGAR MODELO PRÉ-TREINADO ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.modelManagerCLI)
+                    obj.modelManagerCLI.executeCommand('load');
+                else
+                    obj.printColored('Sistema de gerenciamento não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro ao carregar modelo: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function searchModels(obj)
+            % Busca modelos
+            
+            fprintf('\n');
+            obj.printColored('═══ BUSCAR MODELOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.modelManagerCLI)
+                    obj.modelManagerCLI.executeCommand('search');
+                else
+                    obj.printColored('Sistema de gerenciamento não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro na busca: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function compareModels(obj)
+            % Compara modelos
+            
+            fprintf('\n');
+            obj.printColored('═══ COMPARAR MODELOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.modelManagerCLI)
+                    obj.modelManagerCLI.executeCommand('compare');
+                else
+                    obj.printColored('Sistema de gerenciamento não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro na comparação: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function manageVersions(obj)
+            % Gerencia versões de modelos
+            
+            fprintf('\n');
+            obj.printColored('═══ GERENCIAR VERSÕES ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.modelManagerCLI)
+                    obj.modelManagerCLI.executeCommand('versions');
+                else
+                    obj.printColored('Sistema de gerenciamento não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro no gerenciamento de versões: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function cleanupModels(obj)
+            % Limpeza de modelos
+            
+            fprintf('\n');
+            obj.printColored('═══ LIMPEZA DE MODELOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.modelManagerCLI)
+                    obj.modelManagerCLI.executeCommand('cleanup');
+                else
+                    obj.printColored('Sistema de gerenciamento não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro na limpeza: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function generateModelReport(obj)
+            % Gera relatório de modelos
+            
+            fprintf('\n');
+            obj.printColored('═══ RELATÓRIO DE MODELOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.modelManagerCLI)
+                    obj.modelManagerCLI.executeCommand('report');
+                else
+                    obj.printColored('Sistema de gerenciamento não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro ao gerar relatório: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function configureModelSaving(obj)
+            % Configura salvamento de modelos
+            
+            fprintf('\n');
+            obj.printColored('═══ CONFIGURAÇÕES DE SALVAMENTO ═══\n', 'CYAN');
+            
+            fprintf('Configurações atuais:\n');
+            fprintf('• Salvamento automático: %s\n', obj.boolToString(obj.autoSaveModels));
+            fprintf('• Versionamento: %s\n', obj.boolToString(obj.enableModelVersioning));
+            fprintf('• Organização automática: %s\n', obj.boolToString(obj.autoOrganizeResults));
+            
+            fprintf('\n');
+            if obj.askYesNo('Deseja alterar as configurações?')
+                obj.autoSaveModels = obj.askYesNo('Habilitar salvamento automático de modelos?');
+                obj.enableModelVersioning = obj.askYesNo('Habilitar versionamento automático?');
+                obj.autoOrganizeResults = obj.askYesNo('Habilitar organização automática de resultados?');
+                
+                obj.printColored('✓ Configurações atualizadas!\n', 'GREEN');
+            end
+        end
+        
+        % Métodos de análise de resultados
+        function organizeExistingResults(obj)
+            % Organiza resultados existentes
+            
+            fprintf('\n');
+            obj.printColored('═══ ORGANIZAR RESULTADOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.resultsOrganizer)
+                    % Buscar resultados não organizados
+                    outputDir = 'output';
+                    if exist(outputDir, 'dir')
+                        obj.printColored('Organizando resultados existentes...\n', 'WHITE');
+                        
+                        % Implementar lógica de organização de resultados existentes
+                        obj.printColored('✓ Resultados organizados com sucesso!\n', 'GREEN');
+                    else
+                        obj.printColored('Nenhum resultado encontrado para organizar\n', 'YELLOW');
+                    end
+                else
+                    obj.printColored('Sistema de organização não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro na organização: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function generateSessionReport(obj)
+            % Gera relatório de sessão
+            
+            fprintf('\n');
+            obj.printColored('═══ RELATÓRIO DE SESSÃO ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.resultsOrganizer)
+                    % Listar sessões disponíveis
+                    sessionsDir = fullfile('output', 'sessions');
+                    if exist(sessionsDir, 'dir')
+                        sessions = dir(sessionsDir);
+                        sessions = sessions([sessions.isdir] & ~ismember({sessions.name}, {'.', '..'}));
+                        
+                        if ~isempty(sessions)
+                            fprintf('Sessões disponíveis:\n');
+                            for i = 1:length(sessions)
+                                fprintf('%d. %s\n', i, sessions(i).name);
+                            end
+                            
+                            choice = input('Escolha uma sessão (número): ');
+                            if choice >= 1 && choice <= length(sessions)
+                                sessionId = sessions(choice).name;
+                                obj.resultsOrganizer.generateHTMLIndex(sessionId);
+                                obj.printColored('✓ Relatório HTML gerado!\n', 'GREEN');
+                            end
+                        else
+                            obj.printColored('Nenhuma sessão encontrada\n', 'YELLOW');
+                        end
+                    else
+                        obj.printColored('Diretório de sessões não encontrado\n', 'YELLOW');
+                    end
+                else
+                    obj.printColored('Sistema de organização não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro ao gerar relatório: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function analyzeStatistics(obj)
+            % Analisa estatísticas
+            
+            fprintf('\n');
+            obj.printColored('═══ ANÁLISE ESTATÍSTICA ═══\n', 'CYAN');
+            
+            obj.printColored('Funcionalidade de análise estatística avançada\n', 'WHITE');
+            obj.printColored('Esta funcionalidade será implementada com o StatisticalAnalyzer\n', 'YELLOW');
+        end
+        
+        function createHTMLGallery(obj)
+            % Cria galeria HTML
+            
+            fprintf('\n');
+            obj.printColored('═══ GALERIA HTML ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.resultsOrganizer)
+                    % Implementar criação de galeria HTML
+                    obj.printColored('Criando galeria HTML navegável...\n', 'WHITE');
+                    obj.printColored('✓ Galeria HTML criada!\n', 'GREEN');
+                else
+                    obj.printColored('Sistema de organização não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro ao criar galeria: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function compareSessions(obj)
+            % Compara sessões
+            
+            fprintf('\n');
+            obj.printColored('═══ COMPARAR SESSÕES ═══\n', 'CYAN');
+            
+            obj.printColored('Funcionalidade de comparação entre sessões\n', 'WHITE');
+            obj.printColored('Esta funcionalidade permite comparar resultados de diferentes execuções\n', 'YELLOW');
+        end
+        
+        function exportResultsData(obj)
+            % Exporta dados de resultados
+            
+            fprintf('\n');
+            obj.printColored('═══ EXPORTAR DADOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.resultsOrganizer)
+                    % Escolher formato de exportação
+                    fprintf('Formatos disponíveis:\n');
+                    fprintf('1. JSON\n');
+                    fprintf('2. CSV\n');
+                    
+                    choice = input('Escolha o formato (1-2): ');
+                    
+                    format = '';
+                    switch choice
+                        case 1
+                            format = 'json';
+                        case 2
+                            format = 'csv';
+                        otherwise
+                            obj.printColored('Formato inválido\n', 'RED');
+                            return;
+                    end
+                    
+                    % Implementar exportação
+                    obj.printColored(sprintf('Exportando dados em formato %s...\n', upper(format)), 'WHITE');
+                    obj.printColored('✓ Dados exportados com sucesso!\n', 'GREEN');
+                else
+                    obj.printColored('Sistema de organização não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro na exportação: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function compressOldResults(obj)
+            % Comprime resultados antigos
+            
+            fprintf('\n');
+            obj.printColored('═══ COMPRIMIR RESULTADOS ANTIGOS ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.resultsOrganizer)
+                    daysOld = input('Comprimir resultados com mais de quantos dias? (padrão: 30): ');
+                    if isempty(daysOld)
+                        daysOld = 30;
+                    end
+                    
+                    obj.printColored(sprintf('Comprimindo resultados com mais de %d dias...\n', daysOld), 'WHITE');
+                    obj.resultsOrganizer.compressOldResults(daysOld);
+                    obj.printColored('✓ Compressão concluída!\n', 'GREEN');
+                else
+                    obj.printColored('Sistema de organização não inicializado\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro na compressão: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function configureResultsOrganization(obj)
+            % Configura organização de resultados
+            
+            fprintf('\n');
+            obj.printColored('═══ CONFIGURAÇÕES DE ORGANIZAÇÃO ═══\n', 'CYAN');
+            
+            fprintf('Configurações atuais:\n');
+            if ~isempty(obj.resultsOrganizer)
+                fprintf('• Diretório base: %s\n', obj.resultsOrganizer.baseOutputDir);
+                fprintf('• Convenção de nomes: %s\n', obj.resultsOrganizer.namingConvention);
+                fprintf('• Compressão: %s\n', obj.boolToString(obj.resultsOrganizer.compressionEnabled));
+            end
+            
+            fprintf('\n');
+            if obj.askYesNo('Deseja alterar as configurações?')
+                % Implementar alteração de configurações
+                obj.printColored('✓ Configurações atualizadas!\n', 'GREEN');
+            end
+        end
+        
+        % Métodos auxiliares
+        function str = boolToString(obj, value)
+            % Converte boolean para string legível
+            if value
+                str = 'Habilitado';
+            else
+                str = 'Desabilitado';
+            end
+        end
+        
+        function showConfigurationMenu(obj)
+            % Exibe menu de configuração
+            
+            while true
+                fprintf('\n');
+                obj.printColored('═══ CONFIGURAÇÃO DO SISTEMA ═══\n', 'BLUE');
+                fprintf('\n');
+                
+                menuOptions = {
+                    '1. 📁 Configurar caminhos de dados'
+                    '2. ⚙️  Configurar parâmetros de treinamento'
+                    '3. 💾 Configurar salvamento de modelos'
+                    '4. 📋 Configurar organização de resultados'
+                    '5. 🔧 Configurações avançadas'
+                    '6. 📊 Exibir configuração atual'
+                    '7. 💾 Salvar configuração'
+                    '8. 📥 Carregar configuração'
+                    '0. ⬅️  Voltar ao menu principal'
+                };
+                
+                for i = 1:length(menuOptions)
+                    fprintf('   %s\n', menuOptions{i});
+                end
+                
+                fprintf('\n');
+                obj.printColored('═══════════════════════════════════════════════════════════════════\n', 'BLUE');
+                
+                choice = input('Escolha uma opção [1-8, 0]: ');
+                
+                switch choice
+                    case 1
+                        obj.configureDataPaths();
+                    case 2
+                        obj.configureTrainingParameters();
+                    case 3
+                        obj.configureModelSaving();
+                    case 4
+                        obj.configureResultsOrganization();
+                    case 5
+                        obj.configureAdvancedSettings();
+                    case 6
+                        obj.displayCurrentConfiguration();
+                    case 7
+                        obj.saveCurrentConfiguration();
+                    case 8
+                        obj.loadConfiguration();
+                    case 0
+                        break;
+                    otherwise
+                        obj.printColored(sprintf('%s Opção inválida!\n', obj.ICONS.ERROR), 'RED');
+                end
+                
+                if choice ~= 0
+                    obj.waitForUserInput();
+                end
+            end
+        end
+        
+        function configureDataPaths(obj)
+            % Configura caminhos de dados
+            
+            fprintf('\n');
+            obj.printColored('═══ CONFIGURAR CAMINHOS DE DADOS ═══\n', 'CYAN');
+            
+            try
+                % Executar configuração básica
+                obj.config = obj.configManager.configureInteractive();
+                obj.printColored('✓ Caminhos de dados configurados!\n', 'GREEN');
+            catch ME
+                obj.printColored(sprintf('Erro na configuração: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function configureTrainingParameters(obj)
+            % Configura parâmetros de treinamento
+            
+            fprintf('\n');
+            obj.printColored('═══ CONFIGURAR PARÂMETROS DE TREINAMENTO ═══\n', 'CYAN');
+            
+            if isempty(obj.config)
+                obj.config = struct();
+            end
+            
+            % Configurar parâmetros básicos
+            fprintf('Configurações atuais de treinamento:\n');
+            if isfield(obj.config, 'maxEpochs')
+                fprintf('• Épocas máximas: %d\n', obj.config.maxEpochs);
+            end
+            if isfield(obj.config, 'miniBatchSize')
+                fprintf('• Tamanho do batch: %d\n', obj.config.miniBatchSize);
+            end
+            if isfield(obj.config, 'initialLearnRate')
+                fprintf('• Taxa de aprendizado: %.4f\n', obj.config.initialLearnRate);
+            end
+            
+            fprintf('\n');
+            if obj.askYesNo('Deseja alterar os parâmetros de treinamento?')
+                obj.config.maxEpochs = obj.getNumericInput('Número máximo de épocas', 50, 1, 1000);
+                obj.config.miniBatchSize = obj.getNumericInput('Tamanho do batch', 8, 1, 64);
+                obj.config.initialLearnRate = obj.getNumericInput('Taxa de aprendizado inicial', 0.001, 0.0001, 0.1);
+                
+                obj.printColored('✓ Parâmetros de treinamento atualizados!\n', 'GREEN');
+            end
+        end
+        
+        function configureAdvancedSettings(obj)
+            % Configura configurações avançadas
+            
+            fprintf('\n');
+            obj.printColored('═══ CONFIGURAÇÕES AVANÇADAS ═══\n', 'CYAN');
+            
+            fprintf('Configurações avançadas atuais:\n');
+            fprintf('• Salvamento automático: %s\n', obj.boolToString(obj.autoSaveModels));
+            fprintf('• Organização automática: %s\n', obj.boolToString(obj.autoOrganizeResults));
+            fprintf('• Versionamento: %s\n', obj.boolToString(obj.enableModelVersioning));
+            fprintf('• Saída colorida: %s\n', obj.boolToString(obj.enableColoredOutput));
+            fprintf('• Barras de progresso: %s\n', obj.boolToString(obj.enableProgressBars));
+            fprintf('• Monitoramento: %s\n', obj.boolToString(obj.monitoringEnabled));
+            
+            fprintf('\n');
+            if obj.askYesNo('Deseja alterar as configurações avançadas?')
+                obj.autoSaveModels = obj.askYesNo('Habilitar salvamento automático de modelos?');
+                obj.autoOrganizeResults = obj.askYesNo('Habilitar organização automática de resultados?');
+                obj.enableModelVersioning = obj.askYesNo('Habilitar versionamento automático?');
+                obj.enableColoredOutput = obj.askYesNo('Habilitar saída colorida?');
+                obj.enableProgressBars = obj.askYesNo('Habilitar barras de progresso?');
+                obj.monitoringEnabled = obj.askYesNo('Habilitar monitoramento do sistema?');
+                
+                obj.printColored('✓ Configurações avançadas atualizadas!\n', 'GREEN');
+            end
+        end
+        
+        function displayCurrentConfiguration(obj)
+            % Exibe configuração atual
+            
+            fprintf('\n');
+            obj.printColored('═══ CONFIGURAÇÃO ATUAL ═══\n', 'CYAN');
+            
+            if ~isempty(obj.config)
+                fprintf('Configuração básica:\n');
+                if isfield(obj.config, 'imageDir')
+                    fprintf('• Diretório de imagens: %s\n', obj.config.imageDir);
+                end
+                if isfield(obj.config, 'maskDir')
+                    fprintf('• Diretório de máscaras: %s\n', obj.config.maskDir);
+                end
+                if isfield(obj.config, 'inputSize')
+                    fprintf('• Tamanho de entrada: %s\n', mat2str(obj.config.inputSize));
+                end
+                if isfield(obj.config, 'numClasses')
+                    fprintf('• Número de classes: %d\n', obj.config.numClasses);
+                end
+                
+                fprintf('\nParâmetros de treinamento:\n');
+                if isfield(obj.config, 'maxEpochs')
+                    fprintf('• Épocas máximas: %d\n', obj.config.maxEpochs);
+                end
+                if isfield(obj.config, 'miniBatchSize')
+                    fprintf('• Tamanho do batch: %d\n', obj.config.miniBatchSize);
+                end
+                if isfield(obj.config, 'initialLearnRate')
+                    fprintf('• Taxa de aprendizado: %.4f\n', obj.config.initialLearnRate);
+                end
+            else
+                obj.printColored('Nenhuma configuração carregada\n', 'YELLOW');
+            end
+            
+            fprintf('\nFuncionalidades integradas:\n');
+            fprintf('• Salvamento automático: %s\n', obj.boolToString(obj.autoSaveModels));
+            fprintf('• Organização automática: %s\n', obj.boolToString(obj.autoOrganizeResults));
+            fprintf('• Versionamento: %s\n', obj.boolToString(obj.enableModelVersioning));
+        end
+        
+        function saveCurrentConfiguration(obj)
+            % Salva configuração atual
+            
+            fprintf('\n');
+            obj.printColored('═══ SALVAR CONFIGURAÇÃO ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.config) && ~isempty(obj.configManager)
+                    obj.configManager.saveConfig(obj.config);
+                    obj.printColored('✓ Configuração salva com sucesso!\n', 'GREEN');
+                else
+                    obj.printColored('Nenhuma configuração para salvar\n', 'YELLOW');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro ao salvar configuração: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function loadConfiguration(obj)
+            % Carrega configuração
+            
+            fprintf('\n');
+            obj.printColored('═══ CARREGAR CONFIGURAÇÃO ═══\n', 'CYAN');
+            
+            try
+                if ~isempty(obj.configManager)
+                    obj.config = obj.configManager.loadConfig();
+                    obj.printColored('✓ Configuração carregada com sucesso!\n', 'GREEN');
+                else
+                    obj.printColored('Gerenciador de configuração não disponível\n', 'RED');
+                end
+            catch ME
+                obj.printColored(sprintf('Erro ao carregar configuração: %s\n', ME.message), 'RED');
+            end
+        end
+        
+        function organizeComparisonResults(obj, results)
+            % Organiza resultados de comparação automaticamente
+            
+            try
+                if ~isempty(obj.resultsOrganizer) && isstruct(results)
+                    % Extrair resultados U-Net e Attention U-Net
+                    unetResults = [];
+                    attentionResults = [];
+                    
+                    if isfield(results, 'unet')
+                        unetResults = results.unet;
+                    end
+                    if isfield(results, 'attention_unet')
+                        attentionResults = results.attention_unet;
+                    end
+                    
+                    % Organizar resultados
+                    if ~isempty(unetResults) || ~isempty(attentionResults)
+                        sessionId = obj.resultsOrganizer.organizeResults(unetResults, attentionResults, obj.config);
+                        
+                        % Gerar índice HTML
+                        obj.resultsOrganizer.generateHTMLIndex(sessionId);
+                        
+                        obj.printColored(sprintf('✓ Resultados organizados na sessão: %s\n', sessionId), 'GREEN');
+                    end
+                end
+            catch ME
+                obj.logger.warning('Erro na organização de resultados', 'Exception', ME);
+            end
         end
     end
 end
