@@ -65,6 +65,15 @@ function executar_comparacao()
     fprintf('      (Versão 1.2 - Corrigida)        \n');
     fprintf('=====================================\n\n');
     
+    % Aviso sobre nova interface integrada
+    fprintf('📢 NOVA INTERFACE DISPONÍVEL!\n');
+    fprintf('Para acessar as funcionalidades integradas de:\n');
+    fprintf('• Gerenciamento de modelos\n');
+    fprintf('• Organização automática de resultados\n');
+    fprintf('• Configuração avançada\n');
+    fprintf('\nExecute: main_sistema_comparacao\n');
+    fprintf('=====================================\n\n');
+    
     % Verificar se existe configuração salva
     if ~exist('config_caminhos.mat', 'file')
         fprintf('=== CONFIGURACAO INICIAL ===\n');

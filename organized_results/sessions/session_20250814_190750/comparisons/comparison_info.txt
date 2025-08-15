@@ -1,0 +1,20 @@
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.7262, Attention IoU: 0.7481
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.7425, Attention IoU: 0.7644
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.7712, Attention IoU: 0.7759
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.6342, Attention IoU: 0.7449
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.9596, Attention IoU: 0.7992
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.8067, Attention IoU: 0.8780
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.7450, Attention IoU: 0.9267
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.7339, Attention IoU: 0.7055
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.6445, Attention IoU: 0.7392
+Comparison created for U-Net vs Attention U-Net
+U-Net IoU: 0.6596, Attention IoU: 0.7884
