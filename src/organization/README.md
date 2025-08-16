@@ -1,34 +1,92 @@
-# Organization Module
+# Módulo de Organização de Resultados
 
-This module provides automatic organization and management of segmentation results.
+Este módulo contém a classe `OrganizadorResultados` responsável por organizar automaticamente todos os resultados do sistema de segmentação.
 
-## Components
+## Funcionalidades
 
-- **ResultsOrganizer.m**: Main class for organizing segmentation results into structured directories
-- **FileManager.m**: Utilities for file management, compression, and cleanup
-- **HTMLGenerator.m**: Generates navigable HTML indexes for result exploration
-- **MetadataExporter.m**: Exports summaries and metadata in standard formats
+### 1. Criação Automática de Estrutura de Pastas
+- `resultados_segmentacao/unet/` - Segmentações do modelo U-Net
+- `resultados_segmentacao/attention_unet/` - Segmentações do modelo Attention U-Net
+- `resultados_segmentacao/comparacoes/` - Comparações visuais entre modelos
+- `resultados_segmentacao/relatorios/` - Relatórios e métricas
+- `resultados_segmentacao/modelos/` - Modelos treinados
 
-## Features
+### 2. Nomenclatura Consistente
+- Segmentações U-Net: `nomeoriginal_unet.png`
+- Segmentações Attention U-Net: `nomeoriginal_attention.png`
+- Modelos: `modelo_unet.mat`, `modelo_attention_unet.mat`
 
-- Hierarchical directory structure with sessions, models, and comparisons
-- Consistent naming conventions with timestamps and metrics
-- Automatic compression of old results
-- HTML gallery generation for visual exploration
-- Export to JSON, CSV, and other standard formats
+### 3. Índice de Arquivos
+- Arquivo `indice_arquivos.txt` com lista completa de todos os arquivos processados
+- Timestamps de processamento
+- Estatísticas de organização
 
-## Usage
+### 4. Recuperação de Erros
+- Criação automática de pastas em caso de erro
+- Método de recuperação para recriar estrutura
+
+## Uso Básico
 
 ```matlab
-% Create organizer
-organizer = ResultsOrganizer();
+% Criar organizador
+organizador = OrganizadorResultados();
 
-% Organize results from a comparison session
-sessionId = organizer.organizeResults(unetResults, attentionResults, config);
+% Criar estrutura de pastas
+organizador.criarEstruturaPastas();
 
-% Generate HTML index
-organizer.generateHTMLIndex(sessionId);
+% Organizar arquivo de segmentação
+organizador.organizarArquivoSegmentacao('temp/img001_seg.png', 'img001.png', 'unet');
 
-% Export metadata
-organizer.exportMetadata(sessionId, 'json');
+% Organizar modelo treinado
+organizador.organizarModelo('modelo_temp.mat', 'modelo_unet');
+
+% Criar índice de arquivos
+organizador.criarIndiceArquivos();
+
+% Exibir estrutura
+organizador.exibirEstrutura();
+```
+
+## Uso Avançado
+
+```matlab
+% Organização rápida de múltiplos arquivos
+arquivosUNet = {'temp/seg1_unet.png', 'temp/seg2_unet.png'};
+arquivosAttention = {'temp/seg1_att.png', 'temp/seg2_att.png'};
+modelos = {'modelo_unet.mat', 'modelo_attention.mat'};
+
+sucesso = OrganizadorResultados.organizarResultadosRapido(arquivosUNet, arquivosAttention, modelos);
+```
+
+## Integração com Sistema Principal
+
+O `OrganizadorResultados` é chamado automaticamente pelo sistema principal após a segmentação das imagens, organizando todos os resultados de forma consistente e criando a documentação necessária.
+
+## Tratamento de Erros
+
+A classe implementa recuperação automática de erros:
+- Recria pastas se não existirem
+- Continua processamento mesmo com falhas individuais
+- Log detalhado de erros para debugging
+
+## Estrutura Final
+
+```
+resultados_segmentacao/
+├── unet/
+│   ├── img001_unet.png
+│   ├── img002_unet.png
+│   └── ...
+├── attention_unet/
+│   ├── img001_attention.png
+│   ├── img002_attention.png
+│   └── ...
+├── comparacoes/
+│   └── (comparações visuais)
+├── relatorios/
+│   └── (relatórios e métricas)
+├── modelos/
+│   ├── modelo_unet.mat
+│   └── modelo_attention_unet.mat
+└── indice_arquivos.txt
 ```

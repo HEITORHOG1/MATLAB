@@ -1,0 +1,41 @@
+=== ÍNDICE DE ARQUIVOS PROCESSADOS ===
+Gerado em: 15-Aug-2025 13:50:44
+
+--- SEGMENTAÇÕES U-NET ---
+Total de arquivos: 2
+
+1. imagem001.png -> imagem001_unet.png
+   Caminho: demo_resultados\unet\imagem001_unet.png
+   Processado: 15-Aug-2025 13:50:44
+
+2. imagem002.png -> imagem002_unet.png
+   Caminho: demo_resultados\unet\imagem002_unet.png
+   Processado: 15-Aug-2025 13:50:44
+
+--- SEGMENTAÇÕES ATTENTION U-NET ---
+Total de arquivos: 2
+
+1. imagem001.png -> imagem001_attention.png
+   Caminho: demo_resultados\attention_unet\imagem001_attention.png
+   Processado: 15-Aug-2025 13:50:44
+
+2. imagem002.png -> imagem002_attention.png
+   Caminho: demo_resultados\attention_unet\imagem002_attention.png
+   Processado: 15-Aug-2025 13:50:44
+
+--- MODELOS TREINADOS ---
+Total de modelos: 2
+
+1. modelo_unet.mat
+   Caminho: demo_resultados\modelos\modelo_unet.mat
+   Salvo: 15-Aug-2025 13:50:44
+
+2. modelo_attention_unet.mat
+   Caminho: demo_resultados\modelos\modelo_attention_unet.mat
+   Salvo: 15-Aug-2025 13:50:44
+
+--- RESUMO ---
+Total de arquivos organizados: 6
+- Segmentações U-Net: 2
+- Segmentações Attention U-Net: 2
+- Modelos treinados: 2

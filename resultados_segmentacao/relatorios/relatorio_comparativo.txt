@@ -1,0 +1,109 @@
+========================================================================
+                    RELATÓRIO COMPARATIVO DE MODELOS
+                      U-Net vs Attention U-Net
+========================================================================
+
+Data de Geração: 15/08/2025 14:18:12
+Sistema: ComparadorModelos v1.0
+
+1. RESUMO EXECUTIVO
+==================
+
+Modelo Vencedor: Empate técnico
+Nível de Confiança: baixa
+
+Diferenças Principais:
+- IoU: +0.0000 (diferença mínima)
+- Dice: +0.0000 (diferença mínima)
+- Accuracy: +0.0000 (diferença mínima)
+
+2. MÉTRICAS DETALHADAS
+=====================
+
+2.1 U-Net
+---------
+IoU:
+  Média: 1.0000 ± 0.0000
+  Min/Max: 1.0000 / 1.0000
+  Mediana: 1.0000
+
+Dice:
+  Média: 1.0000 ± 0.0000
+  Min/Max: 1.0000 / 1.0000
+  Mediana: 1.0000
+
+Accuracy:
+  Média: 1.0000 ± 0.0000
+  Min/Max: 1.0000 / 1.0000
+  Mediana: 1.0000
+
+2.2 Attention U-Net
+-------------------
+IoU:
+  Média: 1.0000 ± 0.0000
+  Min/Max: 1.0000 / 1.0000
+  Mediana: 1.0000
+
+Dice:
+  Média: 1.0000 ± 0.0000
+  Min/Max: 1.0000 / 1.0000
+  Mediana: 1.0000
+
+Accuracy:
+  Média: 1.0000 ± 0.0000
+  Min/Max: 1.0000 / 1.0000
+  Mediana: 1.0000
+
+3. ANÁLISE COMPARATIVA
+=====================
+
+3.1 Comparação de Performance
+-----------------------------
+IoU:
+  U-Net: 1.0000
+  Attention U-Net: 1.0000
+  Diferença: +0.0000 (+0.00%)
+  Interpretação: Desempenho equivalente
+
+Dice:
+  U-Net: 1.0000
+  Attention U-Net: 1.0000
+  Diferença: +0.0000 (+0.00%)
+  Interpretação: Desempenho equivalente
+
+Accuracy:
+  U-Net: 1.0000
+  Attention U-Net: 1.0000
+  Diferença: +0.0000 (+0.00%)
+  Interpretação: Desempenho equivalente
+
+
+3.2 Consistência dos Resultados
+-------------------------------
+Desvio Padrão (menor = mais consistente):
+- U-Net: IoU=0.0000, Dice=0.0000, Acc=0.0000
+- Attention U-Net: IoU=0.0000, Dice=0.0000, Acc=0.0000
+
+4. CONCLUSÕES E RECOMENDAÇÕES
+============================
+
+4.1 Conclusões
+--------------
+Os modelos apresentaram performance similar neste dataset.
+A escolha pode ser baseada em outros critérios (velocidade, recursos).
+
+4.2 Recomendações
+-----------------
+🔄 RECOMENDAÇÃO: Realize testes adicionais.
+   As diferenças são pequenas e podem não ser significativas.
+
+4.3 Próximos Passos
+-------------------
+1. Validar resultados com dataset maior
+2. Testar com diferentes tipos de imagens
+3. Avaliar tempo de processamento
+4. Considerar ensemble dos dois modelos
+
+========================================================================
+Fim do Relatório - Gerado automaticamente pelo ComparadorModelos
+========================================================================

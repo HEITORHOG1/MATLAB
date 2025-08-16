@@ -1,0 +1,61 @@
+=== ÍNDICE DE ARQUIVOS PROCESSADOS ===
+Gerado em: 15-Aug-2025 14:17:27
+
+--- SEGMENTAÇÕES U-NET ---
+Total de arquivos: 5
+
+1. exemplo_seg_unet.png -> exemplo_seg_unet_unet.png
+   Caminho: resultados_segmentacao\unet\exemplo_seg_unet_unet.png
+   Processado: 15-Aug-2025 14:17:27
+
+2. exemplo_seg_unet2.png -> exemplo_seg_unet2_unet.png
+   Caminho: resultados_segmentacao\unet\exemplo_seg_unet2_unet.png
+   Processado: 15-Aug-2025 14:17:27
+
+3. rapido_unet1.png -> rapido_unet1_unet.png
+   Caminho: resultados_segmentacao\unet\rapido_unet1_unet.png
+   Processado: 15-Aug-2025 14:17:27
+
+4. rapido_unet2.png -> rapido_unet2_unet.png
+   Caminho: resultados_segmentacao\unet\rapido_unet2_unet.png
+   Processado: 15-Aug-2025 14:17:27
+
+5. temp_rapid_unet2.png -> temp_rapid_unet2_unet.png
+   Caminho: resultados_segmentacao\unet\temp_rapid_unet2_unet.png
+   Processado: 15-Aug-2025 14:17:27
+
+--- SEGMENTAÇÕES ATTENTION U-NET ---
+Total de arquivos: 3
+
+1. exemplo_seg_attention.png -> exemplo_seg_attention_attention.png
+   Caminho: resultados_segmentacao\attention_unet\exemplo_seg_attention_attention.png
+   Processado: 15-Aug-2025 14:17:27
+
+2. exemplo_seg_attention2.png -> exemplo_seg_attention2_attention.png
+   Caminho: resultados_segmentacao\attention_unet\exemplo_seg_attention2_attention.png
+   Processado: 15-Aug-2025 14:17:27
+
+3. temp_seg_attention.png -> temp_seg_attention_attention.png
+   Caminho: resultados_segmentacao\attention_unet\temp_seg_attention_attention.png
+   Processado: 15-Aug-2025 14:17:27
+
+--- MODELOS TREINADOS ---
+Total de modelos: 3
+
+1. modelo_attention_unet.mat
+   Caminho: resultados_segmentacao\modelos\modelo_attention_unet.mat
+   Salvo: 15-Aug-2025 14:17:27
+
+2. modelo_teste_correcao.mat
+   Caminho: resultados_segmentacao\modelos\modelo_teste_correcao.mat
+   Salvo: 15-Aug-2025 14:17:27
+
+3. modelo_unet.mat
+   Caminho: resultados_segmentacao\modelos\modelo_unet.mat
+   Salvo: 15-Aug-2025 14:17:27
+
+--- RESUMO ---
+Total de arquivos organizados: 11
+- Segmentações U-Net: 5
+- Segmentações Attention U-Net: 3
+- Modelos treinados: 3
