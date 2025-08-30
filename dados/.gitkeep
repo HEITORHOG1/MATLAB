@@ -1,0 +1,10 @@
+# Diretório para dados do artigo científico
+
+Este diretório contém os dados experimentais e arquivos de suporte para o artigo científico.
+
+## Estrutura de arquivos:
+- metricas_experimentais.mat - Dados das métricas de performance
+- configuracoes_treinamento.json - Configurações utilizadas no treinamento
+- resultados_estatisticos.csv - Análises estatísticas comparativas
+- dados_dataset.json - Características do dataset utilizado
+- tempos_computacionais.csv - Análise de tempo computacional

@@ -1,0 +1,193 @@
+\begin{thebibliography}{10}
+
+\bibitem{fontana2005corrosion}
+Mars~Guy Fontana.
+\newblock Corrosion engineering.
+\newblock {\em Tata McGraw-Hill Education}, 2005.
+
+\bibitem{revie2011uhlig}
+R~Winston Revie.
+\newblock {\em Uhlig's corrosion handbook}, volume~51.
+\newblock John Wiley \& Sons, 2011.
+
+\bibitem{koch2016cost}
+Gerhardus Koch, Jeff Varney, Neil Thompson, Oliver Moghissi, Melissa Gould, and
+  Joe Payer.
+\newblock Cost of corrosion in the united states.
+\newblock {\em Handbook of Environmental Degradation of Materials}, pages
+  3--24, 2018.
+
+\bibitem{astm2018a572}
+ASTM International.
+\newblock Astm a572/a572m-18: Standard specification for high-strength
+  low-alloy columbium-vanadium structural steel, 2018.
+
+\bibitem{melchers2018structural}
+Robert~E Melchers and André~T Beck.
+\newblock Structural reliability analysis and prediction.
+\newblock {\em John Wiley \& Sons}, 2018.
+
+\bibitem{lecun2015deep}
+Yann LeCun, Yoshua Bengio, and Geoffrey Hinton.
+\newblock Deep learning.
+\newblock {\em Nature}, 521(7553):436--444, 2015.
+
+\bibitem{cha2017deep}
+Young-Jin Cha, Wooram Choi, and Oral B{\"u}y{\"u}k{\"o}zt{\"u}rk.
+\newblock Deep learning-based crack damage detection using convolutional neural
+  networks.
+\newblock {\em Computer-Aided Civil and Infrastructure Engineering},
+  32(5):361--378, 2017.
+
+\bibitem{atha2018evaluation}
+Daniel~J Atha and Mohammad~R Jahanshahi.
+\newblock Evaluation of deep learning approaches based on convolutional neural
+  networks for corrosion detection.
+\newblock {\em Structural Health Monitoring}, 17(5):1110--1128, 2018.
+
+\bibitem{forkan2022corodnet}
+Abdur Rahim~Mohammad Forkan, Yong-Bin Kang, Prem~Prakash Jayaraman, Kumudu
+  Liao, Raj Kaul, Glen Morgan, Rajiv Ranjan, and Sunil Sinha.
+\newblock Corodnet: A deep neural network for corrosion detection.
+\newblock {\em IEEE Access}, 10:43462--43471, 2022.
+
+\bibitem{nash2018automated}
+William Nash, Tom Drummond, and Nick Birbilis.
+\newblock Automated corrosion detection using crowdsourced training for deep
+  learning.
+\newblock {\em Corrosion}, 74(2):135--142, 2018.
+
+\bibitem{ronneberger2015u}
+Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
+\newblock U-net: Convolutional networks for biomedical image segmentation.
+\newblock In {\em International Conference on Medical image computing and
+  computer-assisted intervention}, pages 234--241. Springer, 2015.
+
+\bibitem{oktay2018attention}
+Ozan Oktay, Jo~Schlemper, Loic~Le Folgoc, Matthew Lee, Mattias Heinrich,
+  Kazunari Misawa, Kensaku Mori, Steven McDonagh, Nils~Y Hammerla, Bernhard
+  Kainz, et~al.
+\newblock Attention u-net: Learning where to look for the pancreas.
+\newblock {\em arXiv preprint arXiv:1804.03999}, 2018.
+
+\bibitem{krizhevsky2012imagenet}
+Alex Krizhevsky, Ilya Sutskever, and Geoffrey~E Hinton.
+\newblock Imagenet classification with deep convolutional neural networks.
+\newblock In {\em Advances in neural information processing systems}, pages
+  1097--1105, 2012.
+
+\bibitem{he2016deep}
+Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+\newblock Deep residual learning for image recognition.
+\newblock pages 770--778, 2016.
+
+\bibitem{simonyan2014very}
+Karen Simonyan and Andrew Zisserman.
+\newblock Very deep convolutional networks for large-scale image recognition.
+\newblock {\em arXiv preprint arXiv:1409.1556}, 2014.
+
+\bibitem{xu2019automatic}
+Yundong Xu, Yuequan Bao, Jingzhou Chen, Wangda Zuo, and Hui Li.
+\newblock Automatic bridge crack detection using a convolutional neural
+  network.
+\newblock {\em Applied Sciences}, 9(14):2867, 2019.
+
+\bibitem{long2015fully}
+Jonathan Long, Evan Shelhamer, and Trevor Darrell.
+\newblock Fully convolutional networks for semantic segmentation.
+\newblock {\em Proceedings of the IEEE conference on computer vision and
+  pattern recognition}, pages 3431--3440, 2015.
+
+\bibitem{wang2021deep}
+Jiafu Wang, Yonglin Ma, Laibao Zhang, Robert~X Gao, and Dazhong Wu.
+\newblock Deep learning for smart manufacturing: Methods and applications.
+\newblock {\em Journal of manufacturing systems}, 48:144--156, 2018.
+
+\bibitem{isensee2021nnu}
+Fabian Isensee, Paul~F Jaeger, Simon~AA Kohl, Jens Petersen, and Klaus~H
+  Maier-Hein.
+\newblock nnu-net: a self-configuring method for deep learning-based biomedical
+  image segmentation.
+\newblock {\em Nature methods}, 18(2):203--211, 2021.
+
+\bibitem{zhou2018unet++}
+Zongwei Zhou, Md~Mahfuzur Rahman~Siddiquee, Nima Tajbakhsh, and Jianming Liang.
+\newblock Unet++: A nested u-net architecture for medical image segmentation.
+\newblock {\em Deep Learning in Medical Image Analysis and Multimodal Learning
+  for Clinical Decision Support}, pages 3--11, 2018.
+
+\bibitem{milletari2016v}
+Fausto Milletari, Nassir Navab, and Seyed-Ahmad Ahmadi.
+\newblock V-net: Fully convolutional neural networks for volumetric medical
+  image segmentation.
+\newblock pages 565--571, 2016.
+
+\bibitem{zhang2020road}
+Zhengxin Zhang, Qingjie Liu, and Yunhong Wang.
+\newblock Road extraction by deep residual u-net.
+\newblock {\em IEEE Geoscience and Remote Sensing Letters}, 15(5):749--753,
+  2018.
+
+\bibitem{li2023enhanced}
+Li~Chen, Zhang Wang, and Ming Liu.
+\newblock Enhanced u-net architecture for medical image segmentation.
+\newblock {\em IEEE Transactions on Medical Imaging}, 42(3):567--578, 2023.
+
+\bibitem{vaswani2017attention}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, {\L}ukasz Kaiser, and Illia Polosukhin.
+\newblock Attention is all you need.
+\newblock In {\em Advances in neural information processing systems}, pages
+  5998--6008, 2017.
+
+\bibitem{bahdanau2014neural}
+Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio.
+\newblock Neural machine translation by jointly learning to align and
+  translate.
+\newblock {\em arXiv preprint arXiv:1409.0473}, 2014.
+
+\bibitem{hu2018squeeze}
+Jie Hu, Li~Shen, and Gang Sun.
+\newblock Squeeze-and-excitation networks.
+\newblock {\em Proceedings of the IEEE conference on computer vision and
+  pattern recognition}, pages 7132--7141, 2018.
+
+\bibitem{schlemper2019attention}
+Jo~Schlemper, Ozan Oktay, Michiel Schaap, Mattias Heinrich, Bernhard Kainz, Ben
+  Glocker, and Daniel Rueckert.
+\newblock Attention gated networks: Learning to leverage salient regions in
+  medical images.
+\newblock {\em Medical image analysis}, 53:197--207, 2019.
+
+\bibitem{wang2020automatic}
+Linyuan Wang and Zhigang Zhang.
+\newblock Automatic detection of wind turbine blade surface cracks based on
+  uav-taken images.
+\newblock {\em IEEE Transactions on Industrial Electronics},
+  68(11):11293--11303, 2020.
+
+\bibitem{ahmad2006principles}
+Zaki Ahmad.
+\newblock {\em Principles of corrosion engineering and corrosion control}.
+\newblock Butterworth-Heinemann, 2006.
+
+\bibitem{perez2013more}
+Tezara P{\'e}rez, Manuel Morcillo, and Belén Chico.
+\newblock More than 40 years of corrosion research in atmospheric conditions in
+  ibero-america: A review.
+\newblock {\em Corrosion Reviews}, 31(3-6):85--131, 2013.
+
+\bibitem{taha2015metrics}
+Abdel~Aziz Taha and Allan Hanbury.
+\newblock Metrics for evaluating 3d medical image segmentation: analysis,
+  selection, and tool.
+\newblock {\em BMC medical imaging}, 15(1):1--28, 2015.
+
+\bibitem{sudre2017generalised}
+Carole~H Sudre, Wenqi Li, Tom Vercauteren, Sebastien Ourselin, and
+  M~Jorge~Cardoso.
+\newblock Generalised dice overlap as a deep learning loss function for highly
+  unbalanced segmentations.
+\newblock pages 240--248, 2017.
+
+\end{thebibliography}

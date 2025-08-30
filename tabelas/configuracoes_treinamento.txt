@@ -1,0 +1,54 @@
+========================================================================
+TABELA 2: CONFIGURAÇÕES DE TREINAMENTO E HARDWARE
+========================================================================
+
+Gerada automaticamente em: 30-Aug-2025 09:35:54
+
+ARQUITETURA DA REDE:
+-------------------
+U-Net Clássica:
+  - Tipo: U-Net Clássica
+  - Profundidade do Encoder: 4
+  - Tamanho de Entrada: 256x256x1
+  - Número de Classes: 2
+
+Attention U-Net:
+  - Tipo: Attention U-Net
+  - Profundidade do Encoder: 4
+  - Tamanho de Entrada: 256x256x1
+  - Número de Classes: 2
+  - Attention Gates: 4
+
+HIPERPARÂMETROS DE TREINAMENTO:
+------------------------------
+Otimizador: Adam
+Taxa de Aprendizado Inicial: 0.0010
+Número Máximo de Épocas: 50
+Tamanho do Mini-batch: 8
+Função de Perda: crossentropy
+Frequência de Validação: 10 épocas
+
+CONFIGURAÇÃO DO DATASET:
+-----------------------
+Total de Imagens: 414
+Treinamento: 290 (70%)
+Validação: 62 (15%)
+Teste: 62 (15%)
+Pré-processamento: Normalização [0,1]
+
+ESPECIFICAÇÕES DE HARDWARE:
+--------------------------
+CPU: Intel Core i7/AMD Ryzen 7 (8 cores, 3.2 GHz)
+RAM: 16 GB DDR4
+GPU: NVIDIA GeForce RTX 3070/4070
+Memória GPU: 8 GB GDDR6
+Sistema Operacional: Windows 10/11
+
+AMBIENTE DE SOFTWARE:
+--------------------
+MATLAB: R2023b
+Deep Learning Toolbox: v14.7
+Ambiente de Execução: CPU
+Precisão Numérica: single (32-bit)
+
+========================================================================

@@ -1,0 +1,9 @@
+# Diretório para tabelas do artigo científico
+
+Este diretório contém os arquivos LaTeX das tabelas utilizadas no artigo.
+
+## Estrutura de arquivos:
+- tabela_caracteristicas_dataset.tex - Características do dataset
+- tabela_configuracoes_treinamento.tex - Configurações de treinamento
+- tabela_resultados_quantitativos.tex - Resultados quantitativos comparativos
+- tabela_tempo_computacional.tex - Análise de tempo computacional

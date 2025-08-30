@@ -1,0 +1,47 @@
+========================================================================
+RELATÓRIO DE DADOS EXPERIMENTAIS - EXEMPLO
+Detecção de Corrosão: U-Net vs Attention U-Net
+========================================================================
+
+Data de geração: 29-Aug-2025 14:13:26
+Número de amostras: 30 por modelo
+
+RESULTADOS COMPARATIVOS:
+========================
+
+IOU:
+  U-Net: 0.7639 ± 0.1035
+  Attention U-Net: 0.7457 ± 0.0775
+  Diferença: -0.0182 (-2.38%)
+  p-value: 0.443408
+  Resultado: Diferença não significativa
+
+DICE:
+  U-Net: 0.7720 ± 0.0729
+  Attention U-Net: 0.8152 ± 0.0606
+  Diferença: 0.0432 (5.60%)
+  p-value: 0.015284
+  Resultado: Diferença estatisticamente significativa
+
+ACCURACY:
+  U-Net: 0.8925 ± 0.0494
+  Attention U-Net: 0.9239 ± 0.0283
+  Diferença: 0.0313 (3.51%)
+  p-value: 0.003822
+  Resultado: Diferença estatisticamente significativa
+
+F1_SCORE:
+  U-Net: 0.7419 ± 0.0689
+  Attention U-Net: 0.7783 ± 0.0504
+  Diferença: 0.0364 (4.91%)
+  p-value: 0.022853
+  Resultado: Diferença estatisticamente significativa
+
+CONCLUSÃO:
+==========
+
+Os dados sintéticos demonstram o funcionamento do sistema de extração
+e análise estatística. Em um cenário real, estes dados seriam extraídos
+dos arquivos .mat gerados durante o treinamento e avaliação dos modelos.
+
+O sistema está pronto para processar dados reais do projeto.

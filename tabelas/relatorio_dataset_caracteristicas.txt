@@ -1,0 +1,76 @@
+========================================================================
+RELATÓRIO: CARACTERÍSTICAS DO DATASET DE CORROSÃO
+========================================================================
+
+Data da Análise: 30-Aug-2025 09:28:01
+Projeto: Detecção Automatizada de Corrosão em Vigas W ASTM A572 Grau 50
+
+1. RESUMO EXECUTIVO
+-------------------
+O dataset analisado contém 217 imagens de vigas W fabricadas em aço ASTM A572 Grau 50
+com anotações manuais de regiões de corrosão superficial. As imagens foram processadas
+de resolução original 512x512 para 256x256 pixels em formato grayscale.
+
+2. CARACTERÍSTICAS TÉCNICAS
+----------------------------
+Total de Imagens: 217
+Total de Máscaras: 217
+Consistência: Sim
+Resolução Original: 512x512 pixels
+Resolução Processada: 256x256 pixels
+Formato: JPEG (RGB)
+Material: ASTM A572 Grau 50
+Tipo de Estrutura: Vigas W
+Tipo de Defeito: Corrosão superficial
+
+3. DISTRIBUIÇÃO DE CLASSES
+--------------------------
+Número de Classes: 2
+Classe 1: Background (88.8%)
+Classe 2: Corrosão (11.2%)
+
+4. DIVISÃO DO DATASET
+---------------------
+Treinamento: 152 imagens (70.0%)
+Validação: 33 imagens (15.0%)
+Teste: 32 imagens (15.0%)
+
+5. TABELA LATEX PARA O ARTIGO
+------------------------------
+\begin{table}[htbp]
+\centering
+\caption{Características do Dataset de Imagens de Corrosão}
+\label{tab:dataset_caracteristicas}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Característica} & \textbf{Valor} \\
+\hline
+Total de Imagens & 217 \\
+\hline
+Resolução Original & 512 × 512 pixels \\
+\hline
+Resolução Processada & 256 × 256 pixels \\
+\hline
+Formato & JPEG (RGB) \\
+\hline
+Material das Vigas & ASTM A572 Grau 50 \\
+\hline
+Tipo de Estrutura & Vigas W \\
+\hline
+Tipo de Defeito & Corrosão superficial \\
+\hline
+Número de Classes & 2 (Background, Corrosão) \\
+\hline
+Distribuição de Classes & Background: 88.8\%, Corrosão: 11.2\% \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Divisão do Dataset}} \\
+\hline
+Treinamento & 152 imagens (70.0\%) \\
+\hline
+Validação & 33 imagens (15.0\%) \\
+\hline
+Teste & 32 imagens (15.0\%) \\
+\hline
+\end{tabular}
+\end{table}
+

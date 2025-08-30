@@ -1,0 +1,55 @@
+% Tabela 2: Configurações de Treinamento
+% Gerada automaticamente em 30-Aug-2025 09:35:54
+
+\begin{table}[htbp]
+\centering
+\caption{Configurações de treinamento e especificações de hardware utilizadas nos experimentos}
+\label{tab:configuracoes_treinamento}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Parâmetro} & \textbf{U-Net} & \textbf{Attention U-Net} \\
+\hline
+\hline
+\multicolumn{3}{|c|}{\textbf{Arquitetura da Rede}} \\
+\hline
+Tipo de Arquitetura & U-Net Clássica & Attention U-Net \\
+Profundidade do Encoder & 4 & 4 \\
+Tamanho de Entrada & 256×256×1 & 256×256×1 \\
+Número de Classes & 2 & 2 \\
+Attention Gates & N/A & 4 \\
+\hline
+\multicolumn{3}{|c|}{\textbf{Hiperparâmetros de Treinamento}} \\
+\hline
+Otimizador & Adam & Adam \\
+Taxa de Aprendizado Inicial & 0.0010 & 0.0010 \\
+Número Máximo de Épocas & 50 & 50 \\
+Tamanho do Mini-batch & 8 & 8 \\
+Função de Perda & crossentropy & crossentropy \\
+Frequência de Validação & 10 épocas & 10 épocas \\
+\hline
+\multicolumn{3}{|c|}{\textbf{Configuração do Dataset}} \\
+\hline
+Total de Imagens & \multicolumn{2}{c|}{414} \\
+Amostras de Treinamento & \multicolumn{2}{c|}{290 (70\%)} \\
+Amostras de Validação & \multicolumn{2}{c|}{62 (15\%)} \\
+Amostras de Teste & \multicolumn{2}{c|}{62 (15\%)} \\
+Pré-processamento & \multicolumn{2}{c|}{Normalização [0,1]} \\
+Aumento de Dados & \multicolumn{2}{c|}{Sim} \\
+\hline
+\multicolumn{3}{|c|}{\textbf{Especificações de Hardware}} \\
+\hline
+Processador (CPU) & \multicolumn{2}{c|}{Intel Core i7/AMD Ryzen 7 (8 cores, 3.2 GHz)} \\
+Memória RAM & \multicolumn{2}{c|}{16 GB DDR4} \\
+Placa Gráfica (GPU) & \multicolumn{2}{c|}{NVIDIA GeForce RTX 3070/4070} \\
+Memória GPU & \multicolumn{2}{c|}{8 GB GDDR6} \\
+Sistema Operacional & \multicolumn{2}{c|}{Windows 10/11} \\
+\hline
+\multicolumn{3}{|c|}{\textbf{Ambiente de Software}} \\
+\hline
+MATLAB & \multicolumn{2}{c|}{R2023b} \\
+Deep Learning Toolbox & \multicolumn{2}{c|}{v14.7} \\
+Ambiente de Execução & \multicolumn{2}{c|}{CPU} \\
+Precisão Numérica & \multicolumn{2}{c|}{single (32-bit)} \\
+\hline
+\end{tabular}
+\end{table}

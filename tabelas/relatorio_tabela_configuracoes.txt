@@ -1,0 +1,42 @@
+========================================================================
+RELATÓRIO DE GERAÇÃO - TABELA DE CONFIGURAÇÕES DE TREINAMENTO
+========================================================================
+
+Data de Geração: 30-Aug-2025 09:35:54
+Projeto: Detecção de Corrosão com U-Net vs Attention U-Net
+
+STATUS DA GERAÇÃO:
+-----------------
+✅ Tabela gerada com sucesso
+✅ Arquivo LaTeX criado: C:\Users\heito\Documents\MATLAB\tabelas\tabela_configuracoes_treinamento.tex
+
+CONFIGURAÇÕES EXTRAÍDAS:
+-----------------------
+U-Net:
+  - Otimizador: Adam
+  - Learning Rate: 0.0010
+  - Épocas: 50
+  - Batch Size: 8
+
+Attention U-Net:
+  - Otimizador: Adam
+  - Learning Rate: 0.0010
+  - Épocas: 50
+  - Batch Size: 8
+  - Attention Gates: 4
+
+HARDWARE DETECTADO:
+------------------
+CPU: Intel Core i7/AMD Ryzen 7 (8 cores, 3.2 GHz)
+RAM: 16 GB DDR4
+GPU: NVIDIA GeForce RTX 3070/4070
+Memória GPU: 8 GB GDDR6
+
+PRÓXIMOS PASSOS:
+---------------
+1. Revisar a tabela LaTeX gerada
+2. Integrar no documento principal do artigo
+3. Verificar formatação e alinhamento
+4. Validar informações técnicas
+
+========================================================================

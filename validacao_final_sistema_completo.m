@@ -1,13 +1,13 @@
-function validacao_final_sistema_completo()
-    % VALIDACAO_FINAL_SISTEMA_COMPLETO - Validação final do sistema integrado
+function resultado = validacao_final_sistema_completo()
+    % validacao_final_sistema_completo - Executa validação final completa do artigo científico
     %
-    % Este script executa uma validação completa do sistema de segmentação,
-    % verificando todos os componentes, integrações e funcionalidades.
+    % Este script implementa a validação final completa conforme especificado na tarefa 24:
+    % - Executa todos os testes de qualidade científica
+    % - Verifica reprodutibilidade metodológica
+    % - Confirma nível de qualidade Excelente (E) em critérios I-R-B-MB-E
+    % - Gera relatório final de validação
     %
-    % Validações realizadas:
-    % 1. Verificação de todos os componentes
-    % 2. Teste de integração completa
-    % 3. Validação de criação de arquivos
+    % Requirements: 1.2, 2.1, 5.1, 5.2, 5.3, 5.4
     % 4. Verificação de tratamento de erros
     % 5. Teste de documentação
     % 6. Validação de estrutura final

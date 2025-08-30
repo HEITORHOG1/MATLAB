@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="1600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for different types of processes -->
+    <linearGradient id="dataGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E3F2FD;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#BBDEFB;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="processGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3E5F5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E1BEE7;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="modelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C8E6C9;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="analysisGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF3E0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFE0B2;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Arrow marker -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#333">
+    Fluxograma da Metodologia Experimental
+  </text>
+  <text x="600" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#666">
+    Detecção de Corrosão em Vigas W ASTM A572 Grau 50 - U-Net vs Attention U-Net
+  </text>
+  
+  <!-- Phase 1: Data Acquisition -->
+  <rect x="50" y="80" width="1100" height="120" fill="none" stroke="#2196F3" stroke-width="2" stroke-dasharray="5,5" rx="10"/>
+  <text x="70" y="100" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2196F3">FASE 1: AQUISIÇÃO E PREPARAÇÃO DOS DADOS</text>
+  
+  <!-- Step 1: Material Characterization -->
+  <rect x="100" y="120" width="200" height="60" fill="url(#dataGrad)" stroke="#1976D2" stroke-width="2" rx="8"/>
+  <text x="200" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Caracterização do Material</text>
+  <text x="200" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Vigas W ASTM A572 Grau 50</text>
+  <text x="200" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Especificações técnicas</text>
+  
+  <!-- Step 2: Image Acquisition -->
+  <rect x="350" y="120" width="200" height="60" fill="url(#dataGrad)" stroke="#1976D2" stroke-width="2" rx="8"/>
+  <text x="450" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Aquisição de Imagens</text>
+  <text x="450" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">414 imagens de corrosão</text>
+  <text x="450" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Resolução: 512×512 pixels</text>
+  
+  <!-- Step 3: Manual Annotation -->
+  <rect x="600" y="120" width="200" height="60" fill="url(#dataGrad)" stroke="#1976D2" stroke-width="2" rx="8"/>
+  <text x="700" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Anotação Manual</text>
+  <text x="700" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Ground truth masks</text>
+  <text x="700" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Segmentação de regiões</text>
+  
+  <!-- Step 4: Quality Control -->
+  <rect x="850" y="120" width="200" height="60" fill="url(#dataGrad)" stroke="#1976D2" stroke-width="2" rx="8"/>
+  <text x="950" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Controle de Qualidade</text>
+  <text x="950" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Validação das anotações</text>
+  <text x="950" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Correção de inconsistências</text>
+  
+  <!-- Arrows Phase 1 -->
+  <line x1="300" y1="150" x2="340" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="550" y1="150" x2="590" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="800" y1="150" x2="840" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Phase 2: Data Preprocessing -->
+  <rect x="50" y="220" width="1100" height="120" fill="none" stroke="#9C27B0" stroke-width="2" stroke-dasharray="5,5" rx="10"/>
+  <text x="70" y="240" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#9C27B0">FASE 2: PRÉ-PROCESSAMENTO DOS DADOS</text>
+  
+  <!-- Step 5: Image Preprocessing -->
+  <rect x="150" y="260" width="200" height="60" fill="url(#processGrad)" stroke="#7B1FA2" stroke-width="2" rx="8"/>
+  <text x="250" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Pré-processamento</text>
+  <text x="250" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Redimensionamento: 256×256</text>
+  <text x="250" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Normalização [0,1]</text>
+  
+  <!-- Step 6: Data Augmentation -->
+  <rect x="400" y="260" width="200" height="60" fill="url(#processGrad)" stroke="#7B1FA2" stroke-width="2" rx="8"/>
+  <text x="500" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Data Augmentation</text>
+  <text x="500" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Rotação, flip, zoom</text>
+  <text x="500" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Aumento do dataset</text>
+  
+  <!-- Step 7: Dataset Split -->
+  <rect x="650" y="260" width="200" height="60" fill="url(#processGrad)" stroke="#7B1FA2" stroke-width="2" rx="8"/>
+  <text x="750" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Divisão do Dataset</text>
+  <text x="750" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Train: 70% | Val: 15%</text>
+  <text x="750" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Test: 15%</text>
+  
+  <!-- Arrows Phase 2 -->
+  <line x1="350" y1="290" x2="390" y2="290" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="290" x2="640" y2="290" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Connection from Phase 1 to Phase 2 -->
+  <line x1="600" y1="200" x2="600" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Phase 3: Model Training -->
+  <rect x="50" y="360" width="1100" height="200" fill="none" stroke="#4CAF50" stroke-width="2" stroke-dasharray="5,5" rx="10"/>
+  <text x="70" y="380" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#4CAF50">FASE 3: TREINAMENTO DOS MODELOS</text>
+  
+  <!-- Parallel Training Paths -->
+  <!-- U-Net Path -->
+  <rect x="150" y="400" width="180" height="60" fill="url(#modelGrad)" stroke="#388E3C" stroke-width="2" rx="8"/>
+  <text x="240" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Arquitetura U-Net</text>
+  <text x="240" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Encoder-Decoder</text>
+  <text x="240" y="450" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Skip Connections</text>
+  
+  <rect x="150" y="480" width="180" height="60" fill="url(#modelGrad)" stroke="#388E3C" stroke-width="2" rx="8"/>
+  <text x="240" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Treinamento U-Net</text>
+  <text x="240" y="515" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Epochs: 50 | Batch: 8</text>
+  <text x="240" y="530" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">LR: 0.001 | Adam</text>
+  
+  <!-- Attention U-Net Path -->
+  <rect x="370" y="400" width="180" height="60" fill="url(#modelGrad)" stroke="#388E3C" stroke-width="2" rx="8"/>
+  <text x="460" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Arquitetura Attention U-Net</text>
+  <text x="460" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">U-Net + Attention Gates</text>
+  <text x="460" y="450" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Mecanismo de Atenção</text>
+  
+  <rect x="370" y="480" width="180" height="60" fill="url(#modelGrad)" stroke="#388E3C" stroke-width="2" rx="8"/>
+  <text x="460" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Treinamento Attention U-Net</text>
+  <text x="460" y="515" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Epochs: 50 | Batch: 8</text>
+  <text x="460" y="530" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">LR: 0.001 | Adam</text>
+  
+  <!-- Cross-Validation -->
+  <rect x="600" y="440" width="180" height="60" fill="url(#modelGrad)" stroke="#388E3C" stroke-width="2" rx="8"/>
+  <text x="690" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Validação Cruzada</text>
+  <text x="690" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">K-fold (k=5)</text>
+  <text x="690" y="490" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Monitoramento de Loss</text>
+  
+  <!-- Model Saving -->
+  <rect x="820" y="440" width="180" height="60" fill="url(#modelGrad)" stroke="#388E3C" stroke-width="2" rx="8"/>
+  <text x="910" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Salvamento dos Modelos</text>
+  <text x="910" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Melhores pesos</text>
+  <text x="910" y="490" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Checkpoints</text>
+  
+  <!-- Arrows Phase 3 -->
+  <line x1="240" y1="460" x2="240" y2="470" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="460" y1="460" x2="460" y2="470" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="330" y1="510" x2="590" y2="470" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="550" y1="510" x2="590" y2="470" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="780" y1="470" x2="810" y2="470" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Connection from Phase 2 to Phase 3 -->
+  <line x1="600" y1="340" x2="600" y2="390" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="390" x2="240" y2="390" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="390" x2="460" y2="390" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Phase 4: Model Evaluation -->
+  <rect x="50" y="580" width="1100" height="160" fill="none" stroke="#FF9800" stroke-width="2" stroke-dasharray="5,5" rx="10"/>
+  <text x="70" y="600" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#FF9800">FASE 4: AVALIAÇÃO E TESTE DOS MODELOS</text>
+  
+  <!-- Step 8: Inference -->
+  <rect x="100" y="620" width="180" height="60" fill="url(#analysisGrad)" stroke="#F57C00" stroke-width="2" rx="8"/>
+  <text x="190" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Inferência</text>
+  <text x="190" y="655" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Segmentação do</text>
+  <text x="190" y="670" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">conjunto de teste</text>
+  
+  <!-- Step 9: Metrics Calculation -->
+  <rect x="320" y="620" width="180" height="60" fill="url(#analysisGrad)" stroke="#F57C00" stroke-width="2" rx="8"/>
+  <text x="410" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Cálculo de Métricas</text>
+  <text x="410" y="655" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">IoU, Dice, F1-Score</text>
+  <text x="410" y="670" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Precision, Recall</text>
+  
+  <!-- Step 10: Performance Analysis -->
+  <rect x="540" y="620" width="180" height="60" fill="url(#analysisGrad)" stroke="#F57C00" stroke-width="2" rx="8"/>
+  <text x="630" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Análise de Performance</text>
+  <text x="630" y="655" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Tempo de treinamento</text>
+  <text x="630" y="670" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Tempo de inferência</text>
+  
+  <!-- Step 11: Visualization -->
+  <rect x="760" y="620" width="180" height="60" fill="url(#analysisGrad)" stroke="#F57C00" stroke-width="2" rx="8"/>
+  <text x="850" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Visualização</text>
+  <text x="850" y="655" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Mapas de atenção</text>
+  <text x="850" y="670" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Comparações visuais</text>
+  
+  <!-- Step 12: Results Organization -->
+  <rect x="430" y="700" width="180" height="60" fill="url(#analysisGrad)" stroke="#F57C00" stroke-width="2" rx="8"/>
+  <text x="520" y="720" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Organização dos Resultados</text>
+  <text x="520" y="735" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Estruturação de dados</text>
+  <text x="520" y="750" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Preparação para análise</text>
+  
+  <!-- Arrows Phase 4 -->
+  <line x1="280" y1="650" x2="310" y2="650" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="500" y1="650" x2="530" y2="650" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="720" y1="650" x2="750" y2="650" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="410" y1="680" x2="520" y2="690" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="630" y1="680" x2="520" y2="690" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="850" y1="680" x2="520" y2="690" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Connection from Phase 3 to Phase 4 -->
+  <line x1="600" y1="570" x2="600" y2="610" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="610" x2="190" y2="610" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Phase 5: Statistical Analysis -->
+  <rect x="50" y="780" width="1100" height="160" fill="none" stroke="#E91E63" stroke-width="2" stroke-dasharray="5,5" rx="10"/>
+  <text x="70" y="800" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#E91E63">FASE 5: ANÁLISE ESTATÍSTICA COMPARATIVA</text>
+  
+  <!-- Step 13: Descriptive Statistics -->
+  <rect x="120" y="820" width="180" height="60" fill="#FCE4EC" stroke="#C2185B" stroke-width="2" rx="8"/>
+  <text x="210" y="840" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Estatísticas Descritivas</text>
+  <text x="210" y="855" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Média ± Desvio Padrão</text>
+  <text x="210" y="870" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Intervalos de Confiança</text>
+  
+  <!-- Step 14: Normality Tests -->
+  <rect x="340" y="820" width="180" height="60" fill="#FCE4EC" stroke="#C2185B" stroke-width="2" rx="8"/>
+  <text x="430" y="840" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Testes de Normalidade</text>
+  <text x="430" y="855" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Shapiro-Wilk</text>
+  <text x="430" y="870" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Jarque-Bera</text>
+  
+  <!-- Step 15: Statistical Tests -->
+  <rect x="560" y="820" width="180" height="60" fill="#FCE4EC" stroke="#C2185B" stroke-width="2" rx="8"/>
+  <text x="650" y="840" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Testes Estatísticos</text>
+  <text x="650" y="855" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Teste t de Student</text>
+  <text x="650" y="870" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Wilcoxon-Mann-Whitney</text>
+  
+  <!-- Step 16: Effect Size -->
+  <rect x="780" y="820" width="180" height="60" fill="#FCE4EC" stroke="#C2185B" stroke-width="2" rx="8"/>
+  <text x="870" y="840" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Effect Size</text>
+  <text x="870" y="855" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Cohen's d</text>
+  <text x="870" y="870" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Hedges' g</text>
+  
+  <!-- Step 17: Final Report -->
+  <rect x="450" y="900" width="200" height="60" fill="#FCE4EC" stroke="#C2185B" stroke-width="2" rx="8"/>
+  <text x="550" y="920" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Relatório Final</text>
+  <text x="550" y="935" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Conclusões estatísticas</text>
+  <text x="550" y="950" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Significância e interpretação</text>
+  
+  <!-- Arrows Phase 5 -->
+  <line x1="300" y1="850" x2="330" y2="850" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="520" y1="850" x2="550" y2="850" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="740" y1="850" x2="770" y2="850" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="430" y1="880" x2="520" y2="890" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="650" y1="880" x2="580" y2="890" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="870" y1="880" x2="580" y2="890" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Connection from Phase 4 to Phase 5 -->
+  <line x1="520" y1="770" x2="520" y2="810" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="520" y1="810" x2="210" y2="810" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Phase 6: Documentation -->
+  <rect x="50" y="980" width="1100" height="120" fill="none" stroke="#795548" stroke-width="2" stroke-dasharray="5,5" rx="10"/>
+  <text x="70" y="1000" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#795548">FASE 6: DOCUMENTAÇÃO E REPRODUTIBILIDADE</text>
+  
+  <!-- Step 18: Code Documentation -->
+  <rect x="150" y="1020" width="180" height="60" fill="#EFEBE9" stroke="#5D4037" stroke-width="2" rx="8"/>
+  <text x="240" y="1040" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Documentação do Código</text>
+  <text x="240" y="1055" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Scripts e funções</text>
+  <text x="240" y="1070" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Parâmetros e configurações</text>
+  
+  <!-- Step 19: Data Archive -->
+  <rect x="370" y="1020" width="180" height="60" fill="#EFEBE9" stroke="#5D4037" stroke-width="2" rx="8"/>
+  <text x="460" y="1040" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Arquivo de Dados</text>
+  <text x="460" y="1055" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Modelos treinados</text>
+  <text x="460" y="1070" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Resultados e métricas</text>
+  
+  <!-- Step 20: Reproducibility -->
+  <rect x="590" y="1020" width="180" height="60" fill="#EFEBE9" stroke="#5D4037" stroke-width="2" rx="8"/>
+  <text x="680" y="1040" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Reprodutibilidade</text>
+  <text x="680" y="1055" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Seeds aleatórias</text>
+  <text x="680" y="1070" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Versões de software</text>
+  
+  <!-- Step 21: Scientific Article -->
+  <rect x="810" y="1020" width="180" height="60" fill="#EFEBE9" stroke="#5D4037" stroke-width="2" rx="8"/>
+  <text x="900" y="1040" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Artigo Científico</text>
+  <text x="900" y="1055" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Metodologia detalhada</text>
+  <text x="900" y="1070" text-anchor="middle" font-family="Arial, sans-serif" font-size="10">Resultados e discussão</text>
+  
+  <!-- Arrows Phase 6 -->
+  <line x1="330" y1="1050" x2="360" y2="1050" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="550" y1="1050" x2="580" y2="1050" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="770" y1="1050" x2="800" y2="1050" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Connection from Phase 5 to Phase 6 -->
+  <line x1="550" y1="970" x2="550" y2="1010" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="550" y1="1010" x2="240" y2="1010" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Legend -->
+  <rect x="50" y="1120" width="1100" height="100" fill="#F5F5F5" stroke="#999" stroke-width="1" rx="5"/>
+  <text x="70" y="1140" font-family="Arial, sans-serif" font-size="12" font-weight="bold">LEGENDA:</text>
+  
+  <rect x="70" y="1150" width="20" height="15" fill="url(#dataGrad)" stroke="#1976D2" stroke-width="1"/>
+  <text x="100" y="1162" font-family="Arial, sans-serif" font-size="10">Aquisição e Preparação de Dados</text>
+  
+  <rect x="280" y="1150" width="20" height="15" fill="url(#processGrad)" stroke="#7B1FA2" stroke-width="1"/>
+  <text x="310" y="1162" font-family="Arial, sans-serif" font-size="10">Pré-processamento</text>
+  
+  <rect x="450" y="1150" width="20" height="15" fill="url(#modelGrad)" stroke="#388E3C" stroke-width="1"/>
+  <text x="480" y="1162" font-family="Arial, sans-serif" font-size="10">Treinamento de Modelos</text>
+  
+  <rect x="620" y="1150" width="20" height="15" fill="url(#analysisGrad)" stroke="#F57C00" stroke-width="1"/>
+  <text x="650" y="1162" font-family="Arial, sans-serif" font-size="10">Avaliação e Análise</text>
+  
+  <rect x="780" y="1150" width="20" height="15" fill="#FCE4EC" stroke="#C2185B" stroke-width="1"/>
+  <text x="810" y="1162" font-family="Arial, sans-serif" font-size="10">Análise Estatística</text>
+  
+  <rect x="950" y="1150" width="20" height="15" fill="#EFEBE9" stroke="#5D4037" stroke-width="1"/>
+  <text x="980" y="1162" font-family="Arial, sans-serif" font-size="10">Documentação</text>
+  
+  <!-- Technical Details -->
+  <text x="70" y="1185" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Especificações Técnicas:</text>
+  <text x="70" y="1200" font-family="Arial, sans-serif" font-size="9">• Dataset: 414 imagens de vigas W ASTM A572 Grau 50 com corrosão • Resolução: 512×512 → 256×256 pixels</text>
+  <text x="70" y="1212" font-family="Arial, sans-serif" font-size="9">• Métricas: IoU, Dice Coefficient, Precision, Recall, F1-Score • Análise: Teste t-Student, Cohen's d, IC 95%</text>
+  
+</svg>

@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: artigo_cientifico_corrosao.aux
+Reallocating 'name_of_file' (item size: 1) to 6 items.
+The style file: unsrt.bst
+Reallocating 'name_of_file' (item size: 1) to 12 items.
+Database file #1: referencias.bib
+Warning--I didn't find a database entry for "aisc2016specification"
+Warning--empty journal in he2016deep
+Warning--empty journal in milletari2016v
+Warning--empty journal in sudre2017generalised
+You've used 32 entries,
+            1791 wiz_defined-function locations,
+            637 strings with 9688 characters,
+and the built_in function-call counts, 8692 in all, are:
+= -- 791
+> -- 414
+< -- 11
++ -- 150
+- -- 118
+* -- 598
+:= -- 1333
+add.period$ -- 96
+call.type$ -- 32
+change.case$ -- 30
+chr.to.int$ -- 0
+cite$ -- 35
+duplicate$ -- 380
+empty$ -- 782
+format.name$ -- 118
+if$ -- 1945
+int.to.chr$ -- 0
+int.to.str$ -- 32
+missing$ -- 33
+newline$ -- 162
+num.names$ -- 32
+pop$ -- 94
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 221
+stack$ -- 0
+substring$ -- 681
+swap$ -- 123
+text.length$ -- 11
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 3
+while$ -- 89
+width$ -- 34
+write$ -- 343
+(There were 4 warnings)

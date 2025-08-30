@@ -1,0 +1,85 @@
+========================================
+RELATÓRIO DE ANÁLISE ESTATÍSTICA
+Comparação de Performance: U-Net vs Attention U-Net
+========================================
+
+Data: 30-Aug-2025 00:08:19
+
+----------------------------------------
+MÉTRICA: IoU
+----------------------------------------
+
+ESTATÍSTICAS DESCRITIVAS:
+
+U-Net:
+  Média: 0.7524 ± 0.0764
+  Mediana: 0.7450
+  Min-Max: [0.5793, 0.9483]
+
+Attention U-Net:
+  Média: 0.8208 ± 0.0729
+  Mediana: 0.8317
+  Min-Max: [0.6746, 0.9427]
+
+TESTE ESTATÍSTICO:
+  Teste: t-test de Student
+  p-value: 0.000014
+  Significativo (α=0.05): true
+
+DIFERENÇA ENTRE MODELOS:
+  Diferença absoluta: 0.0683
+  Diferença percentual: 9.08%
+  Melhor modelo: Attention U-Net
+
+----------------------------------------
+MÉTRICA: Dice Coefficient
+----------------------------------------
+
+ESTATÍSTICAS DESCRITIVAS:
+
+U-Net:
+  Média: 0.7718 ± 0.0778
+  Mediana: 0.7772
+  Min-Max: [0.5932, 0.9268]
+
+Attention U-Net:
+  Média: 0.8439 ± 0.0600
+  Mediana: 0.8478
+  Min-Max: [0.7032, 0.9889]
+
+TESTE ESTATÍSTICO:
+  Teste: t-test de Student
+  p-value: 0.000001
+  Significativo (α=0.05): true
+
+DIFERENÇA ENTRE MODELOS:
+  Diferença absoluta: 0.0721
+  Diferença percentual: 9.34%
+  Melhor modelo: Attention U-Net
+
+----------------------------------------
+MÉTRICA: F1-Score
+----------------------------------------
+
+ESTATÍSTICAS DESCRITIVAS:
+
+U-Net:
+  Média: 0.7494 ± 0.0799
+  Mediana: 0.7507
+  Min-Max: [0.6085, 0.9326]
+
+Attention U-Net:
+  Média: 0.8353 ± 0.0589
+  Mediana: 0.8409
+  Min-Max: [0.6974, 0.9703]
+
+TESTE ESTATÍSTICO:
+  Teste: t-test de Student
+  p-value: 0.000000
+  Significativo (α=0.05): true
+
+DIFERENÇA ENTRE MODELOS:
+  Diferença absoluta: 0.0860
+  Diferença percentual: 11.47%
+  Melhor modelo: Attention U-Net
+

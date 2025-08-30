@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for different components -->
+    <linearGradient id="encoderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="decoderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565C0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bottleneckGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF9800;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E65100;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="attentionGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D63031;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="attentionGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FF6B6B;stop-opacity:0.2" />
+    </radialGradient>
+    
+    <!-- Arrow marker definition -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+    <marker id="attentionArrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FF6B6B"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="700" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">
+    Arquitetura Attention U-Net para Segmentação Semântica
+  </text>
+  <text x="450" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">
+    Destacando Mecanismos de Atenção (Attention Gates)
+  </text>
+  
+  <!-- Input Image -->
+  <rect x="50" y="320" width="60" height="40" fill="#E0E0E0" stroke="#666" stroke-width="2"/>
+  <text x="80" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">Input</text>
+  <text x="80" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">512×512×3</text>
+  
+  <!-- Encoder Path -->
+  <!-- Level 1 -->
+  <rect x="140" y="310" width="50" height="60" fill="url(#encoderGrad)" stroke="#333" stroke-width="1"/>
+  <text x="165" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="165" y="347" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">ReLU</text>
+  <text x="165" y="359" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="165" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">512×512×64</text>
+  
+  <!-- MaxPool 1 -->
+  <rect x="210" y="325" width="30" height="30" fill="#FF5722" stroke="#333" stroke-width="1"/>
+  <text x="225" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">MaxPool</text>
+  
+  <!-- Level 2 -->
+  <rect x="260" y="300" width="50" height="60" fill="url(#encoderGrad)" stroke="#333" stroke-width="1"/>
+  <text x="285" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="285" y="337" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">ReLU</text>
+  <text x="285" y="349" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="285" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">256×256×128</text>
+  
+  <!-- MaxPool 2 -->
+  <rect x="330" y="315" width="30" height="30" fill="#FF5722" stroke="#333" stroke-width="1"/>
+  <text x="345" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">MaxPool</text>
+  
+  <!-- Level 3 -->
+  <rect x="380" y="290" width="50" height="60" fill="url(#encoderGrad)" stroke="#333" stroke-width="1"/>
+  <text x="405" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="405" y="327" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">ReLU</text>
+  <text x="405" y="339" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="405" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">128×128×256</text>
+  
+  <!-- Bottleneck -->
+  <rect x="380" y="370" width="50" height="60" fill="url(#bottleneckGrad)" stroke="#333" stroke-width="2"/>
+  <text x="405" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="405" y="407" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">ReLU</text>
+  <text x="405" y="419" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="405" y="440" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">64×64×512</text>
+  
+  <!-- Attention Gates -->
+  <!-- Attention Gate 1 (Level 3) -->
+  <circle cx="470" cy="320" r="25" fill="url(#attentionGrad)" stroke="#333" stroke-width="2"/>
+  <circle cx="470" cy="320" r="30" fill="url(#attentionGlow)" opacity="0.3"/>
+  <text x="470" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white" font-weight="bold">AG</text>
+  <text x="470" y="327" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Attention</text>
+  <text x="470" y="337" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Gate</text>
+  
+  <!-- Attention Gate 2 (Level 2) -->
+  <circle cx="590" cy="330" r="25" fill="url(#attentionGrad)" stroke="#333" stroke-width="2"/>
+  <circle cx="590" cy="330" r="30" fill="url(#attentionGlow)" opacity="0.3"/>
+  <text x="590" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white" font-weight="bold">AG</text>
+  <text x="590" y="337" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Attention</text>
+  <text x="590" y="347" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Gate</text>
+  
+  <!-- Attention Gate 3 (Level 1) -->
+  <circle cx="710" cy="340" r="25" fill="url(#attentionGrad)" stroke="#333" stroke-width="2"/>
+  <circle cx="710" cy="340" r="30" fill="url(#attentionGlow)" opacity="0.3"/>
+  <text x="710" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white" font-weight="bold">AG</text>
+  <text x="710" y="347" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Attention</text>
+  <text x="710" y="357" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">Gate</text>
+  
+  <!-- Decoder Path -->
+  <!-- UpConv 1 -->
+  <rect x="450" y="385" width="30" height="30" fill="#9C27B0" stroke="#333" stroke-width="1"/>
+  <text x="465" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">UpConv</text>
+  
+  <!-- Level 4 -->
+  <rect x="520" y="290" width="50" height="60" fill="url(#decoderGrad)" stroke="#333" stroke-width="1"/>
+  <text x="545" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="545" y="327" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">ReLU</text>
+  <text x="545" y="339" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="545" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">128×128×256</text>
+  
+  <!-- UpConv 2 -->
+  <rect x="620" y="315" width="30" height="30" fill="#9C27B0" stroke="#333" stroke-width="1"/>
+  <text x="635" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">UpConv</text>
+  
+  <!-- Level 5 -->
+  <rect x="670" y="300" width="50" height="60" fill="url(#decoderGrad)" stroke="#333" stroke-width="1"/>
+  <text x="695" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="695" y="337" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">ReLU</text>
+  <text x="695" y="349" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="695" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">256×256×128</text>
+  
+  <!-- UpConv 3 -->
+  <rect x="740" y="325" width="30" height="30" fill="#9C27B0" stroke="#333" stroke-width="1"/>
+  <text x="755" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">UpConv</text>
+  
+  <!-- Level 6 -->
+  <rect x="790" y="310" width="50" height="60" fill="url(#decoderGrad)" stroke="#333" stroke-width="1"/>
+  <text x="815" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="815" y="347" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">ReLU</text>
+  <text x="815" y="359" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Conv</text>
+  <text x="815" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">512×512×64</text>
+  
+  <!-- Output -->
+  <rect x="50" y="450" width="60" height="40" fill="#4CAF50" stroke="#333" stroke-width="2"/>
+  <text x="80" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Output</text>
+  <text x="80" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#333">512×512×1</text>
+  
+  <!-- Skip Connections with Attention -->
+  <!-- Skip connection 1 (through AG1) -->
+  <path d="M 405 290 Q 405 250 470 250 Q 470 295 470 295" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-dasharray="3,3"/>
+  <path d="M 470 345 Q 470 380 545 380 Q 545 350 545 350" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-dasharray="3,3"/>
+  
+  <!-- Skip connection 2 (through AG2) -->
+  <path d="M 285 300 Q 285 220 590 220 Q 590 305 590 305" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-dasharray="3,3"/>
+  <path d="M 590 355 Q 590 390 695 390 Q 695 360 695 360" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-dasharray="3,3"/>
+  
+  <!-- Skip connection 3 (through AG3) -->
+  <path d="M 165 310 Q 165 200 710 200 Q 710 315 710 315" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-dasharray="3,3"/>
+  <path d="M 710 365 Q 710 400 815 400 Q 815 370 815 370" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-dasharray="3,3"/>
+  
+  <!-- Regular data flow arrows -->
+  <path d="M 110 340 L 135 340" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 190 340 L 205 340" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 240 340 L 255 330" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 310 330 L 325 330" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 360 330 L 375 320" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 405 350 L 405 365" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Decoder arrows -->
+  <path d="M 430 400 L 445 400" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 480 400 L 515 320" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 570 320 L 615 330" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 650 330 L 665 330" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 720 330 L 735 340" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 770 340 L 785 340" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Attention mechanism detail box -->
+  <rect x="50" y="80" width="300" height="180" fill="#fff" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="200" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">
+    Mecanismo de Atenção (Attention Gate)
+  </text>
+  
+  <!-- Attention gate internal structure -->
+  <rect x="70" y="120" width="40" height="25" fill="#4CAF50" stroke="#333" stroke-width="1"/>
+  <text x="90" y="137" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">xl (skip)</text>
+  
+  <rect x="70" y="160" width="40" height="25" fill="#2196F3" stroke="#333" stroke-width="1"/>
+  <text x="90" y="177" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">g (gating)</text>
+  
+  <circle cx="150" cy="150" r="15" fill="#FF9800" stroke="#333" stroke-width="1"/>
+  <text x="150" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">+</text>
+  
+  <rect x="190" y="140" width="30" height="20" fill="#9C27B0" stroke="#333" stroke-width="1"/>
+  <text x="205" y="153" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">σ</text>
+  
+  <circle cx="260" cy="150" r="15" fill="#FF5722" stroke="#333" stroke-width="1"/>
+  <text x="260" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">×</text>
+  
+  <rect x="290" y="140" width="40" height="20" fill="#4CAF50" stroke="#333" stroke-width="1"/>
+  <text x="310" y="153" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">x̂l</text>
+  
+  <!-- Attention arrows -->
+  <path d="M 110 132 L 135 145" stroke="#FF6B6B" stroke-width="2" marker-end="url(#attentionArrow)"/>
+  <path d="M 110 172 L 135 155" stroke="#FF6B6B" stroke-width="2" marker-end="url(#attentionArrow)"/>
+  <path d="M 165 150 L 185 150" stroke="#FF6B6B" stroke-width="2" marker-end="url(#attentionArrow)"/>
+  <path d="M 220 150 L 245 150" stroke="#FF6B6B" stroke-width="2" marker-end="url(#attentionArrow)"/>
+  <path d="M 275 150 L 285 150" stroke="#FF6B6B" stroke-width="2" marker-end="url(#attentionArrow)"/>
+  
+  <!-- Attention formula -->
+  <text x="200" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">
+    α = σ(W^T[Wₓxₗ + Wₘgᵢ + b] + b')
+  </text>
+  <text x="200" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">
+    x̂ₗ = αᵢ ⊙ xₗ
+  </text>
+  <text x="200" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#666">
+    onde α são os pesos de atenção e ⊙ é multiplicação elemento-wise
+  </text>
+  
+  <!-- Legend -->
+  <g transform="translate(50, 550)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Legenda:</text>
+    
+    <rect x="0" y="15" width="20" height="15" fill="url(#encoderGrad)"/>
+    <text x="25" y="27" font-family="Arial, sans-serif" font-size="11" fill="#333">Encoder (Contração)</text>
+    
+    <rect x="150" y="15" width="20" height="15" fill="url(#decoderGrad)"/>
+    <text x="175" y="27" font-family="Arial, sans-serif" font-size="11" fill="#333">Decoder (Expansão)</text>
+    
+    <rect x="300" y="15" width="20" height="15" fill="url(#bottleneckGrad)"/>
+    <text x="325" y="27" font-family="Arial, sans-serif" font-size="11" fill="#333">Bottleneck</text>
+    
+    <circle cx="450" cy="22" r="10" fill="url(#attentionGrad)"/>
+    <text x="465" y="27" font-family="Arial, sans-serif" font-size="11" fill="#333">Attention Gates</text>
+    
+    <rect x="0" y="40" width="20" height="15" fill="#FF5722"/>
+    <text x="25" y="52" font-family="Arial, sans-serif" font-size="11" fill="#333">Max Pooling</text>
+    
+    <rect x="150" y="40" width="20" height="15" fill="#9C27B0"/>
+    <text x="175" y="52" font-family="Arial, sans-serif" font-size="11" fill="#333">Upsampling</text>
+    
+    <line x1="300" y1="47" x2="320" y2="47" stroke="#FF6B6B" stroke-width="3" stroke-dasharray="3,3"/>
+    <text x="325" y="52" font-family="Arial, sans-serif" font-size="11" fill="#333">Skip Connections com Atenção</text>
+  </g>
+  
+  <!-- Technical annotations -->
+  <text x="50" y="590" font-family="Arial, sans-serif" font-size="10" fill="#666">
+    • Attention Gates filtram informações irrelevantes das skip connections
+  </text>
+  <text x="50" y="605" font-family="Arial, sans-serif" font-size="10" fill="#666">
+    • Mecanismo de atenção foca em regiões relevantes para segmentação
+  </text>
+  <text x="50" y="620" font-family="Arial, sans-serif" font-size="10" fill="#666">
+    • Melhora a precisão sem aumentar significativamente a complexidade computacional
+  </text>
+  
+  <!-- Comparison note -->
+  <rect x="400" y="80" width="450" height="60" fill="#E3F2FD" stroke="#1976D2" stroke-width="2" rx="5"/>
+  <text x="625" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1976D2">
+    Diferença Principal vs U-Net Clássica
+  </text>
+  <text x="625" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">
+    Attention Gates modulam as skip connections, permitindo que o modelo
+  </text>
+  <text x="625" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">
+    foque automaticamente nas regiões mais relevantes para a segmentação
+  </text>
+  
+</svg>

@@ -1,0 +1,12 @@
+# Diretório para figuras do artigo científico
+
+Este diretório contém todas as figuras utilizadas no artigo científico sobre detecção de corrosão.
+
+## Estrutura de arquivos:
+- figura_unet_arquitetura.svg - Diagrama da arquitetura U-Net clássica
+- figura_attention_unet_arquitetura.svg - Diagrama da arquitetura Attention U-Net
+- figura_fluxograma_metodologia.svg - Fluxograma da metodologia experimental
+- figura_comparacao_segmentacoes.png - Comparação visual de segmentações
+- figura_performance_comparativa.svg - Gráficos de performance comparativa
+- figura_curvas_aprendizado.svg - Curvas de aprendizado
+- figura_mapas_atencao.png - Mapas de atenção (Attention U-Net)

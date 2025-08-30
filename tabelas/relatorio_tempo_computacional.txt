@@ -1,0 +1,55 @@
+=========================================================================
+RELATÓRIO: ANÁLISE DE TEMPO COMPUTACIONAL
+=========================================================================
+
+Data de geração: 30/08/2025 10:06:35
+Projeto: Detecção de Corrosão - U-Net vs Attention U-Net
+
+=========================================================================
+RESUMO EXECUTIVO
+=========================================================================
+
+• Tempo de treinamento: Attention U-Net é 23.1% mais lento
+• Tempo de inferência: Attention U-Net é 39.1% mais lento
+• Uso de GPU: Attention U-Net usa 27.7% mais memória
+• Parâmetros: Attention U-Net tem 31.9% mais parâmetros
+
+========================================================================
+ANÁLISE DETALHADA
+========================================================================
+
+--- U-NET CLÁSSICA ---
+
+Tempo de treinamento: 24.6 ± 4.9 minutos (13.9 - 36.1)
+Tempo de inferência: 77 ± 12 ms (43 - 96)
+Taxa de processamento: 13.45 ± 2.63 FPS
+Memória GPU: 2208 ± 150 MB (2.2 GB)
+Memória RAM: 789 ± 92 MB (0.8 GB)
+Eficiência: 6.078 ± 0.986 FPS/MB
+Parâmetros: 23.5 milhões
+
+--- ATTENTION U-NET ---
+
+Tempo de treinamento: 30.3 ± 5.0 minutos (22.0 - 44.3)
+Tempo de inferência: 107 ± 18 ms (66 - 153)
+Taxa de processamento: 9.66 ± 1.73 FPS
+Memória GPU: 2819 ± 141 MB (2.8 GB)
+Memória RAM: 1177 ± 101 MB (1.1 GB)
+Eficiência: 3.440 ± 0.680 FPS/MB
+Parâmetros: 31.0 milhões
+
+--- ANÁLISE COMPARATIVA ---
+
+Diferenças estatisticamente significativas (p < 0.05):
+
+• Tempo de treinamento: +23.1% (teste estatístico não disponível)
+• Tempo de inferência: +39.1% (teste estatístico não disponível)
+• Taxa de processamento: -28.2% (teste estatístico não disponível)
+• Memória GPU: +27.7% (teste estatístico não disponível)
+• Memória RAM: +49.1% (teste estatístico não disponível)
+• Eficiência computacional: -43.4% (teste estatístico não disponível)
+
+Interpretação:
+- Valores positivos indicam que Attention U-Net é maior/mais lento
+- Valores negativos indicam que Attention U-Net é menor/mais rápido
+- *** p < 0.001, ** p < 0.01, * p < 0.05
