@@ -5,49 +5,44 @@ Reallocating 'name_of_file' (item size: 1) to 6 items.
 The style file: unsrt.bst
 Reallocating 'name_of_file' (item size: 1) to 12 items.
 Database file #1: referencias.bib
-Warning--I didn't find a database entry for "aisc2016specification"
-Warning--empty journal in he2016deep
-Warning--empty journal in milletari2016v
-Warning--empty journal in sudre2017generalised
-You've used 32 entries,
+You've used 14 entries,
             1791 wiz_defined-function locations,
-            637 strings with 9688 characters,
-and the built_in function-call counts, 8692 in all, are:
-= -- 791
-> -- 414
-< -- 11
-+ -- 150
-- -- 118
-* -- 598
-:= -- 1333
-add.period$ -- 96
-call.type$ -- 32
-change.case$ -- 30
+            532 strings with 6063 characters,
+and the built_in function-call counts, 3228 in all, are:
+= -- 280
+> -- 161
+< -- 3
++ -- 60
+- -- 46
+* -- 212
+:= -- 520
+add.period$ -- 43
+call.type$ -- 14
+change.case$ -- 10
 chr.to.int$ -- 0
-cite$ -- 35
-duplicate$ -- 380
-empty$ -- 782
-format.name$ -- 118
-if$ -- 1945
+cite$ -- 14
+duplicate$ -- 140
+empty$ -- 311
+format.name$ -- 46
+if$ -- 715
 int.to.chr$ -- 0
-int.to.str$ -- 32
-missing$ -- 33
-newline$ -- 162
-num.names$ -- 32
-pop$ -- 94
+int.to.str$ -- 14
+missing$ -- 16
+newline$ -- 73
+num.names$ -- 14
+pop$ -- 52
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 221
+skip$ -- 56
 stack$ -- 0
-substring$ -- 681
-swap$ -- 123
-text.length$ -- 11
+substring$ -- 194
+swap$ -- 31
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 3
-while$ -- 89
-width$ -- 34
-write$ -- 343
-(There were 4 warnings)
+warning$ -- 0
+while$ -- 30
+width$ -- 16
+write$ -- 153
