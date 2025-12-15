@@ -153,8 +153,8 @@ html/
 latex/
 
 # PDFs gerados automaticamente
+# Ignorar todos os PDFs gerados automaticamente
 *.pdf
-!docs/*.pdf
 
 # =============================================================================
 # IMPORTANTE: Arquivos que DEVEM ser incluídos no Git
