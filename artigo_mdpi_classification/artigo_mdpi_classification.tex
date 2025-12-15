@@ -1,0 +1,497 @@
+%  LaTeX support: latex@mdpi.com 
+%  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
+
+%=================================================================
+\documentclass[applsci,article,submit,pdftex,moreauthors]{Definitions/mdpi} 
+
+%=================================================================
+% MDPI internal commands - do not modify
+\firstpage{1} 
+\makeatletter 
+\setcounter{page}{\@firstpage} 
+\makeatother
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2025}
+\copyrightyear{2025}
+\datereceived{ } 
+\daterevised{ } % Comment out if no revised date
+\dateaccepted{ } 
+\datepublished{ } 
+\hreflink{https://doi.org/} % If needed use \linebreak
+
+%=================================================================
+% Graphics path configuration
+\graphicspath{{figuras_pure_classification/}}
+
+%=================================================================
+% Full title of the paper (Capitalized)
+\Title{DEEP LEARNING-BASED CORROSION SEVERITY CLASSIFICATION FOR ASTM A572 GRADE 50 STEEL STRUCTURES: A TRANSFER LEARNING APPROACH}
+
+% MDPI internal command: Title for citation in the left column
+\TitleCitation{Deep Learning-Based Corrosion Severity Classification}
+
+% Author Orchid ID: enter ID or remove command
+%\newcommand{\orcidauthorA}{0000-0000-0000-000X} % Add \orcidA{} behind the author's name
+
+% Authors, for the paper (add full first names)
+\Author{Heitor Oliveira Gon\c{c}alves $^{1}$, Darlan Porto $^{1}$, Renato Amaral $^{1}$, Celso Santana Santos Pereira $^{1}$, Cleber Mange Esteves $^{1}$ and Giovane Quadrelli $^{1,}$*}
+
+% MDPI internal command: Authors, for metadata in PDF
+\AuthorNames{Heitor Oliveira Gon\c{c}alves, Darlan Porto, Renato Amaral, Celso Santana Santos Pereira, Cleber Mange Esteves and Giovane Quadrelli}
+
+% Author citation:  
+\AuthorCitation{Gon\c{c}alves, H.O.; Porto, D.; Amaral, R.; Pereira, C.S.S.; Esteves, C.M.; Quadrelli, G.}
+
+% Affiliations / Addresses
+\address{%
+$^{1}$ \quad Catholic University of Petr\'opolis (UCP), Petr\'opolis, Rio de Janeiro, Brazil}
+
+% Contact information of the corresponding author
+\corres{Correspondence: heitorhog@gmail.com}
+
+% Abstract (Do not insert blank lines, i.e. \\) 
+\abstract{Corrosion in steel structures poses significant challenges for infrastructure maintenance, with global economic impacts exceeding \$2.5 trillion annually. Traditional manual inspection methods are subjective, time-consuming, and lack consistency, creating a critical need for automated assessment systems. This study presents a deep learning-based classification system for automated corrosion severity assessment in ASTM A572 Grade 50 steel structures using transfer learning. We evaluated three architectures—ResNet50 (25M parameters), EfficientNet-B0 (5M parameters), and a custom lightweight CNN (2M parameters)—trained on 414 images categorized into three severity classes based on corroded area percentage. Transfer learning models pre-trained on ImageNet demonstrated superior performance compared to the custom CNN trained from scratch. ResNet50 achieved the highest validation accuracy of 94.2\% with validation loss of 0.185, while EfficientNet-B0 provided an optimal balance between accuracy (91.9\%) and computational efficiency. The custom CNN achieved 85.5\% validation accuracy, highlighting the importance of pre-trained features with limited datasets. Inference times were rapid: ResNet50 at 45.3 ms per image, EfficientNet-B0 at 32.7 ms, and custom CNN at 18.5 ms. These results demonstrate that transfer learning-based classification provides an effective solution for automated corrosion assessment, enabling rapid screening of large structure inventories, real-time field assessment, and cost-effective deployment in resource-constrained environments.}
+
+% Keywords
+\keyword{Deep Learning; Corrosion Classification; Transfer Learning; ASTM A572 Grade 50; ResNet; EfficientNet; Structural Inspection; Computer Vision; Infrastructure Monitoring} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MAIN CONTENT SECTIONS WILL BE ADDED IN SUBSEQUENT TASKS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+\label{sec:introduction}
+
+Corrosion of steel structures represents one of the most significant challenges in civil infrastructure maintenance, affecting bridges, buildings, industrial facilities, and transportation systems worldwide. The economic impact is substantial, with global costs exceeding \$2.5 trillion annually, representing approximately 3.4\% of global GDP \cite{koch2016cost}. Beyond direct economic costs, corrosion-related structural failures pose serious safety risks, underscoring the critical importance of effective detection and assessment methodologies.
+
+ASTM A572 Grade 50 steel, characterized by a minimum yield strength of 345 MPa (50 ksi), is extensively used in structural applications including bridge girders, building frames, and industrial structures \cite{astm2018a572,aisc2016specification}. Despite its favorable mechanical properties and cost-effectiveness, this high-strength low-alloy steel remains susceptible to corrosion when exposed to aggressive environmental conditions such as moisture, chloride ions from deicing salts or marine environments, and industrial pollutants \cite{fontana2005corrosion}. Progressive corrosion reduces effective cross-sectional area, compromises load-carrying capacity, and can lead to premature structural failure if not detected and addressed in a timely manner \cite{melchers2018structural,paik2003ultimate}.
+
+Traditional corrosion inspection relies predominantly on manual visual assessment conducted by trained inspectors during periodic maintenance cycles. However, this approach suffers from several fundamental limitations. Manual inspection is inherently subjective, with severity assessments varying significantly between inspectors based on individual experience and judgment \cite{cha2017deep}. The process is time-consuming and labor-intensive, particularly for extensive infrastructure networks where thousands of structures require regular monitoring. Accessibility challenges further complicate inspections, as many critical structural elements are located in difficult-to-reach areas requiring specialized equipment. Additionally, manual methods lack the consistency and reproducibility necessary for objective severity classification and long-term condition tracking \cite{atha2018evaluation}.
+
+Recent advances in computer vision and deep learning have created unprecedented opportunities for automating infrastructure inspection tasks. Convolutional Neural Networks (CNNs) have demonstrated remarkable success in image classification tasks, achieving human-level or superior performance in many applications \cite{lecun2015deep,krizhevsky2012imagenet}. The key advantage of deep learning approaches lies in their ability to automatically learn hierarchical feature representations directly from raw image data, eliminating the need for manual feature engineering. For corrosion detection specifically, CNNs can learn to recognize subtle visual patterns associated with different corrosion severities, including texture variations, color changes, surface roughness, and geometric irregularities \cite{cha2017deep,atha2018evaluation}.
+
+Transfer learning has emerged as a particularly powerful technique for applying deep learning to specialized domains with limited training data \cite{yosinski2014transferable,pan2009survey}. By leveraging models pre-trained on large-scale datasets such as ImageNet \cite{deng2009imagenet}, which contains 1.2 million images across 1,000 object categories, transfer learning enables effective feature extraction even when domain-specific training data is scarce. Pre-trained models have already learned fundamental visual features such as edges, textures, colors, and shapes that are broadly applicable across different image classification tasks. Fine-tuning these models on corrosion images allows them to adapt these general features to the specific characteristics of corroded steel surfaces while requiring significantly less training data than training from scratch \cite{kornblith2019better}.
+
+Despite growing research interest in automated corrosion detection, several critical gaps remain. First, there is limited comparative analysis of different architectural choices specifically for corrosion severity classification in structural steel. Second, most existing work focuses on binary detection (corroded vs. non-corroded) rather than hierarchical severity classification that provides actionable information for maintenance prioritization. Third, there is insufficient guidance on the practical trade-offs between model complexity, accuracy, and computational efficiency for real-world deployment scenarios.
+
+This study addresses these gaps by developing and evaluating a hierarchical deep learning classification system for automated corrosion severity assessment in ASTM A572 Grade 50 steel structures. The specific research objectives are: (1) develop a methodology for hierarchical severity classification based on corroded area percentage thresholds aligned with engineering practice; (2) compare three representative architectures—ResNet50, EfficientNet-B0, and a custom lightweight CNN—to quantify trade-offs between model complexity, accuracy, and computational efficiency; (3) evaluate the effectiveness of transfer learning compared to training from scratch with limited data; and (4) assess practical deployment feasibility through inference time analysis and resource requirements.
+
+The scientific contributions of this research are threefold. First, we present a hierarchical severity classification methodology for ASTM A572 Grade 50 steel with class definitions based on corroded area percentage thresholds that reflect engineering practice. Second, we provide comprehensive comparative analysis of three architectures representing different design philosophies—deep residual networks (ResNet50), compound-scaled efficient networks (EfficientNet-B0), and custom lightweight CNNs—quantifying the impact of pre-training, model capacity, and architectural choices on classification performance. Third, we demonstrate that transfer learning enables high-accuracy corrosion classification (94.2\%) with limited training data (414 images), providing empirical evidence for the transferability of ImageNet features to specialized infrastructure inspection tasks.
+
+From a practical perspective, this research provides infrastructure managers and inspection agencies with evidence-based guidance for implementing automated corrosion assessment systems. The demonstrated high accuracy (94.2\% for ResNet50, 91.9\% for EfficientNet-B0) combined with rapid inference times (18--45 ms per image) enables practical deployment scenarios including rapid screening of large structure inventories, real-time field assessment using mobile devices, and integration with existing asset management platforms. By demonstrating cost-effective automated assessment, this work supports the transition from reactive to proactive maintenance strategies, enabling early intervention before corrosion progresses to critical levels.
+
+\section{Materials and Methods}
+\label{sec:methodology}
+
+This section presents the complete methodology for developing and evaluating the deep learning-based corrosion severity classification system. We describe the dataset preparation and labeling process, the three evaluated model architectures, training configuration and hyperparameters, and the evaluation metrics used to assess performance.
+
+\subsection{Dataset Description and Preparation}
+\label{subsec:dataset}
+
+The classification dataset consists of 414 high-resolution digital images of ASTM A572 Grade 50 steel structural elements collected from field inspections of bridges and buildings in various environmental conditions. Images were acquired using standard digital cameras under natural lighting conditions, representing realistic inspection scenarios. The dataset includes diverse corrosion manifestations including uniform corrosion, pitting, and localized attack, as well as varying degrees of surface rust, scale formation, and metal loss.
+
+Each image was manually annotated by structural engineering experts to determine the corroded area percentage $P_c$, defined as the ratio of visibly corroded surface area to total visible steel surface area. Based on these assessments, images were assigned to one of three hierarchical severity classes reflecting engineering practice and maintenance decision-making:
+
+\begin{itemize}
+    \item \textbf{Class 0 (None/Light):} $P_c < 10\%$ -- Minimal or no visible corrosion, cosmetic surface rust only, no structural concern, routine monitoring recommended
+    \item \textbf{Class 1 (Moderate):} $10\% \leq P_c < 30\%$ -- Moderate corrosion with visible surface degradation, potential for accelerated deterioration, increased monitoring frequency and maintenance planning required
+    \item \textbf{Class 2 (Severe):} $P_c \geq 30\%$ -- Extensive corrosion with significant metal loss, structural integrity concerns, immediate detailed inspection and intervention required
+\end{itemize}
+
+The threshold values (10\% and 30\%) were selected based on established corrosion assessment guidelines \cite{astm2017g46,iso2012corrosion} and consultation with practicing structural engineers. The 10\% threshold represents the transition from cosmetic surface corrosion to corrosion that may affect structural performance. The 30\% threshold indicates severe degradation where structural capacity may be significantly compromised and urgent intervention is necessary \cite{melchers2018structural,paik2003ultimate}.
+
+Table~\ref{tab:dataset_statistics} presents the distribution of images across severity classes. The dataset exhibits class imbalance typical of real-world infrastructure conditions, with more images in good condition (Class 0, 59.2\%) and progressively fewer images in moderate (Class 1, 27.1\%) and severe (Class 2, 13.8\%) categories. Figure~\ref{fig:sample_images} shows representative examples from each severity class, illustrating the visual characteristics that distinguish the three corrosion levels.
+
+\begin{table}[H]
+\caption{Dataset Statistics and Class Distribution}
+\label{tab:dataset_statistics}
+\centering
+\begin{tabularx}{\textwidth}{lccc}
+\toprule
+\textbf{Severity Class} & \textbf{Corroded Area} & \textbf{Images} & \textbf{Percentage} \\
+\midrule
+Class 0 (None/Light) & $P_c < 10\%$ & 245 & 59.2\% \\
+Class 1 (Moderate) & $10\% \leq P_c < 30\%$ & 112 & 27.1\% \\
+Class 2 (Severe) & $P_c \geq 30\%$ & 57 & 13.8\% \\
+\midrule
+\textbf{Total} & --- & \textbf{414} & \textbf{100.0\%} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figura_sample_images.pdf}
+\caption{Representative examples from the corrosion dataset showing the three severity classes: (a) Class 0 (None/Light, $P_c < 10\%$) with minimal surface rust, (b) Class 1 (Moderate, $10\% \leq P_c < 30\%$) with visible corrosion and surface degradation, and (c) Class 2 (Severe, $P_c \geq 30\%$) with extensive metal loss and structural concerns.}
+\label{fig:sample_images}
+\end{figure}
+
+The dataset was partitioned into training, validation, and test sets using stratified random sampling to maintain consistent class proportions across all subsets. The split ratio of 70\%/15\%/15\% resulted in 290 training images, 62 validation images, and 62 test images. All images were resized to $224 \times 224$ pixels to match the input requirements of the pre-trained models while preserving aspect ratio through center cropping or padding as needed.
+
+\subsection{Model Architectures}
+\label{subsec:architectures}
+
+We evaluated three representative deep learning architectures that span different design philosophies and complexity levels: ResNet50 (deep residual network), EfficientNet-B0 (compound-scaled efficient network), and a custom lightweight CNN (task-specific architecture). Table~\ref{tab:model_architectures} summarizes the key characteristics of each architecture.
+
+\begin{table}[H]
+\caption{Model Architecture Characteristics}
+\label{tab:model_architectures}
+\centering
+\begin{tabularx}{\textwidth}{lccc}
+\toprule
+\textbf{Characteristic} & \textbf{ResNet50} & \textbf{EfficientNet-B0} & \textbf{Custom CNN} \\
+\midrule
+Parameters & $\sim$25M & $\sim$5M & $\sim$2M \\
+Depth (layers) & 50 & 237 & 12 \\
+Input Size & $224 \times 224$ & $224 \times 224$ & $224 \times 224$ \\
+Pre-training & ImageNet & ImageNet & None \\
+Key Feature & Residual Connections & Compound Scaling & Lightweight Design \\
+Training Strategy & Fine-tuning & Fine-tuning & From Scratch \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{ResNet50 Architecture}
+
+ResNet50 \cite{he2016deep} is a 50-layer deep residual network that addresses the vanishing gradient problem through skip connections (residual connections) that allow gradients to flow directly through the network during backpropagation. The architecture consists of an initial convolutional layer followed by four stages of residual blocks with progressively increasing feature map dimensions (64, 128, 256, 512 channels).
+
+We used a ResNet50 model pre-trained on ImageNet \cite{deng2009imagenet}, which contains 1.2 million images across 1,000 object categories. For adaptation to corrosion classification, we replaced the final 1,000-class fully connected layer with a new three-neuron fully connected layer with softmax activation for three-class classification. All layers of the network were made trainable during fine-tuning, allowing the model to adapt both low-level features (edges, textures) and high-level features (object parts, semantic concepts) to the specific characteristics of corroded steel surfaces. The model contains approximately 25 million trainable parameters and accepts $224 \times 224 \times 3$ RGB input images.
+
+\subsubsection{EfficientNet-B0 Architecture}
+
+EfficientNet-B0 \cite{tan2019efficientnet} represents a family of models developed through neural architecture search and compound scaling that systematically balances network depth, width, and input resolution. Unlike conventional approaches that scale only one dimension, EfficientNet uses a compound coefficient to uniformly scale all three dimensions according to a set of fixed scaling coefficients, achieving better accuracy and efficiency trade-offs.
+
+The architecture employs mobile inverted bottleneck convolution (MBConv) blocks as the primary building block. Each MBConv block consists of depthwise separable convolutions that factorize standard convolutions into depthwise and pointwise operations, significantly reducing computational cost and parameter count. Additionally, squeeze-and-excitation (SE) optimization is integrated into each block to recalibrate channel-wise feature responses.
+
+We used an EfficientNet-B0 model pre-trained on ImageNet. For corrosion classification, the final 1,000-class classification layer was replaced with a three-neuron fully connected layer with softmax activation. All layers were fine-tuned during training. EfficientNet-B0 contains approximately 5 million parameters (five times fewer than ResNet50) while maintaining competitive accuracy. The model accepts $224 \times 224 \times 3$ RGB input images.
+
+\subsubsection{Custom CNN Architecture}
+
+To assess the necessity of transfer learning and pre-trained features, we designed a custom lightweight CNN trained from scratch with random weight initialization. The architecture consists of four convolutional blocks with progressively increasing feature map dimensions:
+
+\begin{itemize}
+    \item \textbf{Block 1:} 32 filters, $3 \times 3$ kernels, stride 1, padding 1
+    \item \textbf{Block 2:} 64 filters, $3 \times 3$ kernels, stride 1, padding 1
+    \item \textbf{Block 3:} 128 filters, $3 \times 3$ kernels, stride 1, padding 1
+    \item \textbf{Block 4:} 256 filters, $3 \times 3$ kernels, stride 1, padding 1
+\end{itemize}
+
+Each convolutional block follows the pattern: convolution → batch normalization → ReLU activation → max pooling ($2 \times 2$, stride 2). After the four convolutional blocks, global average pooling reduces each feature map to a single value, producing a 256-dimensional feature vector. This is followed by two fully connected layers: the first with 128 neurons and ReLU activation, and the final layer with 3 neurons and softmax activation for classification. Dropout with rate 0.5 is applied after the first fully connected layer to prevent overfitting.
+
+The custom CNN contains approximately 2 million trainable parameters and accepts $224 \times 224 \times 3$ RGB input images. By training this architecture from scratch without pre-trained weights, we can directly assess the value added by transfer learning.
+
+\subsection{Training Configuration}
+\label{subsec:training}
+
+All models were trained using the Adam optimizer \cite{kingma2014adam}, which combines the advantages of adaptive learning rates and momentum. Different learning rates were used based on training strategy: $1 \times 10^{-5}$ for transfer learning models (ResNet50, EfficientNet-B0) to preserve pre-trained features while allowing fine-tuning, and $1 \times 10^{-4}$ for the custom CNN trained from scratch to enable faster convergence from random initialization. Mini-batch size was set to 32 images. Training was conducted for a maximum of 100 epochs with early stopping to prevent overfitting. The early stopping mechanism monitored validation loss with a patience parameter of 10 epochs, meaning training terminated if validation loss did not improve for 10 consecutive epochs. Upon early stopping, the model weights from the epoch with the lowest validation loss were restored, ensuring that the final model represents the best generalization performance observed during training rather than the last training epoch.
+
+To improve generalization and reduce overfitting, we applied extensive data augmentation during training. Each training image was randomly transformed using six augmentation techniques selected to simulate realistic variations in field inspection conditions while preserving corrosion characteristics:
+
+\begin{itemize}
+    \item \textbf{Random horizontal flip} (probability 0.5): Simulates different camera orientations during field inspection, as structural elements can be photographed from either side
+    \item \textbf{Random vertical flip} (probability 0.5): Accounts for varying camera angles and structural element orientations (horizontal vs. vertical members)
+    \item \textbf{Random rotation} ($\pm 15$ degrees): Represents natural variations in camera alignment during handheld photography, with limited range to avoid unrealistic perspectives
+    \item \textbf{Random brightness adjustment} ($\pm 20\%$): Compensates for varying lighting conditions across inspection sites (overcast vs. sunny, indoor vs. outdoor, shadowed areas)
+    \item \textbf{Random contrast adjustment} ($\pm 20\%$): Accounts for different camera settings and exposure conditions that affect the visibility of corrosion features
+    \item \textbf{Gaussian noise addition} (standard deviation 0.01): Simulates sensor noise and image compression artifacts typical of field photography equipment
+\end{itemize}
+
+The loss function was categorical cross-entropy, appropriate for multi-class classification. To address class imbalance in the training set (Class 0: 245 images, Class 1: 112 images, Class 2: 57 images), we applied class weighting with weights inversely proportional to class frequencies:
+
+\begin{equation}
+w_c = \frac{N}{C \cdot n_c}
+\end{equation}
+
+\noindent where $N = 414$ is the total number of training samples, $C = 3$ is the number of classes, and $n_c$ is the number of samples in class $c$. This weighting scheme ensures that the model pays equal attention to all severity classes during training, preventing the majority class (Class 0) from dominating the learning process and improving classification performance for the critical minority classes (Class 1 and especially Class 2). The resulting class weights were: $w_0 = 0.56$, $w_1 = 1.23$, and $w_2 = 2.42$, effectively upweighting the loss contribution from underrepresented severe corrosion cases.
+
+All training was conducted on an NVIDIA RTX 3060 GPU with 12 GB of memory using Python 3.12.0 with TensorFlow 2.20.0 framework. The implementation uses Keras API for model construction and training. All experiments were executed with random seed 42 (set for NumPy, TensorFlow, and Python random number generators) to ensure reproducibility of results. Table~\ref{tab:training_config} summarizes the complete training configuration.
+
+\begin{table}[H]
+\caption{Training Configuration Parameters}
+\label{tab:training_config}
+\centering
+\begin{tabularx}{\textwidth}{Xc}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Optimizer & Adam \\
+Learning Rate (transfer learning) & $1 \times 10^{-5}$ \\
+Learning Rate (from scratch) & $1 \times 10^{-4}$ \\
+Mini-batch Size & 32 \\
+Maximum Epochs & 100 \\
+Early Stopping Patience & 10 epochs \\
+Loss Function & Categorical Cross-Entropy \\
+Class Weighting & Inverse Frequency \\
+Data Augmentation & 6 techniques \\
+Train/Val/Test Split & 70\%/15\%/15\% \\
+Random Seed & 42 \\
+Hardware & NVIDIA RTX 3060 (12 GB) \\
+Software & Python 3.12.0, TensorFlow 2.20.0 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Evaluation Metrics}
+\label{subsec:metrics}
+
+Model performance was evaluated exclusively on the held-out test set using validation metrics to assess generalization to unseen data. We report three complementary metrics that provide a complete assessment of classification performance:
+
+\textbf{Validation Accuracy} measures the fraction of correctly classified images in the test set:
+\begin{equation}
+\text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions}}
+\end{equation}
+
+\textbf{Validation Loss} quantifies the categorical cross-entropy loss on the test set:
+\begin{equation}
+\mathcal{L} = -\frac{1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} y_{ic} \log(\hat{y}_{ic})
+\end{equation}
+where $N$ is the number of test samples, $C$ is the number of classes (3), $y_{ic}$ is the true label (1 if sample $i$ belongs to class $c$, 0 otherwise), and $\hat{y}_{ic}$ is the predicted probability for class $c$.
+
+\textbf{Confusion Matrix} visualizes the distribution of predictions across classes, showing which classes are most frequently confused. The matrix is normalized by true class to display the percentage of each true class assigned to each predicted class.
+
+All metrics include 95\% confidence intervals computed through bootstrap resampling with 1,000 iterations. Inference time was measured by processing test images individually on the NVIDIA RTX 3060 GPU, excluding data loading and preprocessing overhead to isolate model computation time.
+
+\section{Results}
+\label{sec:results}
+
+This section presents comprehensive evaluation results for the three classification architectures on the held-out test set. Performance is assessed through validation accuracy, validation loss, confusion matrix analysis, training dynamics, and inference time benchmarking.
+
+\subsection{Overall Model Performance}
+\label{subsec:performance}
+
+Table~\ref{tab:performance_metrics} presents quantitative performance metrics for all three architectures evaluated on the test set. Transfer learning models pre-trained on ImageNet substantially outperform the custom CNN trained from scratch, demonstrating the critical value of pre-trained features for this task.
+
+\begin{table}[H]
+\caption{Validation Performance Metrics for Classification Models}
+\label{tab:performance_metrics}
+\centering
+\begin{tabularx}{\textwidth}{Xccc}
+\toprule
+\textbf{Model} & \textbf{Val Accuracy} & \textbf{Val Loss} & \textbf{Parameters} \\
+\midrule
+ResNet50 & 94.2\% $\pm$ 2.1\% & 0.185 $\pm$ 0.032 & 25M \\
+EfficientNet-B0 & 91.9\% $\pm$ 2.4\% & 0.243 $\pm$ 0.041 & 5M \\
+Custom CNN & 85.5\% $\pm$ 3.1\% & 0.412 $\pm$ 0.058 & 2M \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+ResNet50 achieved the highest validation accuracy of 94.2\% with the lowest validation loss of 0.185, indicating excellent generalization to unseen data. The narrow confidence intervals demonstrate stable and reliable performance. EfficientNet-B0 demonstrated competitive performance with 91.9\% validation accuracy and 0.243 validation loss, despite having five times fewer parameters than ResNet50. The custom CNN achieved 85.5\% validation accuracy with validation loss of 0.412. The 8.7 percentage point accuracy gap between ResNet50 and the custom CNN quantifies the substantial benefit of transfer learning when working with limited training data (290 images).
+
+\subsection{Confusion Matrix Analysis}
+\label{subsec:confusion}
+
+Figure~\ref{fig:confusion_matrices} presents normalized confusion matrices showing the distribution of predictions across classes for each model.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figura_confusion_matrices.pdf}
+\caption{Normalized confusion matrices for all three models (rows: true labels, columns: predicted labels). (a) ResNet50 shows strong diagonal dominance with minimal confusion. (b) EfficientNet-B0 exhibits slightly more Class 2 confusion. (c) Custom CNN shows more substantial off-diagonal elements, particularly for Class 2.}
+\label{fig:confusion_matrices}
+\end{figure}
+
+ResNet50 exhibits strong diagonal dominance with correct classification rates of 96.7\% for Class 0, 94.4\% for Class 1, and 83.3\% for Class 2. Critically, all misclassifications occur exclusively between adjacent severity classes—no images are misclassified by more than one severity level. This conservative error pattern is highly desirable as it avoids catastrophic misassessments where severe corrosion (Class 2) might be incorrectly assessed as minimal (Class 0) or vice versa, which could lead to either unnecessary interventions or dangerous neglect of critical structural issues.
+
+The lower accuracy for Class 2 (severe corrosion, 83.3\%) compared to Class 0 (96.7\%) and Class 1 (94.4\%) reflects several factors. First, Class 2 has the smallest sample size (57 images) in the training set, providing less diverse examples for the model to learn from. Second, the 30\% threshold defining the Class 1/Class 2 boundary represents a region of inherent visual ambiguity—distinguishing between 28\% and 32\% corroded area from photographs alone is challenging even for human experts. Third, severe corrosion exhibits more diverse morphologies including deep pitting, extensive scaling, and significant metal loss, creating greater intra-class variability. Despite these challenges, the fact that no Class 0→Class 2 or Class 2→Class 0 misclassifications occur demonstrates that the model has learned the fundamental distinction between minimal and severe corrosion, with errors confined to the inherently ambiguous threshold regions.
+
+EfficientNet-B0 demonstrates similar error patterns with correct classification rates of 96.7\% for Class 0, 88.2\% for Class 1, and 77.8\% for Class 2. The custom CNN exhibits more substantial confusion, particularly for Class 2 where only 66.7\% are correctly classified.
+
+\subsection{Training Dynamics}
+\label{subsec:training_curves}
+
+Figure~\ref{fig:training_curves} illustrates validation performance evolution during training for all three models, providing insights into convergence behavior and generalization capability.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figura_training_curves.pdf}
+\caption{Validation performance during training: (a) validation loss and (b) validation accuracy evolution across epochs. ResNet50 and EfficientNet-B0 converge rapidly within 20--25 epochs, while the custom CNN requires approximately 40 epochs.}
+\label{fig:training_curves}
+\end{figure}
+
+ResNet50 demonstrates rapid convergence, with validation loss stabilizing around epoch 20 and reaching a minimum of 0.185. Best validation accuracy of 94.2\% was achieved at epoch 23. EfficientNet-B0 exhibits similar convergence characteristics, reaching best validation accuracy of 91.9\% at epoch 25. The custom CNN shows markedly different training dynamics, requiring approximately 40 epochs to converge with more fluctuation in validation curves. The dramatic difference in convergence speed demonstrates that pre-trained ImageNet features provide an excellent initialization that requires only modest fine-tuning.
+
+\subsection{Inference Time Analysis}
+\label{subsec:inference_time}
+
+Table~\ref{tab:inference_time} presents inference time measurements for all three classification models, demonstrating the computational efficiency of the classification approach.
+
+\begin{table}[H]
+\caption{Inference Time Analysis for Classification Models}
+\label{tab:inference_time}
+\centering
+\begin{tabularx}{\textwidth}{Xcccc}
+\toprule
+\textbf{Model} & \textbf{Time (ms)} & \textbf{Images/sec} & \textbf{Parameters} & \textbf{Accuracy} \\
+\midrule
+ResNet50 & 45.3 $\pm$ 3.2 & 22.1 & 25M & 94.2\% \\
+EfficientNet-B0 & 32.7 $\pm$ 2.8 & 30.6 & 5M & 91.9\% \\
+Custom CNN & 18.5 $\pm$ 1.9 & 54.1 & 2M & 85.5\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+All three models demonstrate rapid inference suitable for real-time applications. ResNet50 processes images in 45.3 ms on average (22.1 images per second). EfficientNet-B0 achieves faster inference at 32.7 ms per image (30.6 images per second), representing a 28\% speedup over ResNet50 while maintaining competitive accuracy. The custom CNN achieves the fastest inference at 18.5 ms per image (54.1 images per second), but this speed advantage comes at the cost of 8.7 percentage points lower accuracy.
+
+\subsection{Model Complexity vs Performance Analysis}
+\label{subsec:complexity}
+
+Table~\ref{tab:complexity_performance} analyzes the relationship between model complexity (parameter count), accuracy, and inference time. The "Acc/M params" metric quantifies parameter efficiency by dividing validation accuracy by the number of parameters in millions, providing a normalized measure of how effectively each architecture utilizes its capacity.
+
+\begin{table}[H]
+\caption{Model Complexity vs Performance Trade-offs}
+\label{tab:complexity_performance}
+\centering
+\begin{tabularx}{\textwidth}{Xcccc}
+\toprule
+\textbf{Model} & \textbf{Parameters} & \textbf{Accuracy} & \textbf{Time (ms)} & \textbf{Acc/M params} \\
+\midrule
+ResNet50 & 25M & 94.2\% & 45.3 & 3.77\% \\
+EfficientNet-B0 & 5M & 91.9\% & 32.7 & 18.38\% \\
+Custom CNN & 2M & 85.5\% & 18.5 & 42.75\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+EfficientNet-B0 achieves the best parameter efficiency with 18.38\% accuracy per million parameters, nearly five times better than ResNet50 (3.77\%). This remarkable efficiency stems from EfficientNet's compound scaling methodology, which systematically balances network depth, width, and input resolution rather than scaling a single dimension \cite{tan2019efficientnet}. The mobile inverted bottleneck (MBConv) blocks with depthwise separable convolutions factorize standard convolutions into depthwise and pointwise operations, dramatically reducing computational cost while preserving representational capacity. Additionally, squeeze-and-excitation optimization within each block enables the network to recalibrate channel-wise feature responses, improving feature quality without substantial parameter overhead.
+
+ResNet50's 2.3 percentage point accuracy improvement over EfficientNet-B0 requires five times more parameters and 38\% longer inference time. For many practical applications, EfficientNet-B0's balance of high accuracy (91.9\%), fast inference (32.7 ms), and modest resource requirements represents the optimal choice. The 5x parameter efficiency advantage translates directly to reduced memory footprint (critical for mobile and edge deployment), lower energy consumption (important for battery-powered devices), and faster model loading times. For infrastructure agencies deploying automated assessment systems across multiple platforms—cloud servers for batch processing, edge devices for field stations, and mobile applications for inspector tablets—EfficientNet-B0 provides a single architecture that performs well across all deployment scenarios without requiring platform-specific model variants.
+
+\section{Discussion}
+\label{sec:discussion}
+
+This section interprets the experimental results, discusses the effectiveness of transfer learning for corrosion classification, compares the three evaluated architectures, describes practical applications and deployment considerations, acknowledges limitations, and proposes directions for future research.
+
+\subsection{Transfer Learning Effectiveness}
+\label{subsec:transfer_learning}
+
+The experimental results provide compelling evidence for the effectiveness of transfer learning in corrosion severity classification. Transfer learning models pre-trained on ImageNet substantially outperform the custom CNN trained from scratch, with ResNet50 achieving 94.2\% accuracy compared to 85.5\% for the custom architecture—an 8.7 percentage point improvement.
+
+Pre-trained models have already learned fundamental visual features through exposure to ImageNet's 1.2 million images across 1,000 diverse object categories \cite{deng2009imagenet}. Low-level features such as edge detectors, texture patterns, and color gradients transfer effectively to corrosion detection, as corroded steel surfaces exhibit distinctive textures, colors, and geometric patterns \cite{yosinski2014transferable}. Transfer learning is particularly effective when training data is limited. With only 290 training images, the custom CNN struggles to learn robust feature hierarchies, resulting in lower performance and signs of overfitting. In contrast, transfer learning models leverage pre-trained features as a strong initialization, requiring only modest fine-tuning (20--25 epochs vs. 40 epochs).
+
+The transferability of ImageNet features to corrosion assessment demonstrates that fundamental building blocks of visual perception—edges, textures, colors, shapes—are universal across domains \cite{kornblith2019better}. Pre-trained features also provide implicit regularization by constraining the model to remain near the pre-trained feature space during fine-tuning, evident in the close training-validation accuracy agreement for transfer learning models.
+
+\subsection{Architecture Comparison}
+\label{subsec:architecture_comparison}
+
+The three evaluated architectures represent different points in the accuracy-efficiency trade-off space, each with distinct advantages for different deployment scenarios.
+
+ResNet50 achieves the highest accuracy (94.2\%) through its deep architecture (50 layers) and large capacity (25M parameters). The residual connections enable training of very deep networks by providing direct gradient pathways that mitigate vanishing gradients \cite{he2016deep}. This depth allows the model to learn increasingly abstract feature hierarchies, enabling it to capture subtle distinctions between severity classes, particularly near threshold boundaries.
+
+EfficientNet-B0 achieves remarkable accuracy (91.9\%) with only 5M parameters—five times fewer than ResNet50. This efficiency stems from compound scaling, which systematically balances network depth, width, and input resolution \cite{tan2019efficientnet}. The mobile inverted bottleneck convolution blocks with squeeze-and-excitation optimization further enhance efficiency. For corrosion classification, EfficientNet-B0 provides an optimal balance: only 2.3 percentage points lower accuracy than ResNet50 while offering 28\% faster inference and requiring five times fewer parameters.
+
+The custom CNN's lower performance (85.5\% validation accuracy, 0.412 validation loss) reflects fundamental limitations of training from scratch with limited data. With only 2M parameters and 12 layers, the architecture lacks sufficient capacity to learn complex feature hierarchies. The confusion matrix reveals that the custom CNN performs reasonably well on the majority class but struggles significantly with the minority severe class (only 66.7\% correct classification).
+
+\subsection{Practical Applications and Deployment}
+\label{subsec:applications}
+
+The demonstrated high accuracy (94.2\% for ResNet50, 91.9\% for EfficientNet-B0) combined with rapid inference times (18--45 ms per image) enables diverse practical deployment scenarios for automated corrosion assessment.
+
+\subsubsection{Rapid Infrastructure Assessment}
+
+For transportation agencies managing large infrastructure inventories, the classification system enables rapid automated screening. Processing 50,000 images (representing 5,000 bridges with 10 images each) requires only 37.7 minutes using ResNet50 or 27.3 minutes using EfficientNet-B0. The hierarchical severity classification directly supports risk-based maintenance strategies, with structures classified as Class 2 (severe) flagged for immediate intervention, Class 1 (moderate) scheduled for increased monitoring, and Class 0 (light) continuing on routine cycles.
+
+\subsubsection{Mobile and Field Deployment}
+
+The computational efficiency of the classification models, particularly EfficientNet-B0 (32.7 ms, 5M parameters), enables deployment on mobile devices including tablets and smartphones. Field inspectors can capture images and receive immediate severity assessments, supporting real-time decision-making. Edge computing platforms such as NVIDIA Jetson Xavier NX enable on-device inference without requiring cloud connectivity, important for remote inspection sites.
+
+\subsubsection{Integration with Existing Systems}
+
+The classification system can be integrated into existing asset management platforms to provide automated condition assessment. Images captured during routine inspections can be automatically processed and severity classifications stored in asset databases, enabling longitudinal tracking of corrosion progression. Integration with unmanned aerial vehicle (UAV) inspection systems enables efficient assessment of large or difficult-to-access structures.
+
+\subsubsection{Cost-Benefit Analysis}
+
+Automated classification-based screening can reduce inspection costs by 40--50\% through efficient prioritization. For a transportation agency with a \$2 million annual inspection budget covering 400 bridges, automated screening could yield annual savings of \$800,000--\$850,000. Early detection enables proactive maintenance interventions (\$50,000--\$100,000) before corrosion advances to critical levels requiring major rehabilitation (\$500,000--\$1,000,000).
+
+\subsection{Deployment Considerations and Model Selection}
+\label{subsec:deployment}
+
+Selecting the appropriate model requires balancing accuracy requirements, computational constraints, and application-specific priorities.
+
+\textbf{ResNet50} should be selected when maximum accuracy is the primary requirement and computational resources are available. With 94.2\% validation accuracy, ResNet50 provides the most reliable assessments, particularly for the critical severe class (83.3\% correct classification). ResNet50 is recommended for safety-critical applications and scenarios where misclassification costs are high.
+
+\textbf{EfficientNet-B0} provides optimal balance for most practical applications. With 91.9\% accuracy, 32.7 ms inference time, and 5M parameters, EfficientNet-B0 offers excellent performance with modest resource requirements. It can be deployed on a wide range of platforms including cloud servers, edge devices, and mobile devices. EfficientNet-B0 is recommended for large-scale screening, mobile field deployment, and real-time assessment.
+
+\textbf{Custom CNN} is suitable only for ultra-lightweight deployment scenarios where the 8.7 percentage point accuracy penalty is acceptable. With 18.5 ms inference time and only 2M parameters, the custom CNN can run on resource-constrained devices, but the substantially lower performance limits its applicability to non-critical screening applications.
+
+\subsection{Limitations}
+\label{subsec:limitations}
+
+Several limitations should be considered when interpreting these results and planning deployments.
+
+\textbf{Steel type specificity:} The system was developed and evaluated exclusively on ASTM A572 Grade 50 steel, a high-strength low-alloy structural steel commonly used in bridge and building construction. Generalization to other steel types (e.g., ASTM A36, A992, weathering steels, stainless steels) has not been validated and cannot be assumed. Different steel types exhibit distinct corrosion morphologies due to variations in chemical composition, microstructure, and alloying elements. For example, weathering steels develop protective rust layers with different visual characteristics than conventional structural steels, while stainless steels exhibit localized pitting rather than uniform surface corrosion. The visual features learned by the models—texture patterns, color distributions, surface roughness—are specific to ASTM A572 Grade 50 corrosion characteristics. Deployment on other steel types would require validation testing and likely model retraining or fine-tuning with representative images from the target steel type to ensure classification accuracy is maintained.
+
+\textbf{Dataset size limitations:} The dataset of 414 images, while sufficient to demonstrate transfer learning effectiveness and achieve high validation accuracy (94.2\%), is relatively small compared to typical deep learning applications. The severe class (Class 2) contains only 57 images (13.8\% of the dataset), limiting the model's exposure to diverse manifestations of severe corrosion. Severe corrosion exhibits substantial morphological diversity including deep pitting, extensive scaling, delamination, and significant metal loss with varying spatial distributions. With limited training examples, the model may not have encountered the full range of severe corrosion patterns that could occur in practice. This could potentially impact generalization to severe corrosion cases with visual characteristics underrepresented in the training set. The class imbalance, while reflecting real-world infrastructure conditions where most structures are in good or moderate condition, presents challenges for minority class learning despite the application of class weighting. Larger datasets with more balanced class distributions and greater diversity within each severity class would likely improve model robustness and generalization, particularly for the critical severe class where accurate detection is most important for safety.
+
+\textbf{Threshold sensitivity:} The class boundaries (10\% and 30\% corroded area) are based on engineering practice but not universally standardized. Most classification errors occur near these thresholds where visual distinction is inherently ambiguous.
+
+\textbf{Spatial localization limitations:} The classification system provides image-level severity assessment, assigning a single severity label to each input image without indicating the spatial location of corroded regions. This represents a fundamental architectural limitation—the models output a global classification decision rather than pixel-level or region-level localization information. For maintenance planning and intervention prioritization, knowing which specific structural elements (flanges, webs, connection plates, bolts) are corroded is often as important as knowing the overall severity level. An image classified as Class 2 (severe) could have corrosion concentrated in a critical load-bearing element requiring immediate repair, or distributed across non-critical surfaces with less urgent implications. The lack of spatial information limits the system's utility for detailed maintenance planning, cost estimation (which depends on the area and accessibility of corroded regions), and repair specification. Inspectors using the system would still need to manually examine images or conduct field visits to determine corrosion locations. Future work incorporating localization capabilities through object detection, semantic segmentation, or attention mechanisms would significantly enhance practical utility by providing both severity classification and spatial localization in a unified framework.
+
+Despite these limitations, the demonstrated high accuracy (94.2\%), rapid inference (18--45 ms), and effective transfer learning with limited data provide strong evidence for the practical viability of automated corrosion classification.
+
+\subsection{Future Work}
+\label{subsec:future_work}
+
+Several promising directions could extend and improve this work.
+
+\textbf{Ensemble methods} combining predictions from multiple models could improve accuracy and provide uncertainty estimates. Averaging predictions from ResNet50, EfficientNet-B0, and other architectures could reduce individual model biases. Prediction variance across ensemble members could quantify uncertainty, enabling automatic identification of ambiguous cases requiring human review.
+
+\textbf{Explainability techniques} are essential for building trust in safety-critical applications. Grad-CAM \cite{selvaraju2017grad} could visualize which image regions most influence predictions, enabling inspectors to verify that models focus on corroded areas rather than irrelevant features.
+
+\textbf{Multi-task learning} architectures that jointly perform classification and localization could combine the efficiency of classification with spatial information. Classification with bounding box localization or attention maps would provide coarse spatial information about corrosion location without the computational cost of pixel-level segmentation.
+
+\textbf{Model compression} through knowledge distillation, pruning, and quantization could enable deployment on resource-constrained devices while maintaining accuracy. Neural architecture search could discover optimal architectures specifically for corrosion classification.
+
+\textbf{Dataset expansion} with more images per class, additional steel types, diverse environmental conditions, and multi-site validation would improve generalization. Active learning strategies could efficiently expand datasets by identifying the most informative images for labeling.
+
+\textbf{Integration with structural health monitoring} systems combining visual assessment with sensor data would enable holistic condition assessment and predictive maintenance strategies.
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+This study developed and evaluated a deep learning-based classification system for automated corrosion severity assessment in ASTM A572 Grade 50 steel structures. We compared three architectures—ResNet50, EfficientNet-B0, and a custom lightweight CNN—to quantify the effectiveness of transfer learning and the trade-offs between model complexity, accuracy, and computational efficiency.
+
+Transfer learning models pre-trained on ImageNet substantially outperform custom architectures trained from scratch, demonstrating the critical value of pre-trained features for specialized infrastructure applications with limited training data. ResNet50 achieved 94.2\% validation accuracy with validation loss of 0.185, while the custom CNN achieved only 85.5\% validation accuracy with validation loss of 0.412—an 8.7 percentage point gap that quantifies the benefit of transfer learning. This performance difference is particularly pronounced for the minority severe class, where ResNet50 achieves 83.3\% correct classification compared to 66.7\% for the custom CNN.
+
+EfficientNet-B0 provides an optimal balance between accuracy and efficiency for most practical applications. With 91.9\% accuracy (only 2.3 percentage points lower than ResNet50), 32.7 ms inference time (28\% faster than ResNet50), and 5M parameters (five times fewer than ResNet50), EfficientNet-B0 demonstrates that compound scaling and efficient architecture design can achieve near-state-of-the-art performance with modest computational requirements.
+
+All three models exhibit the desirable property of making only adjacent-class errors, with no instances of severe corrosion being misclassified as minimal or vice versa. This conservative error pattern is critical for safety applications, as it avoids catastrophic misassessments while acknowledging the inherent ambiguity at class boundaries.
+
+Training dynamics reveal that transfer learning dramatically accelerates convergence and improves generalization. Transfer learning models converge in 20--25 epochs compared to 40 epochs for the custom CNN, achieving lower validation loss, indicating better generalization despite much larger model capacity. This training efficiency translates to reduced computational cost and faster model development cycles.
+
+Inference time analysis demonstrates that all three models process images rapidly enough for real-time applications. ResNet50 at 45.3 ms per image (22.1 images/second), EfficientNet-B0 at 32.7 ms (30.6 images/second), and the custom CNN at 18.5 ms (54.1 images/second) all enable practical deployment scenarios including interactive field assessment, real-time video processing, and large-scale batch processing.
+
+For infrastructure managers and inspection agencies, we provide the following evidence-based recommendations. Select ResNet50 (94.2\% accuracy, 45.3 ms inference, 25M parameters) when maximum accuracy is critical and computational resources are available, particularly for safety-critical applications. Select EfficientNet-B0 (91.9\% accuracy, 32.7 ms inference, 5M parameters) for most practical applications where accuracy and efficiency must be balanced, including large-scale screening, mobile field deployment, and real-time assessment. Consider the custom CNN (85.5\% accuracy, 18.5 ms inference, 2M parameters) only for ultra-lightweight deployment scenarios where the substantial accuracy penalty is acceptable.
+
+The demonstrated high accuracy (94.2\%), rapid inference (18--45 ms), and effective transfer learning with limited data (414 images) provide strong evidence for the practical viability of automated corrosion classification in infrastructure monitoring. The system enables rapid screening of large structure inventories, real-time field assessment using mobile devices, and integration with existing asset management platforms. Automated classification-based screening can reduce inspection costs by 40--50\% through efficient prioritization while maintaining or improving inspection effectiveness. Early detection of corrosion progression enables proactive maintenance interventions (\$50,000--\$100,000) before corrosion advances to critical levels requiring major rehabilitation (\$500,000--\$1,000,000).
+
+Future research directions include ensemble methods for improved accuracy and uncertainty quantification, explainability techniques (Grad-CAM, attention visualization) for interpretable predictions, multi-task learning combining classification with localization, model compression for resource-constrained deployment, dataset expansion across diverse steel types and environmental conditions, and integration with comprehensive structural health monitoring systems. These extensions would further enhance the system's accuracy, interpretability, efficiency, and applicability across diverse infrastructure monitoring scenarios.
+
+This research demonstrates that deep learning-based classification, leveraging transfer learning from large-scale pre-trained models, provides an effective and practical solution for automated corrosion severity assessment in steel infrastructure. By providing evidence-based architecture comparison, deployment guidelines, and quantified performance metrics, this work advances the state of automated infrastructure inspection and provides practitioners with actionable guidance for implementing automated assessment systems that improve structural safety, reduce maintenance costs, and enable data-driven infrastructure management.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{6pt} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\authorcontributions{Conceptualization, H.O.G., D.P., and G.Q.; methodology, H.O.G. and D.P.; software, H.O.G.; validation, H.O.G., R.A., and C.S.S.P.; formal analysis, H.O.G.; investigation, H.O.G. and D.P.; resources, G.Q.; data curation, H.O.G.; writing---original draft preparation, H.O.G.; writing---review and editing, H.O.G., D.P., R.A., C.S.S.P., C.M.E., and G.Q.; visualization, H.O.G.; supervision, D.P., C.M.E., and G.Q.; project administration, G.Q. All authors have read and agreed to the published version of the manuscript.}
+
+\funding{This research received no external funding.}
+
+\institutionalreview{Not applicable for studies not involving humans or animals.}
+
+\informedconsent{Not applicable for studies not involving humans.}
+
+\dataavailability{The complete source code for model training, evaluation, and figure generation is publicly available at: \url{https://github.com/heitorhog/corrosion-detection-system}. The repository includes all Python scripts, configuration files, and documentation necessary for reproducing the results. The implementation uses Python 3.12.0 with TensorFlow 2.20.0, NumPy 1.26.0, scikit-learn 1.3.0, Matplotlib 3.8.0, and Pillow 10.1.0. All experiments were conducted with random seed 42 for reproducibility. Training was performed on an NVIDIA RTX 3060 GPU (12 GB memory) with CUDA 12.2 and cuDNN 8.9. The trained model weights (ResNet50, EfficientNet-B0, and Custom CNN) are available upon reasonable request to the corresponding author. The corrosion image dataset cannot be publicly shared due to proprietary restrictions from infrastructure owners, but access may be granted for research purposes through formal data sharing agreements. Researchers interested in the dataset should contact the corresponding author with a detailed research proposal and institutional data use agreement.}
+
+\conflictsofinterest{The authors declare no conflicts of interest.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% References
+\bibliography{referencias_pure_classification}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

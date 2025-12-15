@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\caption{Model Architecture Characteristics for 4-Class Corrosion Classification}
+\label{tab:model_architectures_classification}
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lccccl}
+\hline\hline
+\textbf{Model} & \textbf{Parameters} & \textbf{Depth} & \textbf{Input Size} & \textbf{Pre-training} & \textbf{Key Feature} \\
+\hline
+ResNet50 & $\sim$25M & 50 & $224 \times 224$ & ImageNet & Residual connections \\
+EfficientNet-B0 & $\sim$5M & 237 & $224 \times 224$ & ImageNet & Compound scaling \\
+Custom CNN & $\sim$2M & 12 & $224 \times 224$ & None & Lightweight design \\
+\hline\hline
+\end{tabular}
+\normalsize
+\vspace{0.2cm}
+\\\textit{Note: All models modified with final fully connected layer outputting 4 classes}
+\\\textit{for hierarchical severity classification (No corrosion, Light, Moderate, Severe).}
+\end{table}

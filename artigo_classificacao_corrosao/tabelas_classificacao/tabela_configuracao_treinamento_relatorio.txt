@@ -1,0 +1,43 @@
+TRAINING CONFIGURATION REPORT
+=============================
+
+Generated: 24-Oct-2025 09:46:33
+
+HYPERPARAMETERS:
+----------------
+Optimizer                          : Adam
+Learning Rate (from scratch)       : $1 times 10^{-4}$
+Learning Rate (transfer learning)  : $1 times 10^{-5}$
+Mini-batch Size                    : 32
+Maximum Epochs                     : 100
+Early Stopping Patience            : 10 epochs
+Loss Function                      : Categorical Cross-Entropy
+Class Weighting                    : Inverse Frequency
+Train/Val/Test Split               : 70%/15%/15%
+Input Image Size                   : $224 times 224$ pixels
+Data Augmentation                  : Enabled (5 techniques)
+Hardware                           : NVIDIA RTX 3060 (12 GB)
+Software                           : MATLAB R2023b
+Deep Learning Toolbox              : Version 14.6
+
+DATA AUGMENTATION:
+------------------
+Horizontal Flip          : 50% probability
+Vertical Flip            : 50% probability
+Rotation                 : $pm 15^circ$
+Brightness Adjustment    : $pm 20%$
+Contrast Adjustment      : $pm 20%$
+
+TRAINING STRATEGY:
+------------------
+- Transfer learning models use lower learning rate to preserve pre-trained features
+- Custom CNN trained from scratch with higher learning rate
+- Early stopping prevents overfitting by monitoring validation loss
+- Class weighting addresses imbalance in 4-class dataset
+- Stratified sampling maintains class proportions across splits
+
+COMPUTATIONAL RESOURCES:
+------------------------
+- GPU: NVIDIA RTX 3060 with 12 GB VRAM
+- Software: MATLAB R2023b with Deep Learning Toolbox 14.6
+- Training time: ~2-4 hours per model (depending on architecture)

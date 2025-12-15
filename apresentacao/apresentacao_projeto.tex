@@ -1,0 +1,551 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{siunitx}
+
+% Tema da apresentação
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Informações do documento
+\title[Detecção Automatizada de Corrosão]{Detecção Automatizada de Corrosão em Vigas W de Aço ASTM A572 Grau 50 Usando U-Net e Attention U-Net}
+\subtitle{Uma Análise Comparativa para Segmentação Semântica}
+
+\author[Gonçalves, Porto \& Amaral]{
+    Heitor Oliveira Gonçalves\inst{1} \and
+    Darlan Porto\inst{1} \and
+    Renato Amaral\inst{1}
+}
+
+\institute[UCP]{
+    \inst{1}%
+    Universidade Católica de Petrópolis (UCP)\\
+    Petrópolis, Rio de Janeiro, Brasil\\
+    \vspace{0.3cm}
+    \texttt{heitor.42540005@ucp.br}\\
+    \texttt{darlan.42540004@ucp.br}\\
+    \texttt{renato.42540007@ucp.br}
+}
+
+\date{\today}
+
+% Logo (opcional - descomente e ajuste o caminho se tiver logo)
+% \logo{\includegraphics[height=1cm]{logo_ucp.png}}
+
+\begin{document}
+
+% ========================================
+% SLIDE 1: TÍTULO
+% ========================================
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% ========================================
+% SLIDE 2: SUMÁRIO
+% ========================================
+\begin{frame}{Sumário}
+    \tableofcontents
+\end{frame}
+
+% ========================================
+% SEÇÃO 1: INTRODUÇÃO E CONTEXTO
+% ========================================
+\section{Introdução e Contexto}
+
+\begin{frame}{Resumo do Projeto}
+    \begin{block}{Objetivo}
+        Desenvolver e avaliar sistemas automatizados de detecção de corrosão usando redes neurais profundas para inspeção de estruturas de aço.
+    \end{block}
+    
+    \vspace{0.5cm}
+    
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Problema:}
+        \begin{itemize}
+            \item Inspeções manuais subjetivas
+            \item Altos custos operacionais
+            \item Dificuldade de acesso
+            \item Detecção tardia
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Solução:}
+        \begin{itemize}
+            \item Deep Learning
+            \item Segmentação semântica
+            \item U-Net e Attention U-Net
+            \item Detecção automatizada
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Resumo Executivo}
+    \begin{block}{Contexto}
+        A corrosão em estruturas metálicas representa um desafio crítico na engenharia civil, exigindo métodos de inspeção eficientes e objetivos para garantir a segurança estrutural e prolongar a vida útil. Os métodos tradicionais de inspeção visual apresentam limitações significativas em termos de subjetividade, dependência da experiência do inspetor, altos custos operacionais e dificuldade de acesso a elementos estruturais críticos em infraestruturas de grande escala.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Resumo Executivo (continuação)}
+    \begin{block}{Metodologia}
+        Este estudo apresenta uma análise comparativa abrangente entre as arquiteturas U-Net e Attention U-Net para detecção automatizada de corrosão em vigas W de aço ASTM A572 Grau 50 usando técnicas avançadas de segmentação semântica baseadas em deep learning. Foi desenvolvido um dataset abrangente de 800 imagens de alta resolução de vigas de aço contendo diferentes níveis de severidade de corrosão, com anotações manuais precisas das regiões afetadas realizadas por especialistas em patologia estrutural.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Resumo Executivo (continuação)}
+    \begin{block}{Resultados}
+        A arquitetura Attention U-Net demonstrou desempenho estatisticamente superior em todas as métricas avaliadas, alcançando IoU médio de 0,775 ± 0,089 comparado a 0,693 ± 0,078 para a U-Net clássica (p < 0,001). O Coeficiente Dice atingiu 0,741 ± 0,067 para Attention U-Net versus 0,678 ± 0,071 para a arquitetura U-Net padrão. O F1-Score alcançou 0,823 ± 0,054 e 0,751 ± 0,063, respectivamente.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Resumo Executivo (continuação)}
+    \begin{block}{Conclusões}
+        O mecanismo de atenção provou ser particularmente eficaz na identificação de regiões de corrosão sutis e na redução significativa de detecções falso-positivas. Os resultados indicam conclusivamente que a incorporação de mecanismos de atenção melhora substancialmente a capacidade de detecção automatizada de corrosão (melhoria de 11,8\% no IoU), oferecendo uma ferramenta promissora e prática para inspeção não destrutiva de estruturas de aço em aplicações contemporâneas de engenharia civil.
+    \end{block}
+\end{frame}
+
+% ========================================
+% SEÇÃO 2: MATERIAIS E AÇOS (DARLAN)
+% ========================================
+\section{Caracterização dos Materiais}
+
+\begin{frame}{Caracterização dos Materiais}
+    \begin{center}
+        \Large{\textbf{Darlan Porto}}\\
+        \normalsize{Engenheiro Mecânico}\\
+        \vspace{0.5cm}
+        \large{Aços das Vigas ASTM A572 Grau 50}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Aço ASTM A572 Grau 50}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Propriedades Mecânicas:}
+        \begin{itemize}
+            \item Tensão de escoamento: 345 MPa (50 ksi)
+            \item Resistência à tração: 450-620 MPa
+            \item Excelente relação resistência/peso
+            \item Alta capacidade de carga
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Composição Química:}
+        \begin{itemize}
+            \item Carbono: máx. 0,23\%
+            \item Manganês: 0,85-1,35\%
+            \item Silício: até 0,40\%
+            \item Fósforo: máx. 0,04\%
+            \item Enxofre: máx. 0,05\%
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Perfis W Utilizados no Estudo}
+    \begin{table}
+        \centering
+        \begin{tabular}{lcc}
+            \toprule
+            \textbf{Perfil} & \textbf{Dimensões} & \textbf{Aplicação} \\
+            \midrule
+            W200×100 & 200mm × 100mm & Estruturas comerciais \\
+            W250×149 & 250mm × 149mm & Edifícios industriais \\
+            W310×179 & 310mm × 179mm & Grandes vãos \\
+            \bottomrule
+        \end{tabular}
+        \caption{Perfis W de aço ASTM A572 Grau 50 utilizados}
+    \end{table}
+    
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Exposição atmosférica: 6 meses a 5 anos
+        \item Diferentes níveis de severidade de corrosão
+        \item Representativos de condições reais de serviço
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Tipos de Corrosão Observados}
+    \begin{enumerate}
+        \item \textbf{Corrosão Uniforme:}
+        \begin{itemize}
+            \item Formação de óxidos de ferro (Fe$_2$O$_3$ e Fe$_3$O$_4$)
+            \item Distribuição homogênea na superfície
+            \item Coloração característica amarelo-alaranjada a marrom-avermelhada
+        \end{itemize}
+        
+        \item \textbf{Corrosão por Pites:}
+        \begin{itemize}
+            \item Cavidades localizadas de geometria irregular
+            \item Alta frequência espacial
+            \item Desafio para detecção visual
+        \end{itemize}
+        
+        \item \textbf{Corrosão Galvânica:}
+        \begin{itemize}
+            \item Regiões de contato com materiais de potencial eletroquímico diferente
+            \item Aceleração do processo corrosivo
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+% ========================================
+% SEÇÃO 3: IMPACTO E APLICAÇÕES (RENATO)
+% ========================================
+\section{Impacto e Aplicações Práticas}
+
+\begin{frame}{Impacto e Aplicações Práticas}
+    \begin{center}
+        \Large{\textbf{Renato Amaral}}\\
+        \normalsize{Engenheiro Civil}\\
+        \vspace{0.5cm}
+        \large{Impacto na Engenharia Civil}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Impacto Econômico da Corrosão}
+    \begin{block}{Custos Globais}
+        \begin{itemize}
+            \item Perdas econômicas: \textbf{US\$ 2,5 trilhões/ano}
+            \item Representa \textbf{3,4\% do PIB global}
+            \item Custos de manutenção e substituição elevados
+            \item Impacto na segurança estrutural
+        \end{itemize}
+    \end{block}
+    
+    \vspace{0.5cm}
+    
+    \begin{alertblock}{Desafios Atuais}
+        \begin{itemize}
+            \item Inspeções manuais demoradas e caras
+            \item Subjetividade na avaliação
+            \item Dificuldade de acesso a elementos críticos
+            \item Detecção tardia de processos corrosivos
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Aplicações Práticas}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Benefícios Imediatos:}
+        \begin{itemize}
+            \item Inspeções mais frequentes
+            \item Redução de custos operacionais
+            \item Maior objetividade
+            \item Documentação digital
+            \item Rastreabilidade
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Aplicações:}
+        \begin{itemize}
+            \item Pontes e viadutos
+            \item Edifícios industriais
+            \item Torres de transmissão
+            \item Plataformas offshore
+            \item Infraestrutura crítica
+        \end{itemize}
+    \end{columns}
+    
+    \vspace{0.5cm}
+    
+    \begin{block}{Melhoria Quantificada}
+        \begin{itemize}
+            \item \textbf{11,8\%} de melhoria no IoU
+            \item \textbf{46\%} de redução em falsos positivos
+            \item Tempo de processamento: \textbf{150 ms/imagem}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Implicações para Manutenção Estrutural}
+    \begin{enumerate}
+        \item \textbf{Manutenção Preditiva:}
+        \begin{itemize}
+            \item Monitoramento contínuo de estruturas
+            \item Identificação precoce de deterioração
+            \item Planejamento otimizado de intervenções
+        \end{itemize}
+        
+        \item \textbf{Redução de Custos:}
+        \begin{itemize}
+            \item Minimização de intervenções desnecessárias
+            \item Alocação eficiente de recursos
+            \item Extensão da vida útil das estruturas
+        \end{itemize}
+        
+        \item \textbf{Segurança Aprimorada:}
+        \begin{itemize}
+            \item Detecção confiável de regiões críticas
+            \item Redução de riscos de falha estrutural
+            \item Conformidade com normas de segurança
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+% ========================================
+% SEÇÃO 4: TECNOLOGIA E FERRAMENTAS (HEITOR)
+% ========================================
+\section{Tecnologia e Ferramentas}
+
+\begin{frame}{Tecnologia e Ferramentas}
+    \begin{center}
+        \Large{\textbf{Heitor Oliveira Gonçalves}}\\
+        \vspace{0.5cm}
+        \large{Tecnologia Aplicada e Ferramentas Utilizadas}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Arquiteturas de Deep Learning}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{U-Net Clássica:}
+        \begin{itemize}
+            \item Encoder-decoder
+            \item Skip connections
+            \item Preservação de detalhes
+            \item Eficiente computacionalmente
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Attention U-Net:}
+        \begin{itemize}
+            \item Mecanismos de atenção
+            \item Foco seletivo em regiões
+            \item Supressão de ruído
+            \item Maior precisão
+        \end{itemize}
+    \end{columns}
+    
+    \vspace{0.5cm}
+    
+    \begin{block}{Vantagem da Attention U-Net}
+        Os gates de atenção permitem que o modelo aprenda automaticamente a focar nas características mais relevantes para detecção de corrosão, resultando em \textbf{11,8\% de melhoria no IoU}.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Stack Tecnológico}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Software e Frameworks:}
+        \begin{itemize}
+            \item Python 3.9.7
+            \item TensorFlow 2.12.0
+            \item CUDA 11.8
+            \item cuDNN 8.6
+            \item OpenCV
+            \item NumPy, Pandas
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Hardware:}
+        \begin{itemize}
+            \item GPU: NVIDIA RTX 4090 (24GB)
+            \item CPU: Intel Core i9-13900K
+            \item RAM: 64GB DDR5
+            \item Armazenamento: SSD NVMe
+        \end{itemize}
+    \end{columns}
+    
+    \vspace{0.5cm}
+    
+    \begin{block}{Ferramentas de Anotação}
+        \begin{itemize}
+            \item CVAT (Computer Vision Annotation Tool)
+            \item Anotação pixel-a-pixel por especialistas
+            \item Índice Kappa de Fleiss: 0,87 (concordância quase perfeita)
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Dataset e Processamento}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{lc}
+            \toprule
+            \textbf{Característica} & \textbf{Valor} \\
+            \midrule
+            Total de Imagens & 800 \\
+            Resolução Original & 512 × 512 pixels \\
+            Resolução Processada & 256 × 256 pixels \\
+            Formato & JPEG (RGB) \\
+            \midrule
+            Treinamento & 560 imagens (70\%) \\
+            Validação & 120 imagens (15\%) \\
+            Teste & 120 imagens (15\%) \\
+            \bottomrule
+        \end{tabular}
+        \caption{Características do dataset}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Configurações de Treinamento}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Hiperparâmetros:}
+        \begin{itemize}
+            \item Learning rate: $1 \times 10^{-4}$
+            \item Batch size: 8
+            \item Otimizador: Adam
+            \item Épocas: 100 (early stopping)
+            \item Loss: Binary Cross-Entropy + Dice
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Técnicas Aplicadas:}
+        \begin{itemize}
+            \item Data augmentation
+            \item ReduceLROnPlateau
+            \item Early stopping
+            \item K-fold cross-validation (k=5)
+            \item Normalização de imagens
+        \end{itemize}
+    \end{columns}
+    
+    \vspace{0.5cm}
+    
+    \begin{alertblock}{Reprodutibilidade}
+        Todas as configurações foram documentadas e seeds fixadas (random\_state=42) para garantir reprodutibilidade dos experimentos.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Métricas de Avaliação}
+    \begin{enumerate}
+        \item \textbf{Intersection over Union (IoU):}
+        \begin{itemize}
+            \item Mede sobreposição entre predição e ground truth
+            \item Attention U-Net: 0,775 ± 0,089
+            \item U-Net: 0,693 ± 0,078
+        \end{itemize}
+        
+        \item \textbf{Coeficiente Dice:}
+        \begin{itemize}
+            \item Enfatiza sobreposição de regiões
+            \item Attention U-Net: 0,741 ± 0,067
+            \item U-Net: 0,678 ± 0,071
+        \end{itemize}
+        
+        \item \textbf{F1-Score:}
+        \begin{itemize}
+            \item Média harmônica de precisão e recall
+            \item Attention U-Net: 0,823 ± 0,054
+            \item U-Net: 0,751 ± 0,063
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+% ========================================
+% SEÇÃO 5: RESULTADOS
+% ========================================
+\section{Resultados}
+
+\begin{frame}{Resultados Comparativos}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{lccc}
+            \toprule
+            \textbf{Métrica} & \textbf{U-Net} & \textbf{Attention U-Net} & \textbf{Melhoria} \\
+            \midrule
+            IoU & 0,693 ± 0,078 & 0,775 ± 0,089 & +11,8\% \\
+            Dice & 0,678 ± 0,071 & 0,741 ± 0,067 & +9,3\% \\
+            F1-Score & 0,751 ± 0,063 & 0,823 ± 0,054 & +9,6\% \\
+            Precisão & 0,784 ± 0,092 & 0,871 ± 0,076 & +11,1\% \\
+            Recall & 0,721 ± 0,088 & 0,779 ± 0,081 & +8,0\% \\
+            \midrule
+            Falsos Positivos & 23,4\% & 12,8\% & -46\% \\
+            \bottomrule
+        \end{tabular}
+        \caption{Comparação de desempenho (p < 0,001 para todas as métricas)}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Análise Estatística}
+    \begin{block}{Significância Estatística}
+        \begin{itemize}
+            \item Teste t pareado: p < 0,001 para todas as métricas
+            \item Intervalos de confiança 95\% não sobrepostos
+            \item Tamanho de efeito (Cohen's d): 0,98 (IoU) - efeito grande
+        \end{itemize}
+    \end{block}
+    
+    \vspace{0.5cm}
+    
+    \begin{block}{Desempenho por Categoria de Corrosão}
+        \begin{itemize}
+            \item \textbf{Corrosão leve:} Diferença < 3\% entre arquiteturas
+            \item \textbf{Corrosão moderada:} Attention U-Net +8,5\%
+            \item \textbf{Corrosão severa:} Attention U-Net +15,2\%
+            \item \textbf{Corrosão por pites:} Taxa de detecção 87,3\% vs 71,2\%
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% ========================================
+% SEÇÃO 6: CONCLUSÕES
+% ========================================
+\section{Conclusões}
+
+\begin{frame}{Conclusões}
+    \begin{block}{Principais Contribuições}
+        \begin{enumerate}
+            \item Primeira avaliação comparativa rigorosa entre U-Net e Attention U-Net para detecção de corrosão em aços ASTM A572 Grau 50
+            \item Demonstração empírica da eficácia dos mecanismos de atenção (melhoria de 11,8\% no IoU)
+            \item Desenvolvimento de protocolo metodológico reproduzível para sistemas de detecção automatizada
+            \item Redução de 46\% em falsos positivos com Attention U-Net
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Limitações e Trabalhos Futuros}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Limitações:}
+        \begin{itemize}
+            \item Dataset específico para condições laboratoriais
+            \item Necessidade de validação em estruturas reais
+            \item Overhead computacional da Attention U-Net
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Trabalhos Futuros:}
+        \begin{itemize}
+            \item Expansão do dataset
+            \item Otimização computacional
+            \item Estudos longitudinais
+            \item Arquiteturas híbridas
+            \item Integração com drones
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Agradecimentos}
+    \begin{center}
+        \Large{Agradecimentos}
+    \end{center}
+    
+    \vspace{1cm}
+    
+    \begin{itemize}
+        \item Universidade Católica de Petrópolis (UCP)
+        \item Especialistas em patologia estrutural
+        \item Laboratórios de computação
+        \item Professores orientadores
+    \end{itemize}
+    
+    \vspace{1cm}
+    
+    \begin{center}
+        \Large{\textbf{Obrigado!}}\\
+        \vspace{0.5cm}
+        \normalsize{Perguntas?}
+    \end{center}
+\end{frame}
+
+\end{document}

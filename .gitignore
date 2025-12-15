@@ -49,6 +49,24 @@ comparacao_visual_modelos.png
 pipeline_errors_*.txt
 error_log_*.txt
 
+# =============================================================================
+# LaTeX (artefatos gerados)
+# =============================================================================
+
+*.aux
+*.bbl
+*.blg
+*.out
+*.lof
+*.lot
+*.toc
+*.nav
+*.snm
+*.synctex.gz
+*.spl
+*.fff
+*.ttt
+
 # Relatórios gerados
 relatorio_comparacao.txt
 resultados_comparacao.mat
@@ -155,6 +173,18 @@ latex/
 # PDFs gerados automaticamente
 # Ignorar todos os PDFs gerados automaticamente
 *.pdf
+
+# =============================================================================
+# Pesos/modelos treinados (binários grandes)
+# =============================================================================
+
+*.keras
+*.h5
+*.hdf5
+*.pth
+*.pt
+*.onnx
+*.tflite
 
 # =============================================================================
 # IMPORTANTE: Arquivos que DEVEM ser incluídos no Git

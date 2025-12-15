@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\caption{Training Configuration Parameters for 4-Class Classification Models}
+\label{tab:training_config_classification}
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{ll}
+\hline\hline
+\textbf{Parameter} & \textbf{Value} \\
+\hline
+Optimizer & Adam \\
+Learning Rate (from scratch) & $1 \\times 10^{-4}$ \\
+Learning Rate (transfer learning) & $1 \\times 10^{-5}$ \\
+Mini-batch Size & 32 \\
+Maximum Epochs & 100 \\
+Early Stopping Patience & 10 epochs \\
+Loss Function & Categorical Cross-Entropy \\
+Class Weighting & Inverse Frequency \\
+Train/Val/Test Split & 70\\%/15\\%/15\\% \\
+Input Image Size & $224 \\times 224$ pixels \\
+Data Augmentation & Enabled (5 techniques) \\
+Hardware & NVIDIA RTX 3060 (12 GB) \\
+Software & MATLAB R2023b \\
+Deep Learning Toolbox & Version 14.6 \\
+\hline
+\multicolumn{2}{l}{\textbf{Data Augmentation Techniques:}} \\
+\quad Horizontal Flip & 50\\% probability \\
+\quad Vertical Flip & 50\\% probability \\
+\quad Rotation & $\\pm 15^\\circ$ \\
+\quad Brightness Adjustment & $\\pm 20\\%$ \\
+\quad Contrast Adjustment & $\\pm 20\\%$ \\
+\hline\hline
+\end{tabular}
+\normalsize
+\end{table}

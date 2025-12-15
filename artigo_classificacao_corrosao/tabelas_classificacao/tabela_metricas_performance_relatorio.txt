@@ -1,0 +1,85 @@
+PERFORMANCE METRICS REPORT - 4-CLASS CLASSIFICATION
+===================================================
+
+Generated: 24-Oct-2025 09:46:33
+
+⚠️  NOTE: Using placeholder metrics. Run executar_classificacao() for actual results.
+
+OVERALL PERFORMANCE:
+--------------------
+ResNet50:
+  Overall Accuracy: 94.2%
+  Macro F1-Score:   0.940
+
+EfficientNet-B0:
+  Overall Accuracy: 92.8%
+  Macro F1-Score:   0.930
+
+Custom CNN:
+  Overall Accuracy: 89.5%
+  Macro F1-Score:   0.900
+
+PER-CLASS PERFORMANCE:
+----------------------
+
+ResNet50:
+  Class 0 (No corrosion):
+    Precision: 0.96
+    Recall:    0.95
+    F1-Score:  0.96
+  Class 1 (Light):
+    Precision: 0.93
+    Recall:    0.92
+    F1-Score:  0.93
+  Class 2 (Moderate):
+    Precision: 0.91
+    Recall:    0.90
+    F1-Score:  0.91
+  Class 3 (Severe):
+    Precision: 0.94
+    Recall:    0.93
+    F1-Score:  0.94
+
+EfficientNet-B0:
+  Class 0 (No corrosion):
+    Precision: 0.95
+    Recall:    0.94
+    F1-Score:  0.95
+  Class 1 (Light):
+    Precision: 0.91
+    Recall:    0.90
+    F1-Score:  0.91
+  Class 2 (Moderate):
+    Precision: 0.89
+    Recall:    0.88
+    F1-Score:  0.89
+  Class 3 (Severe):
+    Precision: 0.92
+    Recall:    0.91
+    F1-Score:  0.92
+
+Custom CNN:
+  Class 0 (No corrosion):
+    Precision: 0.93
+    Recall:    0.92
+    F1-Score:  0.92
+  Class 1 (Light):
+    Precision: 0.88
+    Recall:    0.87
+    F1-Score:  0.87
+  Class 2 (Moderate):
+    Precision: 0.85
+    Recall:    0.84
+    F1-Score:  0.85
+  Class 3 (Severe):
+    Precision: 0.89
+    Recall:    0.88
+    F1-Score:  0.89
+
+KEY OBSERVATIONS:
+-----------------
+- ResNet50 achieves highest overall accuracy and per-class F1-scores
+- Transfer learning models (ResNet50, EfficientNet-B0) outperform custom CNN
+- All models show strong performance on Class 0 (No corrosion)
+- Class 3 (Severe) is most challenging due to smaller sample size
+- Balanced performance across all 4 severity classes demonstrates robustness

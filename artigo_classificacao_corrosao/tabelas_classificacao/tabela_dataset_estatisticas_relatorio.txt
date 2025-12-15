@@ -1,0 +1,25 @@
+DATASET STATISTICS REPORT - 4-CLASS CLASSIFICATION
+==================================================
+
+Generated: 24-Oct-2025 09:46:33
+
+CLASS DISTRIBUTION:
+-------------------
+Class 0 (No corrosion, 0%):        166 images (40.1%)
+Class 1 (Light, <10%):             124 images (30.0%)
+Class 2 (Moderate, 10-30%):         83 images (20.0%)
+Class 3 (Severe, >30%):             41 images (9.9%)
+Total:                              414 images
+
+DATA SPLITS (Stratified):
+-------------------------
+Training set:   290 images (70%)
+Validation set:  62 images (15%)
+Test set:        62 images (15%)
+
+PER-CLASS SPLITS:
+-----------------
+Class 0: Train=116, Val=25, Test=25
+Class 1: Train=87, Val=19, Test=18
+Class 2: Train=58, Val=12, Test=13
+Class 3: Train=29, Val=6, Test=6

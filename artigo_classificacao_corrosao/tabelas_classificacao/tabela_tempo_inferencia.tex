@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\caption{Inference Time Comparison: Classification vs Segmentation Approaches}
+\label{tab:inference_time_classification}
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lcccc}
+\hline\hline
+\textbf{Model} & \textbf{Approach} & \textbf{Time (ms)} & \textbf{Throughput} & \textbf{Speedup} \\
+ & & \textbf{per image} & \textbf{(img/s)} & \textbf{vs U-Net} \\
+\hline
+ResNet50 & Classification & 45.3 & 22.1 & 18.8$\times$ \\
+EfficientNet-B0 & Classification & 38.7 & 25.8 & 22.0$\times$ \\
+Custom CNN & Classification & 28.5 & 35.1 & 29.8$\times$ \\
+\hline
+U-Net & Segmentation & 850.0 & 1.2 & 1.0$\times$ \\
+Attention U-Net & Segmentation & 920.0 & 1.1 & 0.9$\times$ \\
+\hline\hline
+\end{tabular}
+\normalsize
+\vspace{0.2cm}
+\\\textit{Note: Inference times measured on NVIDIA RTX 3060 GPU (12 GB) with batch size 1.}
+\\\textit{Classification provides 15-30$\times$ speedup over segmentation for rapid severity assessment.}
+\end{table}

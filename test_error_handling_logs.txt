@@ -1,6 +1,0 @@
-Categorical Processing Log Export
-Generated: 28-Jul-2025 14:26:58
-Total entries: 4
-
-[2025-07-28 14:26:55.360] DataTypeConverter.categoricalToNumeric: categorical->double (success: true)
-  Details: 

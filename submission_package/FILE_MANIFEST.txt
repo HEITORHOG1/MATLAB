@@ -1,0 +1,41 @@
+ASCE Submission Package - File Manifest
+Generated: 24/10/2025 12:28:51,53
+Updated: 24/10/2025 13:06:00 (Task 13 - Final Validation Complete)
+
+============================================================================
+MANUSCRIPT FILES
+============================================================================
+artigo_classificacao_corrosao.pdf
+artigo_classificacao_corrosao.tex
+referencias_classificacao.bib
+
+============================================================================
+FIGURE FILES
+============================================================================
+figura_curvas_treinamento.pdf
+figura_curvas_treinamento.png
+figura_fluxograma_metodologia.pdf
+figura_fluxograma_metodologia.png
+figura_matrizes_confusao.pdf
+figura_matrizes_confusao.png
+
+============================================================================
+STYLE FILES
+============================================================================
+ascelike-new.bst
+ascelike-new.cls
+
+============================================================================
+DOCUMENTATION FILES
+============================================================================
+ASCE_PAGE_LIMITS.md
+ASCE_SUBMISSION_PACKAGE.md
+COMPREHENSIVE_CHANGE_REPORT_TASK9.md
+SUPPLEMENTARY_MATERIALS_ASSESSMENT.md
+TASK_9_COMPLETION_REPORT.md
+
+============================================================================
+TOTAL FILE COUNT
+============================================================================
+22
+files

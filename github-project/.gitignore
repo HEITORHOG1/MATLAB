@@ -1,0 +1,149 @@
+# Corrosion Classification Project - Git Ignore
+
+# Dataset (proprietary, not to be shared)
+data/
+dataset/
+images/
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tif
+*.tiff
+
+# Trained models (too large for git)
+models/*.mat
+models/*.h5
+models/*.pth
+models/*.onnx
+*.mat
+*.h5
+*.pth
+*.onnx
+
+# MATLAB
+*.asv
+*.m~
+*.autosave
+slprj/
+*.slxc
+*.mexw64
+*.mexa64
+*.mexmaci64
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Results and outputs (keep structure, ignore content)
+results/*.png
+results/*.pdf
+results/*.csv
+results/*.txt
+results/confusion_matrices/*.png
+results/training_curves/*.png
+results/metrics/*.csv
+
+# Logs
+logs/
+*.log
+*.out
+*.err
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.toc
+*.synctex.gz
+*.pdf
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Large files
+*.avi
+*.mp4
+*.mov
+
+# Credentials and secrets
+.env
+.env.local
+secrets.yaml
+credentials.json
+*.key
+*.pem
+
+# Keep directory structure but ignore contents
+!results/.gitkeep
+!models/.gitkeep
+!data/.gitkeep

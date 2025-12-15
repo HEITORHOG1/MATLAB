@@ -1,0 +1,43 @@
+MODEL ARCHITECTURE DETAILS REPORT
+==================================
+
+Generated: 24-Oct-2025 09:46:33
+
+ARCHITECTURE COMPARISON:
+------------------------
+
+1. ResNet50
+   Parameters:    ~25M
+   Depth:         50 layers
+   Input Size:    224×224 pixels
+   Pre-training:  ImageNet (1.2M images)
+   Key Feature:   Residual connections
+   Modification:  Final FC layer → 4 classes
+
+2. EfficientNet-B0
+   Parameters:    ~5M
+   Depth:         237 layers
+   Input Size:    224×224 pixels
+   Pre-training:  ImageNet (1.2M images)
+   Key Feature:   Compound scaling
+   Modification:  Final FC layer → 4 classes
+
+3. Custom CNN
+   Parameters:    ~2M
+   Depth:         12 layers
+   Input Size:    224×224 pixels
+   Pre-training:  None (trained from scratch)
+   Key Feature:   Lightweight design
+   Modification:  4 conv blocks + 2 FC layers
+
+DESIGN RATIONALE:
+-----------------
+- ResNet50: Deep architecture with residual connections for learning complex features
+- EfficientNet-B0: Balanced architecture optimizing depth, width, and resolution
+- Custom CNN: Lightweight design for resource-constrained deployment
+
+All models adapted for 4-class hierarchical classification:
+  Class 0: No corrosion (0% corroded area)
+  Class 1: Light corrosion (<10% corroded area)
+  Class 2: Moderate corrosion (10-30% corroded area)
+  Class 3: Severe corrosion (>30% corroded area)

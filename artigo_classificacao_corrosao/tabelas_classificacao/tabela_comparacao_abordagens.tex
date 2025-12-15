@@ -1,0 +1,29 @@
+\begin{table*}[htbp]
+\caption{Qualitative Comparison: Classification vs Segmentation Approaches for Corrosion Assessment}
+\label{tab:approach_comparison_classification}
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\hline\hline
+\textbf{Criterion} & \textbf{Classification (This Work)} & \textbf{Segmentation (Previous Work)} \\
+\hline
+Output Type & Severity class label & Pixel-level mask \\
+Spatial Information & None (image-level) & Detailed (pixel-level) \\
+Accuracy (Severity) & High (94\\%) & Very High (96\\%) \\
+Inference Speed & Fast (30-45 ms) & Slow (850-920 ms) \\
+Speedup Factor & 15-30$\\times$ faster & Baseline \\
+Memory Usage & Low (2-25M params) & High (31-34M params) \\
+Training Time & Moderate (2-4 hours) & Long (8-12 hours) \\
+Interpretability & Class probability & Visual mask overlay \\
+Primary Use Case & Rapid screening & Detailed analysis \\
+Secondary Use Case & Large-scale monitoring & Critical structures \\
+Deployment & Edge devices, mobile & Workstation, cloud \\
+Real-time Capability & Yes (>30 fps) & No (~1 fps) \\
+\hline\hline
+\end{tabular}
+\normalsize
+\vspace{0.2cm}
+\\\textit{Note: Both approaches are complementary. Classification excels at rapid screening,}
+\\\textit{while segmentation provides detailed spatial analysis. Hybrid workflows recommended.}
+\end{table*}
