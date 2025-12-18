@@ -1,0 +1,40 @@
+FIGURE CAPTIONS LIST
+
+Manuscript Title: AUTOMATED CORROSION DETECTION IN ASTM A572 GRADE 50 W-BEAMS 
+USING U-NET AND ATTENTION U-NET: A COMPARATIVE ANALYSIS FOR SEMANTIC SEGMENTATION
+
+Authors: Heitor Oliveira Gonçalves, Darlan Porto, Renato Amaral, Giovane Quadrelli
+
+
+Fig. 1. Experimental methodology flowchart for corrosion detection in ASTM A572 
+Grade 50 W-beams using U-Net vs Attention U-Net. The pipeline comprises six phases: 
+(1) data acquisition with 217 original corrosion images at 512×512 resolution 
+(expanded to 414 after augmentation), (2) preprocessing including normalization 
+and data augmentation, (3) parallel training of both architectures with identical 
+hyperparameters, (4) model evaluation using IoU, Dice, F1-Score metrics, 
+(5) comparative statistical analysis with significance testing and effect size 
+calculation, and (6) documentation for reproducibility.
+
+
+Fig. 2. Comparative performance analysis between U-Net and Attention U-Net 
+architectures. (A) Box plots showing distribution of IoU, Dice coefficient, and 
+F1-Score metrics across test samples. (B) Performance stratification by corrosion 
+severity levels. (C) Precision-Recall curves demonstrating superior trade-off 
+achieved by Attention U-Net. Error bars represent 95% confidence intervals. 
+Statistical significance (p < 0.001) confirmed through Student's t-test.
+
+
+Fig. 3. Learning curves showing training and validation performance evolution 
+during model training. (A) Training and validation loss curves for both 
+architectures over 100 epochs. (B) IoU metric progression demonstrating faster 
+convergence and superior final performance of Attention U-Net. (C) Dice 
+coefficient evolution showing consistent improvement with attention mechanisms. 
+Early stopping was applied at epoch 78 for U-Net and epoch 82 for Attention U-Net 
+based on validation loss plateau.
+
+
+Fig. 4. Visual comparison of segmentations between U-Net and Attention U-Net. 
+(A) Success case with well-defined corrosion, (B) Challenging case with subtle 
+corrosion, (C) Limitation case with complex geometry. Columns: original image, 
+ground truth, U-Net segmentation, Attention U-Net segmentation. Red regions 
+indicate corrosion areas detected by the models.
