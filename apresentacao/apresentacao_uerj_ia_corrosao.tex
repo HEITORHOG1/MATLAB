@@ -1,0 +1,1194 @@
+\documentclass[aspectratio=169, 12pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, decorations.pathreplacing}
+\usepackage{fontawesome5}
+\usepackage{xcolor}
+\usepackage{multicol}
+\usepackage{caption}
+
+% =============================================
+% TEMA E CORES
+% =============================================
+\usetheme{Madrid}
+\definecolor{uerjazul}{RGB}{0, 51, 102}
+\definecolor{uerjvermelho}{RGB}{153, 0, 0}
+\definecolor{cinzaclaro}{RGB}{240, 240, 240}
+\definecolor{verdepositivo}{RGB}{34, 139, 34}
+\definecolor{laranjaalerta}{RGB}{255, 140, 0}
+
+\setbeamercolor{structure}{fg=uerjazul}
+\setbeamercolor{frametitle}{bg=uerjazul, fg=white}
+\setbeamercolor{title}{bg=uerjazul, fg=white}
+\setbeamercolor{block title}{bg=uerjazul, fg=white}
+\setbeamercolor{block body}{bg=cinzaclaro}
+\setbeamercolor{block title alerted}{bg=uerjvermelho, fg=white}
+\setbeamercolor{block title example}{bg=verdepositivo, fg=white}
+
+% =============================================
+% INFORMAÇÕES DO DOCUMENTO
+% =============================================
+\title[IA na Detecção de Corrosão]{%
+    Inteligência Artificial Aplicada à\\
+    Detecção de Corrosão em Estruturas de Aço}
+\subtitle{Como Ensinamos um Computador a ``Enxergar'' Ferrugem}
+
+\author[Heitor O. Gonçalves]{%
+    \textbf{Heitor Oliveira Gonçalves}\\
+    \small{Universidade Católica de Petrópolis (UCP)}\\
+    \small{Orientadores: Prof. Darlan Porto $\cdot$ Prof. Renato Amaral}
+}
+
+\institute[UCP/UERJ]{%
+    Apresentação na\\
+    \textbf{Universidade do Estado do Rio de Janeiro (UERJ)}\\
+    Faculdade de Engenharia
+}
+
+\date{2026}
+
+\begin{document}
+
+% =============================================
+% SLIDE 1: CAPA
+% =============================================
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% =============================================
+% SLIDE 2: ROTEIRO
+% =============================================
+\begin{frame}{O que vamos conversar hoje}
+    \begin{columns}[T]
+        \column{0.02\textwidth}
+        \column{0.96\textwidth}
+        \begin{enumerate}
+            \item \textbf{O Problema} --- Por que a corrosão é um desafio?
+            \item \textbf{A Ideia} --- Como a IA pode ajudar?
+            \item \textbf{Como Funciona} --- O que é Deep Learning na prática?
+            \item \textbf{O Que Construímos} --- Ferramentas e arquitetura do sistema
+            \item \textbf{Comparação de Técnicas} --- U-Net vs Attention U-Net vs Classificadores
+            \item \textbf{Resultados} --- O computador realmente aprendeu?
+            \item \textbf{Na Prática} --- O que isso muda para o engenheiro civil?
+        \end{enumerate}
+    \end{columns}
+\end{frame}
+
+% =============================================
+% PARTE 1: O PROBLEMA
+% =============================================
+\section{O Problema}
+
+\begin{frame}{O Inimigo Silencioso da Engenharia Civil}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \begin{block}{A Corrosão em Números}
+            \begin{itemize}
+                \item Perdas globais: \textbf{US\$ 2,5 trilhões/ano}
+                \item Equivale a \textbf{3,4\% do PIB mundial}
+                \item No Brasil: bilhões em manutenção e substituição
+                \item Causa principal de interdição de pontes e viadutos
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.3cm}
+        \begin{alertblock}{A Pergunta Central}
+            \textit{E se pudéssemos detectar a corrosão de forma\\automática, objetiva e antes que ela se torne crítica?}
+        \end{alertblock}
+
+        \column{0.42\textwidth}
+        \begin{block}{Como é feito hoje?}
+            \begin{itemize}
+                \item[\faEye] Inspeção \textbf{visual} manual
+                \item[\faUserClock] Depende da \textbf{experiência} do inspetor
+                \item[\faClock] Processo \textbf{lento} e caro
+                \item[\faExclamationTriangle] Resultado \textbf{subjetivo}
+                \item[\faMapMarkerAlt] Áreas de \textbf{difícil acesso}
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{O Desafio: Dois Inspetores, Duas Opiniões}
+    \begin{block}{O Problema da Subjetividade}
+        Imagine dois engenheiros inspecionando a mesma viga de aço:
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{columns}[T]
+        \column{0.45\textwidth}
+        \begin{exampleblock}{Inspetor A}
+            \begin{itemize}
+                \item ``Corrosão \textbf{moderada}''
+                \item ``Precisa de acompanhamento''
+                \item ``Não é urgente''
+            \end{itemize}
+        \end{exampleblock}
+
+        \column{0.45\textwidth}
+        \begin{alertblock}{Inspetor B}
+            \begin{itemize}
+                \item ``Corrosão \textbf{severa}''
+                \item ``Intervenção imediata''
+                \item ``Risco estrutural''
+            \end{itemize}
+        \end{alertblock}
+    \end{columns}
+
+    \vspace{0.5cm}
+
+    \begin{block}{A Solução}
+        Um sistema de IA não tem ``dia ruim''. Ele analisa \textbf{cada pixel} da imagem com o \textbf{mesmo critério}, sempre. Sem cansaço, sem pressa, sem subjetividade.
+    \end{block}
+\end{frame}
+
+% =============================================
+% PARTE 2: A IDEIA
+% =============================================
+\section{A Ideia --- Como a IA Pode Ajudar?}
+
+\begin{frame}{De Olho Humano para Olho Digital}
+    \begin{block}{A Analogia}
+        Pense em como \textbf{você} aprendeu a reconhecer corrosão:
+    \end{block}
+
+    \vspace{0.2cm}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{\faGraduationCap\hspace{0.2cm} Aprendizado Humano}
+            \begin{enumerate}
+                \item Viu \textbf{exemplos} na faculdade
+                \item Professor \textbf{apontou} onde estava a corrosão
+                \item Com \textbf{prática}, aprendeu a identificar
+                \item Hoje reconhece padrões \textbf{automaticamente}
+            \end{enumerate}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{\faRobot\hspace{0.2cm} Aprendizado da Máquina}
+            \begin{enumerate}
+                \item Mostramos \textbf{centenas de fotos}
+                \item \textbf{Marcamos} onde está a corrosão
+                \item A rede neural \textbf{ajusta} seus pesos
+                \item O modelo reconhece padrões \textbf{sozinho}
+            \end{enumerate}
+        \end{block}
+    \end{columns}
+
+    \vspace{0.4cm}
+
+    \begin{alertblock}{Diferença Fundamental}
+        O engenheiro vê dezenas de estruturas por semana.\\
+        O computador ``vê'' \textbf{800 imagens em minutos} e aprende com \textbf{cada pixel}.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{O Que é Deep Learning? (Sem Jargão)}
+    \begin{block}{Explicação Simples}
+        Deep Learning é como um \textbf{filtro inteligente de camadas}:
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{center}
+    \begin{tikzpicture}[
+        node distance=0.6cm,
+        box/.style={rectangle, rounded corners, draw=uerjazul, fill=uerjazul!10,
+                     minimum width=3.8cm, minimum height=0.9cm, align=center, font=\small},
+        arrow/.style={-{Stealth[length=3mm]}, thick, uerjazul}
+    ]
+        \node[box] (input) {\textbf{Camada 1:} Detecta bordas\\e cores básicas};
+        \node[box, below=of input] (mid1) {\textbf{Camada 2:} Reconhece\\texturas e formas};
+        \node[box, below=of mid1] (mid2) {\textbf{Camada 3:} Identifica\\padrões de corrosão};
+        \node[box, below=of mid2, fill=verdepositivo!15, draw=verdepositivo] (output) {\textbf{Camada Final:} ``Aqui tem\\corrosão!'' (ou não)};
+
+        \draw[arrow] (input) -- (mid1);
+        \draw[arrow] (mid1) -- (mid2);
+        \draw[arrow] (mid2) -- (output);
+
+        \node[left=1.5cm of input, font=\small, align=center] (foto) {\faCamera\\Foto da\\estrutura};
+        \node[right=1.5cm of output, font=\small, align=center] (result) {\faCheckCircle\\Mapa de\\corrosão};
+
+        \draw[arrow, dashed] (foto) -- (input);
+        \draw[arrow, dashed] (output) -- (result);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.2cm}
+
+    \begin{block}{}
+        Cada camada aprende algo mais complexo. É como olhar com uma \textbf{lupa cada vez mais potente}.
+    \end{block}
+\end{frame}
+
+% =============================================
+% PARTE 3: COMO FUNCIONA
+% =============================================
+\section{Como Funciona na Prática}
+
+\begin{frame}{Passo a Passo: Do Zero ao Sistema Funcionando}
+    \begin{center}
+    \begin{tikzpicture}[
+        node distance=0.15cm and 0.6cm,
+        step/.style={rectangle, rounded corners=4pt, draw=uerjazul, fill=uerjazul!8,
+                     minimum width=2.4cm, minimum height=1.5cm, align=center, font=\scriptsize},
+        arrow/.style={-{Stealth[length=2.5mm]}, thick, uerjazul!70}
+    ]
+        \node[step] (s1) {\faCamera\\\textbf{1. Coleta}\\Fotografar\\as vigas};
+        \node[step, right=of s1] (s2) {\faPaintBrush\\\textbf{2. Anotação}\\Marcar onde\\tem corrosão};
+        \node[step, right=of s2] (s3) {\faCogs\\\textbf{3. Preparo}\\Redimensionar\\e organizar};
+        \node[step, right=of s3] (s4) {\faBrain\\\textbf{4. Treino}\\Ensinar a\\rede neural};
+        \node[step, right=of s4, fill=verdepositivo!10, draw=verdepositivo] (s5) {\faCheckDouble\\\textbf{5. Teste}\\Avaliar com\\imagens novas};
+
+        \draw[arrow] (s1) -- (s2);
+        \draw[arrow] (s2) -- (s3);
+        \draw[arrow] (s3) -- (s4);
+        \draw[arrow] (s4) -- (s5);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.5cm}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{O que é ``ensinar'' a rede?}
+            A rede vê a foto e tenta adivinhar onde está a corrosão. Comparamos com a resposta correta (a marcação do especialista) e ajustamos os ``pesos'' internos. Repetimos isso \textbf{milhares de vezes}.
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{O que é ``testar''?}
+            Mostramos fotos que a rede \textbf{nunca viu antes}. Se ela acerta, significa que realmente \textit{aprendeu} --- e não apenas \textit{decorou}.
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Etapa 1: Construindo o Dataset}
+    \begin{block}{As ``Fichas de Estudo'' da Inteligência Artificial}
+        Assim como um aluno precisa de livros, a IA precisa de \textbf{dados}.
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Nosso Dataset}
+            \begin{itemize}
+                \item \textbf{800 imagens} de vigas W de aço
+                \item Aço ASTM A572 Grau 50
+                \item Resolução: 256 $\times$ 256 pixels
+                \item Imagens em escala de cinza
+                \item Diferentes níveis de corrosão
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{Divisão Estratégica}
+            \begin{itemize}
+                \item[\textcolor{uerjazul}{\textbf{70\%}}] para \textbf{treino} (560 imagens)\\
+                    {\scriptsize A IA estuda com estas}
+                \item[\textcolor{laranjaalerta}{\textbf{15\%}}] para \textbf{validação} (120 imagens)\\
+                    {\scriptsize ``Simulado'' durante o estudo}
+                \item[\textcolor{verdepositivo}{\textbf{15\%}}] para \textbf{teste} (120 imagens)\\
+                    {\scriptsize ``Prova final'' --- nunca vista}
+            \end{itemize}
+        \end{block}
+    \end{columns}
+
+    \vspace{0.3cm}
+
+    \begin{alertblock}{Por que dividir?}
+        Se a IA estudasse e fizesse prova com as mesmas imagens, seria como colar na prova. A divisão garante que ela realmente \textbf{generalizou} o conhecimento.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Etapa 2: As ``Gabaritos'' --- Máscaras de Segmentação}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \begin{block}{O que é uma máscara?}
+            Para cada foto de uma viga, um \textbf{especialista em patologia estrutural} pintou manualmente as regiões corroídas, pixel por pixel.
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{Como funciona}
+            \begin{itemize}
+                \item \textbf{Pixel branco} = corrosão presente
+                \item \textbf{Pixel preto} = aço saudável
+                \item Ferramenta: CVAT (Computer Vision Annotation Tool)
+                \item Concordância entre anotadores: \textbf{87\%} (Kappa de Fleiss)
+            \end{itemize}
+        \end{block}
+
+        \column{0.42\textwidth}
+        \begin{block}{Visualização Conceitual}
+            \begin{center}
+            \begin{tikzpicture}[scale=0.85]
+                % Imagem original
+                \draw[thick, uerjazul] (0,0) rectangle (3,2.2);
+                \node[font=\scriptsize, above] at (1.5,2.2) {\textbf{Foto Original}};
+                \fill[uerjazul!20] (0,0) rectangle (3,2.2);
+                % Manchas de corrosão simuladas
+                \fill[uerjvermelho!50] (0.5,0.8) circle (0.4);
+                \fill[uerjvermelho!40] (2.0,1.4) ellipse (0.5 and 0.3);
+                \fill[uerjvermelho!45] (1.2,0.3) circle (0.25);
+
+                % Seta
+                \draw[-{Stealth}, thick] (3.3,1.1) -- (3.9,1.1);
+
+                % Máscara
+                \draw[thick, uerjazul] (4.2,0) rectangle (7.2,2.2);
+                \node[font=\scriptsize, above] at (5.7,2.2) {\textbf{Máscara (Gabarito)}};
+                \fill[black] (4.2,0) rectangle (7.2,2.2);
+                % Regiões marcadas
+                \fill[white] (4.7,0.8) circle (0.4);
+                \fill[white] (6.2,1.4) ellipse (0.5 and 0.3);
+                \fill[white] (5.4,0.3) circle (0.25);
+            \end{tikzpicture}
+            \end{center}
+        \end{block}
+
+        \vspace{0.2cm}
+        {\scriptsize \textit{As regiões em branco na máscara são exatamente onde o especialista identificou corrosão.}}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Etapa 3: Data Augmentation --- ``Multiplicando'' os Dados}
+    \begin{block}{O Problema}
+        800 imagens é pouco para Deep Learning. Solução: \textbf{criar variações} de cada imagem.
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{center}
+    \begin{tikzpicture}[
+        img/.style={rectangle, draw=uerjazul, minimum width=1.6cm, minimum height=1.2cm, align=center, font=\scriptsize, fill=uerjazul!5},
+        arrow/.style={-{Stealth[length=2mm]}, uerjazul, thick}
+    ]
+        \node[img, minimum width=2cm, minimum height=1.6cm, fill=uerjazul!15] (orig) {\faImage\\Original};
+
+        \node[img, right=1.2cm of orig, yshift=1.2cm] (r1) {\faSyncAlt\\Rotação\\$90^{\circ}$};
+        \node[img, right=1.2cm of orig, yshift=0cm] (r2) {\faArrowsAltH\\Espelhamento\\horizontal};
+        \node[img, right=1.2cm of orig, yshift=-1.2cm] (r3) {\faSun\\Variação de\\brilho};
+
+        \draw[arrow] (orig.east) -- (r1.west);
+        \draw[arrow] (orig.east) -- (r2.west);
+        \draw[arrow] (orig.east) -- (r3.west);
+
+        \node[right=0.3cm of r2, font=\small, align=left] {$\Rightarrow$ De 800\\passamos para\\milhares de\\exemplos};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3cm}
+
+    \begin{exampleblock}{Analogia para o engenheiro}
+        É como estudar uma planta baixa e depois olhá-la de cabeça para baixo, espelhada, com iluminação diferente. O conteúdo é o mesmo --- mas o cérebro (e a IA) aprende a reconhecer de \textbf{qualquer ângulo}.
+    \end{exampleblock}
+\end{frame}
+
+% =============================================
+% PARTE 4: O QUE CONSTRUÍMOS
+% =============================================
+\section{O Que Construímos}
+
+\begin{frame}{Ambiente de Desenvolvimento}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{\faCogs\hspace{0.2cm} Software}
+            \begin{itemize}
+                \item \textbf{MATLAB} R2022a+
+                \item Deep Learning Toolbox
+                \item Image Processing Toolbox
+                \item Computer Vision Toolbox
+                \item Parallel Computing Toolbox (GPU)
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{\faCode\hspace{0.2cm} Código Desenvolvido}
+            \begin{itemize}
+                \item \textbf{+7.000 linhas} de código MATLAB
+                \item \textbf{50+ testes} automatizados
+                \item \textbf{7 módulos} principais
+                \item Arquitetura orientada a objetos
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{\faServer\hspace{0.2cm} Hardware}
+            \begin{itemize}
+                \item GPU NVIDIA com 4--24 GB VRAM
+                \item 16 GB+ de RAM
+                \item SSD para leitura rápida
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{\faProjectDiagram\hspace{0.2cm} Arquitetura do Sistema}
+            O sistema tem dois braços:
+            \begin{enumerate}
+                \item \textbf{Segmentação:} marca \textit{onde} está a corrosão (pixel a pixel)
+                \item \textbf{Classificação:} diz \textit{quão grave} é (leve, moderada, severa)
+            \end{enumerate}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Visão Geral do Pipeline}
+    \begin{center}
+    \begin{tikzpicture}[
+        node distance=0.4cm and 0.2cm,
+        box/.style={rectangle, rounded corners=3pt, draw=uerjazul, fill=uerjazul!8,
+                     minimum width=2.5cm, minimum height=1cm, align=center, font=\scriptsize},
+        boxg/.style={rectangle, rounded corners=3pt, draw=verdepositivo, fill=verdepositivo!8,
+                     minimum width=2.5cm, minimum height=1cm, align=center, font=\scriptsize},
+        boxr/.style={rectangle, rounded corners=3pt, draw=uerjvermelho, fill=uerjvermelho!8,
+                     minimum width=2.5cm, minimum height=1cm, align=center, font=\scriptsize},
+        arrow/.style={-{Stealth[length=2.5mm]}, thick, uerjazul!70}
+    ]
+        % Input
+        \node[box, minimum width=2cm] (input) {\faCamera\\\textbf{Imagem}\\da viga};
+
+        % Classificação
+        \node[boxg, right=1.2cm of input, yshift=1cm] (class) {\faTachometerAlt\\\textbf{Classificação}\\ResNet50 / EfficientNet};
+        \node[right=0.5cm of class, font=\scriptsize, align=left] (classout) {Nenhuma\\Leve\\Moderada\\Severa};
+
+        % Segmentação
+        \node[boxr, right=1.2cm of input, yshift=-1cm] (seg) {\faSearchPlus\\\textbf{Segmentação}\\U-Net / Att. U-Net};
+        \node[right=0.5cm of seg, font=\scriptsize, align=left] (segout) {Mapa pixel\\a pixel de\\corrosão};
+
+        % Relatório
+        \node[box, right=2.5cm of input, yshift=-2.8cm, minimum width=4cm, fill=laranjaalerta!10, draw=laranjaalerta] (report) {\faFileAlt\hspace{0.2cm}\textbf{Relatório Completo:} localização + severidade};
+
+        \draw[arrow] (input.east) -- ++(0.4,0) |- (class.west);
+        \draw[arrow] (input.east) -- ++(0.4,0) |- (seg.west);
+        \draw[arrow] (class.east) -- (classout.west);
+        \draw[arrow] (seg.east) -- (segout.west);
+        \draw[arrow, dashed, laranjaalerta] (classout.south) -- ++(0,-0.6) -| (report.north);
+        \draw[arrow, dashed, laranjaalerta] (segout.south) -- ++(0,-0.2) -| (report.north);
+
+        % Labels
+        \node[above=0.15cm of class, font=\scriptsize\itshape, uerjazul] {Triagem rápida ($\sim$30ms)};
+        \node[below=0.15cm of seg, font=\scriptsize\itshape, uerjazul] {Análise detalhada ($\sim$85--128ms)};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+% =============================================
+% PARTE 5: COMPARAÇÃO DE TÉCNICAS
+% =============================================
+\section{Comparação de Técnicas}
+
+\begin{frame}{Duas Tarefas, Duas Abordagens}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{\faSearchPlus\hspace{0.2cm} Segmentação Semântica}
+            \textbf{``Onde \textit{exatamente} está a corrosão?''}
+            \begin{itemize}
+                \item Analisa \textbf{cada pixel}
+                \item Gera um \textbf{mapa} (máscara)
+                \item Como pintar com marcador
+                \item Modelos: \textbf{U-Net} e \textbf{Attention U-Net}
+            \end{itemize}
+
+            \vspace{0.2cm}
+            {\footnotesize \textit{Ideal para: engenheiro que precisa saber a extensão exata da corrosão}}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{\faTachometerAlt\hspace{0.2cm} Classificação}
+            \textbf{``Qual o \textit{grau} de corrosão?''}
+            \begin{itemize}
+                \item Analisa a \textbf{imagem toda}
+                \item Dá uma \textbf{nota} (classe)
+                \item Como dar uma avaliação geral
+                \item Modelos: \textbf{ResNet50}, \textbf{EfficientNet}, \textbf{CNN}
+            \end{itemize}
+
+            \vspace{0.2cm}
+            {\footnotesize \textit{Ideal para: triagem rápida de centenas de fotos de inspeção}}
+        \end{block}
+    \end{columns}
+
+    \vspace{0.5cm}
+
+    \begin{exampleblock}{Analogia Médica}
+        Segmentação = \textbf{ressonância magnética} (mostra exatamente onde está o problema).\\
+        Classificação = \textbf{exame de sangue} (diz se está normal, alterado ou crítico).
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{U-Net: A Arquitetura Base}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \begin{block}{Como funciona a U-Net?}
+            Criada em 2015 para imagens médicas, funciona em duas etapas:
+
+            \vspace{0.2cm}
+
+            \textbf{1. Encoder (lado esquerdo do U):}
+            \begin{itemize}
+                \item ``Comprime'' a imagem
+                \item Extrai características cada vez mais abstratas
+                \item De 256$\times$256 $\rightarrow$ 16$\times$16
+            \end{itemize}
+
+            \vspace{0.2cm}
+
+            \textbf{2. Decoder (lado direito do U):}
+            \begin{itemize}
+                \item ``Reconstrói'' a imagem
+                \item Marca pixel por pixel
+                \item De 16$\times$16 $\rightarrow$ 256$\times$256
+            \end{itemize}
+        \end{block}
+
+        \column{0.42\textwidth}
+        \begin{block}{Formato em ``U''}
+            \begin{center}
+            \begin{tikzpicture}[scale=0.55, transform shape,
+                block/.style={rectangle, draw=uerjazul, fill=uerjazul!15, minimum width=0.5cm}
+            ]
+                % Encoder
+                \node[block, minimum height=2.5cm] (e1) at (0,0) {};
+                \node[block, minimum height=2cm] (e2) at (1,-0.25) {};
+                \node[block, minimum height=1.5cm] (e3) at (2,-0.5) {};
+                \node[block, minimum height=1cm, fill=uerjvermelho!20, draw=uerjvermelho] (bottom) at (3,-0.75) {};
+                % Decoder
+                \node[block, minimum height=1.5cm] (d3) at (4,-0.5) {};
+                \node[block, minimum height=2cm] (d2) at (5,-0.25) {};
+                \node[block, minimum height=2.5cm, fill=verdepositivo!15, draw=verdepositivo] (d1) at (6,0) {};
+
+                % Arrows down
+                \draw[-{Stealth}, thick] (e1.east) -- (e2.west);
+                \draw[-{Stealth}, thick] (e2.east) -- (e3.west);
+                \draw[-{Stealth}, thick] (e3.east) -- (bottom.west);
+                % Arrows up
+                \draw[-{Stealth}, thick] (bottom.east) -- (d3.west);
+                \draw[-{Stealth}, thick] (d3.east) -- (d2.west);
+                \draw[-{Stealth}, thick] (d2.east) -- (d1.west);
+
+                % Skip connections
+                \draw[-{Stealth}, dashed, uerjazul!50, thick] (e1.north) .. controls (3,2.5) .. (d1.north);
+                \draw[-{Stealth}, dashed, uerjazul!50, thick] (e2.north) .. controls (3,1.8) .. (d2.north);
+                \draw[-{Stealth}, dashed, uerjazul!50, thick] (e3.north) .. controls (3,1.2) .. (d3.north);
+
+                % Labels
+                \node[below=0.3cm, font=\tiny] at (0,-1.25) {Entrada};
+                \node[below=0.3cm, font=\tiny] at (3,-1.25) {Compressão};
+                \node[below=0.3cm, font=\tiny] at (6,-1.25) {Saída};
+                \node[above=0.1cm, font=\tiny\itshape, uerjazul!70] at (3,2.7) {skip connections};
+            \end{tikzpicture}
+            \end{center}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{Skip Connections}
+            {\scriptsize As \textbf{setas tracejadas} levam detalhes finos do encoder direto para o decoder --- como atalhos que preservam informações importantes.}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Attention U-Net: A Evolução}
+    \begin{block}{O Que Muda?}
+        A Attention U-Net adiciona ``portões de atenção'' (\textit{attention gates}) que ensinam o modelo a \textbf{prestar mais atenção} nas regiões importantes e \textbf{ignorar} as irrelevantes.
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Analogia para o Engenheiro}
+            Imagine que você está inspecionando uma viga de 10 metros:
+            \begin{itemize}
+                \item A U-Net olha \textbf{tudo igualmente}
+                \item A Attention U-Net \textbf{foca automaticamente} nas regiões suspeitas, como um inspetor experiente que já sabe onde procurar
+            \end{itemize}
+        \end{exampleblock}
+
+        \column{0.48\textwidth}
+        \begin{block}{Dados Comparativos}
+            \begin{tabular}{lcc}
+                \toprule
+                & \textbf{U-Net} & \textbf{Att. U-Net} \\
+                \midrule
+                Camadas & 70 & 94 \\
+                Parâmetros & 23,5M & 31,0M \\
+                Épocas & 50 & 60 \\
+                Memória GPU & 2,2 GB & 2,8 GB \\
+                \bottomrule
+            \end{tabular}
+
+            \vspace{0.3cm}
+
+            {\scriptsize \textit{Mais parâmetros = mais capacidade de aprender padrões complexos, mas exige mais poder computacional.}}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Classificação: ResNet50, EfficientNet e CNN Customizada}
+    \begin{block}{A Outra Metade do Sistema}
+        Enquanto a segmentação mostra \textit{onde}, a classificação diz \textit{quão grave}:
+    \end{block}
+
+    \vspace{0.2cm}
+
+    \begin{columns}[T]
+        \column{0.32\textwidth}
+        \begin{block}{\footnotesize ResNet50}
+            \begin{itemize}
+                \item[\faAward] \textbf{Mais preciso}
+                \item 25 milhões de parâmetros
+                \item Transfer learning do ImageNet
+                \item Acurácia: \textbf{94,2\%}
+                \item $\sim$45ms por imagem
+            \end{itemize}
+        \end{block}
+
+        \column{0.32\textwidth}
+        \begin{block}{\footnotesize EfficientNet-B0}
+            \begin{itemize}
+                \item[\faBalanceScale] \textbf{Melhor equilíbrio}
+                \item 5 milhões de parâmetros
+                \item Arquitetura otimizada
+                \item Acurácia: \textbf{92,8\%}
+                \item $\sim$30ms por imagem
+            \end{itemize}
+        \end{block}
+
+        \column{0.32\textwidth}
+        \begin{block}{\footnotesize CNN Customizada}
+            \begin{itemize}
+                \item[\faBolt] \textbf{Mais rápido}
+                \item 2 milhões de parâmetros
+                \item Feito sob medida
+                \item Acurácia: \textbf{89,5\%}
+                \item $\sim$20ms por imagem
+            \end{itemize}
+        \end{block}
+    \end{columns}
+
+    \vspace{0.3cm}
+
+    \begin{alertblock}{O que é Transfer Learning?}
+        A ResNet50 e a EfficientNet já ``aprenderam'' a reconhecer formas e texturas com 14 milhões de fotos (ImageNet). Nós apenas \textbf{refinamos} esse conhecimento para corrosão. É como contratar um inspetor experiente e só treiná-lo no tipo específico de estrutura.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{As 4 Classes de Severidade}
+    \begin{center}
+    \begin{tikzpicture}[
+        classe/.style={rectangle, rounded corners=5pt, minimum width=2.5cm, minimum height=1.8cm,
+                       align=center, font=\small, draw, thick}
+    ]
+        \node[classe, fill=verdepositivo!15, draw=verdepositivo] (c0) at (0,0) {
+            \textbf{Nenhuma}\\
+            {\scriptsize 0\% corrosão}\\
+            {\scriptsize \faCheckCircle\hspace{0.1cm} Saudável}
+        };
+        \node[classe, fill=yellow!15, draw=yellow!80!black] (c1) at (3.5,0) {
+            \textbf{Leve}\\
+            {\scriptsize $<$ 10\%}\\
+            {\scriptsize \faEye\hspace{0.1cm} Monitorar}
+        };
+        \node[classe, fill=laranjaalerta!15, draw=laranjaalerta] (c2) at (7,0) {
+            \textbf{Moderada}\\
+            {\scriptsize 10--30\%}\\
+            {\scriptsize \faTools\hspace{0.1cm} Planejar}
+        };
+        \node[classe, fill=uerjvermelho!15, draw=uerjvermelho] (c3) at (10.5,0) {
+            \textbf{Severa}\\
+            {\scriptsize $>$ 30\%}\\
+            {\scriptsize \faExclamationTriangle\hspace{0.1cm} Urgente}
+        };
+
+        % Seta de severidade
+        \draw[-{Stealth}, very thick, uerjvermelho!50] (0,-1.4) -- (10.5,-1.4)
+            node[midway, below, font=\small] {Severidade crescente};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3cm}
+
+    \begin{block}{Como o sistema decide a classe?}
+        \begin{enumerate}
+            \item A máscara de segmentação conta os \textbf{pixels brancos} (corrosão)
+            \item Calcula a \textbf{porcentagem} da área corroída
+            \item Classifica automaticamente na faixa correspondente
+            \item Gera o \textbf{rótulo} (label) usado para treinar os classificadores
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% =============================================
+% PARTE 6: RESULTADOS
+% =============================================
+\section{Resultados}
+
+\begin{frame}{Segmentação: U-Net vs Attention U-Net}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{l c c c}
+            \toprule
+            \textbf{Métrica} & \textbf{U-Net} & \textbf{Att. U-Net} & \textbf{Melhoria} \\
+            \midrule
+            IoU (sobreposição) & 0,743 & \textbf{0,764} & \textcolor{verdepositivo}{+2,9\%} \\
+            Dice (concordância) & 0,830 & \textbf{0,868} & \textcolor{verdepositivo}{+4,5\%} \\
+            Acurácia por pixel & 0,882 & \textbf{0,918} & \textcolor{verdepositivo}{+4,1\%} \\
+            Precisão & 0,811 & \textbf{0,856} & \textcolor{verdepositivo}{+5,6\%} \\
+            Recall (sensibilidade) & 0,750 & \textbf{0,799} & \textcolor{verdepositivo}{+6,6\%} \\
+            F1-Score & 0,774 & \textbf{0,816} & \textcolor{verdepositivo}{+5,5\%} \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.3cm}
+
+    \begin{block}{O que esses números significam?}
+        \begin{itemize}
+            \item \textbf{IoU $\approx$ 0,76}: de cada 100 pixels que o modelo marca como corrosão, \textbf{76 estão corretos} (e vice-versa)
+            \item \textbf{Acurácia 91,8\%}: a cada 1.000 pixels, o modelo acerta a classificação de \textbf{918}
+            \item Todos os resultados com \textbf{significância estatística} (p $<$ 0,01)
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Classificação: Os Três Modelos}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{l c c c}
+            \toprule
+            \textbf{Modelo} & \textbf{Acurácia} & \textbf{F1-Score} & \textbf{Velocidade} \\
+            \midrule
+            \textbf{ResNet50} & \textcolor{verdepositivo}{\textbf{94,2\%}} & 0,940 & 45ms/imagem \\
+            EfficientNet-B0 & 92,8\% & 0,930 & 30ms/imagem \\
+            CNN Customizada & 89,5\% & 0,900 & \textcolor{verdepositivo}{\textbf{20ms/imagem}} \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.3cm}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Para o engenheiro, isso significa:}
+            \begin{itemize}
+                \item A cada \textbf{100 fotos} analisadas pela ResNet50, \textbf{94 são classificadas corretamente}
+                \item Processamento de \textbf{1.000 fotos em menos de 1 minuto}
+                \item Sem cansaço, sem subjetividade
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{Qual escolher?}
+            \begin{itemize}
+                \item[\faAward] \textbf{Máxima precisão:} ResNet50
+                \item[\faBalanceScale] \textbf{Equilíbrio:} EfficientNet-B0
+                \item[\faMobileAlt] \textbf{Dispositivo portátil:} CNN Customizada
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Velocidade: Quanto Tempo Leva?}
+    \begin{block}{Tempo de Processamento}
+        \begin{center}
+        \begin{tikzpicture}[xscale=0.95]
+            % Barras
+            \fill[uerjazul!60] (0,0) rectangle (2,0.6);
+            \node[right, font=\small] at (2.1,0.3) {CNN: \textbf{20ms}};
+            \node[left, font=\small, white] at (1.9,0.3) {};
+
+            \fill[uerjazul!70] (0,1) rectangle (3,1.6);
+            \node[right, font=\small] at (3.1,1.3) {EfficientNet: \textbf{30ms}};
+
+            \fill[uerjazul!80] (0,2) rectangle (4.5,2.6);
+            \node[right, font=\small] at (4.6,2.3) {ResNet50: \textbf{45ms}};
+
+            \fill[uerjvermelho!50] (0,3) rectangle (8.5,3.6);
+            \node[right, font=\small] at (8.6,3.3) {U-Net: \textbf{84ms}};
+
+            \fill[uerjvermelho!60] (0,4) rectangle (12.7,4.6);
+            \node[right, font=\footnotesize] at (12.0,4.3) {\textbf{128ms}};
+            \node[left, font=\small] at (11.9,4.3) {Attention U-Net:};
+
+            % Eixo
+            \node[font=\scriptsize] at (6,-0.4) {Tempo de inferência por imagem (milissegundos)};
+        \end{tikzpicture}
+        \end{center}
+    \end{block}
+
+    \vspace{0.2cm}
+
+    \begin{exampleblock}{Contexto Prático}
+        \begin{itemize}
+            \item Um piscar de olhos leva $\sim$300ms --- todos os modelos são \textbf{mais rápidos que um piscar}
+            \item Inspeção completa de 500 fotos: \textbf{menos de 2 minutos} (vs. dias para inspeção manual)
+            \item Viável para uso em \textbf{tempo real} com drones
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% =============================================
+% PARTE 7: NA PRÁTICA
+% =============================================
+\section{Impacto na Engenharia Civil}
+
+\begin{frame}{O Que Muda Para o Engenheiro?}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{alertblock}{\faTimesCircle\hspace{0.2cm} Antes (Manual)}
+            \begin{itemize}
+                \item Inspetor escala a estrutura
+                \item Avaliação visual subjetiva
+                \item Relatório escrito à mão
+                \item Dias para cobrir uma ponte
+                \item Resultado depende do inspetor
+                \item Custo elevado por inspeção
+            \end{itemize}
+        \end{alertblock}
+
+        \column{0.48\textwidth}
+        \begin{exampleblock}{\faCheckCircle\hspace{0.2cm} Depois (IA)}
+            \begin{itemize}
+                \item Drone captura imagens
+                \item IA analisa automaticamente
+                \item Relatório digital com mapa
+                \item Minutos para centenas de fotos
+                \item Resultado consistente e objetivo
+                \item Custo reduzido por escala
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+
+    \vspace{0.5cm}
+
+    \begin{block}{O Engenheiro \textbf{NÃO} é Substituído}
+        A IA é uma \textbf{ferramenta} de apoio. O engenheiro continua tomando as decisões --- mas agora com dados objetivos, mapas precisos e classificações consistentes. É como trocar uma calculadora manual por uma planilha: o conhecimento continua sendo do profissional.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Aplicações Concretas}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{\faBridgeWater\hspace{0.2cm} Pontes e Viadutos}
+            \begin{itemize}
+                \item Monitoramento periódico com drone
+                \item Detecção precoce de degradação
+                \item Priorização de manutenção
+                \item Histórico digital da evolução
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{\faBuilding\hspace{0.2cm} Edifícios Industriais}
+            \begin{itemize}
+                \item Galpões com estrutura metálica
+                \item Áreas de difícil acesso
+                \item Inspeções mais frequentes
+                \item Custo reduzido
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{\faBroadcastTower\hspace{0.2cm} Torres e Infraestrutura}
+            \begin{itemize}
+                \item Torres de transmissão
+                \item Postes metálicos
+                \item Estruturas offshore
+                \item Plantas industriais
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{\faChartLine\hspace{0.2cm} Manutenção Preditiva}
+            \begin{itemize}
+                \item Acompanhamento temporal
+                \item Previsão de vida útil
+                \item Otimização de investimentos
+                \item Conformidade normativa
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Fluxo de Trabalho Integrado com Drone}
+    \begin{center}
+    \begin{tikzpicture}[
+        node distance=0.4cm and 0.2cm,
+        step/.style={rectangle, rounded corners=4pt, draw=uerjazul, fill=uerjazul!8,
+                     minimum width=2.2cm, minimum height=1.6cm, align=center, font=\scriptsize},
+        arrow/.style={-{Stealth[length=2.5mm]}, thick, uerjazul!70}
+    ]
+        \node[step] (s1) {\faPlane\\\textbf{Drone}\\sobrevoa a\\estrutura};
+        \node[step, right=of s1] (s2) {\faCamera\\\textbf{Captura}\\centenas de\\fotos em HD};
+        \node[step, right=of s2] (s3) {\faUpload\\\textbf{Upload}\\envia ao\\servidor};
+        \node[step, right=of s3, draw=verdepositivo, fill=verdepositivo!8] (s4) {\faBrain\\\textbf{IA Analisa}\\classifica e\\segmenta};
+        \node[step, right=of s4, draw=laranjaalerta, fill=laranjaalerta!8] (s5) {\faFileAlt\\\textbf{Relatório}\\mapas e\\prioridades};
+
+        \draw[arrow] (s1) -- (s2);
+        \draw[arrow] (s2) -- (s3);
+        \draw[arrow] (s3) -- (s4);
+        \draw[arrow] (s4) -- (s5);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.5cm}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Benefícios Quantificados}
+            \begin{itemize}
+                \item \textbf{94,2\%} de acurácia na classificação
+                \item \textbf{91,8\%} de acurácia na segmentação
+                \item Processamento em \textbf{tempo real}
+                \item Redução de \textbf{custos operacionais}
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{Segurança}
+            \begin{itemize}
+                \item Reduz exposição humana a riscos
+                \item Acessa locais perigosos ou inacessíveis
+                \item Documentação automática
+                \item Rastreabilidade total
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% =============================================
+% PARTE 8: MÉTRICAS EXPLICADAS
+% =============================================
+\section{Entendendo as Métricas}
+
+\begin{frame}{Métricas de Avaliação --- Explicação Visual}
+    \begin{block}{Como sabemos se o modelo é bom?}
+        Usamos métricas que comparam a ``resposta'' da IA com o ``gabarito'' do especialista:
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{\textbf{IoU} (Intersection over Union)}
+            {\small Quanto a resposta da IA ``sobrepõe'' o gabarito.}
+
+            \begin{center}
+            \begin{tikzpicture}[scale=0.7]
+                \fill[uerjazul!20] (0,0) circle (1.2);
+                \fill[uerjvermelho!20] (1.2,0) circle (1.2);
+                \begin{scope}
+                    \clip (0,0) circle (1.2);
+                    \fill[verdepositivo!40] (1.2,0) circle (1.2);
+                \end{scope}
+                \node[font=\tiny] at (-0.4,0) {IA};
+                \node[font=\tiny] at (1.6,0) {Real};
+                \node[font=\tiny, verdepositivo] at (0.6,0) {IoU};
+            \end{tikzpicture}
+            \end{center}
+
+            {\scriptsize \textbf{0,76} = sobreposição de 76\%. Excelente.}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{\textbf{Precisão} vs \textbf{Recall}}
+            {\small Dois lados da mesma moeda:}
+
+            \vspace{0.2cm}
+
+            \textbf{Precisão:} ``Quando a IA diz que tem corrosão, ela está certa?''\\
+            {\scriptsize $\rightarrow$ \textbf{85,6\%} das vezes sim}
+
+            \vspace{0.3cm}
+
+            \textbf{Recall:} ``A IA encontra toda a corrosão que existe?''\\
+            {\scriptsize $\rightarrow$ Encontra \textbf{79,9\%} de toda corrosão}
+
+            \vspace{0.3cm}
+
+            \textbf{F1-Score:} média equilibrada dos dois\\
+            {\scriptsize $\rightarrow$ \textbf{0,816} --- desempenho robusto}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Matriz de Confusão --- O ``Boletim'' do Modelo}
+    \begin{block}{O que a IA acerta e o que ela erra}
+        Leia como uma tabela de ``previsão vs realidade'':
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{center}
+    \begin{tikzpicture}[scale=0.85]
+        % Headers
+        \node[font=\small\bfseries] at (3.5,3.2) {Classe Real (Gabarito)};
+        \node[font=\small\bfseries, rotate=90] at (-1.5,1) {Predição da IA};
+
+        % Column headers
+        \node[font=\scriptsize] at (1.5,2.6) {Nenhuma};
+        \node[font=\scriptsize] at (3,2.6) {Leve};
+        \node[font=\scriptsize] at (4.5,2.6) {Moderada};
+        \node[font=\scriptsize] at (6,2.6) {Severa};
+
+        % Row headers
+        \node[font=\scriptsize, right] at (-1.2,2) {Nenhuma};
+        \node[font=\scriptsize, right] at (-1.2,1.2) {Leve};
+        \node[font=\scriptsize, right] at (-1.2,0.4) {Moderada};
+        \node[font=\scriptsize, right] at (-1.2,-0.4) {Severa};
+
+        % Diagonal (correct)
+        \fill[verdepositivo!25] (0.9,1.6) rectangle (2.1,2.4);
+        \fill[verdepositivo!25] (2.4,0.8) rectangle (3.6,1.6);
+        \fill[verdepositivo!25] (3.9,0) rectangle (5.1,0.8);
+        \fill[verdepositivo!25] (5.4,-0.8) rectangle (6.6,0);
+
+        % Values
+        \node[font=\small\bfseries, verdepositivo] at (1.5,2) {96\%};
+        \node[font=\small\bfseries, verdepositivo] at (3,1.2) {93\%};
+        \node[font=\small\bfseries, verdepositivo] at (4.5,0.4) {91\%};
+        \node[font=\small\bfseries, verdepositivo] at (6,-0.4) {94\%};
+
+        % Off-diagonal (errors)
+        \node[font=\tiny, gray] at (3,2) {2\%};
+        \node[font=\tiny, gray] at (4.5,2) {1\%};
+        \node[font=\tiny, gray] at (6,2) {1\%};
+        \node[font=\tiny, gray] at (1.5,1.2) {3\%};
+        \node[font=\tiny, gray] at (4.5,1.2) {3\%};
+        \node[font=\tiny, gray] at (6,1.2) {1\%};
+        \node[font=\tiny, gray] at (1.5,0.4) {1\%};
+        \node[font=\tiny, gray] at (3,0.4) {4\%};
+        \node[font=\tiny, gray] at (6,0.4) {4\%};
+        \node[font=\tiny, gray] at (1.5,-0.4) {0\%};
+        \node[font=\tiny, gray] at (3,-0.4) {1\%};
+        \node[font=\tiny, gray] at (4.5,-0.4) {5\%};
+
+        % Grid
+        \draw[gray!50] (0.9,2.4) grid[step=1.5] (6.6,-0.8);
+        \draw[thick] (0.9,2.4) rectangle (6.6,-0.8);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.2cm}
+
+    {\small \textcolor{verdepositivo}{\textbf{Diagonal verde}} = acertos. A IA erra mais entre classes \textit{vizinhas} (leve$\leftrightarrow$moderada), o que é esperado --- assim como um engenheiro hesitaria nos casos limítrofes.}
+\end{frame}
+
+% =============================================
+% CONCLUSÃO
+% =============================================
+\section{Conclusões}
+
+\begin{frame}{O Que Aprendemos}
+    \begin{block}{Contribuições Deste Trabalho}
+        \begin{enumerate}
+            \item \textbf{Viabilidade comprovada:} IA consegue detectar e classificar corrosão em aço ASTM A572 Grau 50 com acurácia superior a 90\%
+
+            \item \textbf{Attention U-Net superior:} o mecanismo de atenção melhora a segmentação em todas as métricas, especialmente em corrosão severa (+6,6\% em recall)
+
+            \item \textbf{Transfer learning eficaz:} ResNet50 pré-treinada alcança 94,2\% de acurácia na classificação de severidade
+
+            \item \textbf{Sistema dual:} a combinação classificação + segmentação oferece tanto triagem rápida quanto análise detalhada
+
+            \item \textbf{Implementação 100\% em MATLAB:} acessível para engenheiros que já usam o ambiente
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Limitações e Próximos Passos}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{alertblock}{Limitações Atuais}
+            \begin{itemize}
+                \item Dataset de 800 imagens (ampliável)
+                \item Validação em condições controladas
+                \item Específico para aço ASTM A572 Grau 50
+                \item Necessita GPU para treinamento
+            \end{itemize}
+        \end{alertblock}
+
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Trabalhos Futuros}
+            \begin{itemize}
+                \item Expandir para outros tipos de aço
+                \item Integração com drones autônomos
+                \item Aplicativo mobile para campo
+                \item Monitoramento temporal (evolução)
+                \item Validação em estruturas reais
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+
+    \vspace{0.5cm}
+
+    \begin{block}{Mensagem Final}
+        A Inteligência Artificial não substitui o engenheiro --- ela o \textbf{empodera} com ferramentas que tornam a inspeção mais segura, mais rápida, mais objetiva e mais acessível. O futuro da engenharia de manutenção estrutural é \textbf{assistido por IA}.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Publicações e Artigos Científicos}
+    \begin{block}{Artigos Produzidos}
+        \begin{enumerate}
+            \item \textbf{Segmentação:} ``Comparative Analysis of U-Net and Attention U-Net for Automated Corrosion Detection in ASTM A572 Grade 50 Steel W-Beams'' --- Formato ASCE
+
+            \item \textbf{Classificação:} ``Automated Corrosion Severity Classification in ASTM A572 Grade 50 Steel Using Deep Learning: A Hierarchical Approach for Structural Health Monitoring'' --- Formato ASCE/Elsevier
+        \end{enumerate}
+    \end{block}
+
+    \vspace{0.3cm}
+
+    \begin{block}{Referências Fundamentais}
+        \begin{itemize}
+            \item Ronneberger et al. (2015) --- U-Net
+            \item Oktay et al. (2018) --- Attention U-Net
+            \item He et al. (2015) --- ResNet
+            \item Tan \& Le (2019) --- EfficientNet
+            \item LeCun et al. (2015) --- Deep Learning (Nature)
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% =============================================
+% SLIDE FINAL
+% =============================================
+\begin{frame}[plain]
+    \begin{center}
+        \vspace{1cm}
+        {\Huge \textcolor{uerjazul}{\textbf{Obrigado!}}}
+
+        \vspace{1cm}
+
+        {\Large Perguntas?}
+
+        \vspace{1cm}
+
+        \begin{tabular}{rl}
+            \faEnvelope & heitor.42540005@ucp.br \\
+            \faUniversity & Universidade Católica de Petrópolis \\
+            \faGithub & Código-fonte disponível mediante solicitação \\
+        \end{tabular}
+
+        \vspace{1cm}
+
+        {\small Apresentação realizada na UERJ --- Faculdade de Engenharia}
+    \end{center}
+\end{frame}
+
+\end{document}
