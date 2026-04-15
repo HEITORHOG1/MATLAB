@@ -116,6 +116,10 @@ slprj/
 .vscode/
 *.code-workspace
 
+# Claude Code worktrees and large manuscript
+.claude/worktrees/
+submission_package/Manuscript.tex
+
 # JetBrains
 .idea/
 *.iml

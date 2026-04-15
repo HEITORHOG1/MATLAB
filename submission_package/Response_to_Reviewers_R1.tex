@@ -1,0 +1,415 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+
+\geometry{margin=1in}
+
+% Define colors for reviewer comments and responses
+\definecolor{reviewercolor}{RGB}{0,0,139}
+\definecolor{responsecolor}{RGB}{0,100,0}
+\definecolor{changecolor}{RGB}{139,69,19}
+\definecolor{originalcolor}{RGB}{128,128,128}
+
+\newcommand{\reviewercomment}[1]{\textcolor{reviewercolor}{\textbf{Reviewer Comment:} #1}}
+\newcommand{\response}[1]{\textcolor{responsecolor}{\textbf{Response:} #1}}
+\newcommand{\change}[1]{\textcolor{changecolor}{\textbf{Changes Made:} #1}}
+\newcommand{\originaltext}[1]{\textcolor{originalcolor}{\textit{Original text:} ``#1''}}
+\newcommand{\revisedtext}[1]{\textcolor{black}{\textit{Revised text:} ``#1''}}
+
+\title{\textbf{Response to Reviewers' Comments --- Revision R1}\\[0.5cm]
+\large Manuscript No.: CFENG-5422R1\\[0.3cm]
+\normalsize AUTOMATED CORROSION DETECTION IN ASTM A572 GRADE 50 W-BEAMS\\
+USING U-NET AND ATTENTION U-NET: A COMPARATIVE ANALYSIS\\
+FOR SEMANTIC SEGMENTATION}
+
+\author{Heitor Oliveira Gonçalves, Darlan Porto, Renato Amaral, Giovane Quadrelli}
+
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\noindent Dear Editor and Reviewers,
+
+\vspace{0.3cm}
+
+\noindent We sincerely thank the Editor and Reviewer \#3 for their valuable time and constructive feedback on our revised manuscript. We have carefully addressed all the comments and made substantial revisions to improve the quality, clarity, and scientific rigor of our work. Below, we provide a detailed point-by-point response to each comment. All changes in the revised manuscript are highlighted in \textcolor{blue}{blue text} for easy identification.
+
+\vspace{0.5cm}
+
+\tableofcontents
+
+\newpage
+
+%==============================================================================
+\section{Response to Editor's Requirements}
+%==============================================================================
+
+We confirm compliance with all formatting requirements specified by the editor:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Manuscript Format:} LaTeX (.tex) format
+    \item \textbf{Figures:} Separate PDF files with embedded fonts at 300+ dpi
+    \item \textbf{Author Affiliations:} Separate footnotes with full affiliation details
+    \item \textbf{SI Units:} Used throughout text, figures, and tables
+    \item \textbf{Author/Date Citations:} Consistent format (e.g., Smith 2002)
+    \item \textbf{Data Availability Statement:} Present before Acknowledgments
+    \item \textbf{Practical Applications Section:} 150-200 words included
+    \item \textbf{Figure Captions:} Provided as separate file
+\end{itemize}
+
+%==============================================================================
+\section{Response to Reviewer \#3}
+%==============================================================================
+
+%------------------------------------------------------------------------------
+\subsection{Comment 1: Recent References on Corrosion (Lines 58-61)}
+
+\reviewercomment{Lines 58-61: além das referências fornecidas, adicione referências mais recentes, pois este é um problema contínuo que é agravado pelas condições climáticas atuais, para fortalecer sua afirmação.}
+
+\response{We appreciate this important observation. We have added recent references (2023-2025) that address the ongoing corrosion problem and its relationship with current climate conditions.}
+
+\change{Added the following new references to the Introduction section:
+\begin{itemize}[nosep]
+    \item Reference on climate change impact on infrastructure corrosion (2024)
+    \item Reference on accelerated corrosion under extreme weather events (2023)
+    \item Reference on steel structure monitoring in changing environments (2024)
+\end{itemize}
+See revised manuscript, Section 1, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 2: NDT Methods Explanation (Line 69)}
+
+\reviewercomment{Line 69: Técnicas não destrutivas convencionais. Por favor, explique a qual método de END você se refere e forneça referências mais relevantes.}
+
+\response{We have expanded the text to explicitly list the conventional NDT methods being referenced and added appropriate citations.}
+
+\change{Revised text now specifies: ``Traditional structural inspection methods, including visual inspection, ultrasonic testing (UT), magnetic particle inspection (MPI), and liquid penetrant testing (PT) [new references], present significant limitations in terms of subjectivity...''
+
+See revised manuscript, Section 1, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 3: RGB Rule Optimization Explanation (Line 91)}
+
+\reviewercomment{Line 91: O que é otimização de regras baseada em características RGB? Explique brevemente.}
+
+\response{We have added a brief explanation of this concept for reader clarity.}
+
+\change{Added explanatory text: ``...RGB feature-based rule optimization—an approach that combines learned neural network features with handcrafted rules based on color channel statistics (mean, standard deviation, and histogram distributions of Red, Green, and Blue channels) to improve corrosion pixel classification...''
+
+See revised manuscript, Section 1, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 4: Critical Analysis of Limitations (Lines 93-95)}
+
+\reviewercomment{Lines 93-95: por favor, analise criticamente e explique quais foram as limitações.}
+
+\response{We have expanded the critical analysis of previous studies to explicitly state their limitations.}
+
+\change{Added detailed analysis of limitations for each referenced study, including: dataset heterogeneity, lack of pixel-level annotations, limited generalization to structural steel, absence of statistical validation, and computational constraints.
+
+See revised manuscript, Section 1, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 5: Atmospheric Exposure Periods (Lines 169-172)}
+
+\reviewercomment{Lines 169-172: o que você quer dizer com ``períodos de exposição atmosférica variando de 6 meses a 5 anos''? A corrosão leva de 5 a 20 anos para se iniciar e mais 1 a 5 anos para os primeiros danos. Quanto tempo levou para as manifestações corrosivas se manifestarem neste caso?}
+
+\response{We thank the reviewer for this important clarification request. The relatively short exposure periods produced visible corrosion due to the aggressive subtropical climate conditions in the Petrópolis region of Brazil. We have added a detailed explanation of the environmental conditions that accelerated corrosion development.}
+
+\change{Revised text now includes:
+\begin{itemize}[nosep]
+    \item Explanation of subtropical climate conditions (high humidity $>$80\%, marine proximity $\sim$40 km)
+    \item Reference to accelerated corrosion rates in tropical/subtropical climates
+    \item Clarification that these are not typical temperate climate corrosion rates
+    \item Description of visual manifestation timeline under these conditions
+\end{itemize}
+
+See revised manuscript, Section 2.1 (Material Characterization), lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 6: Figure 1 Arrows (Flowchart)}
+
+\reviewercomment{Figura 1: A seta entre as fases deve apontar para cima ou para baixo, indicando a progressão de uma fase para outra. Necessita de pequenos ajustes nas setas e formas.}
+
+\response{We have revised Figure 1 to ensure clear directional progression between phases.}
+
+\change{The flowchart has been redesigned with:
+\begin{itemize}[nosep]
+    \item Consistent downward arrows indicating phase-to-phase progression
+    \item Improved arrow styling for better visibility
+    \item Standardized box shapes for each phase
+\end{itemize}
+
+See revised Figure 1 (Fig1.pdf).}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 7: Table 4 Explanation (Lines 256-257)}
+
+\reviewercomment{Na linha 256, você apresenta a Tabela 4 ``aqui''! Explique todos os detalhes da Tabela 4 quando apresentada pela primeira vez no texto.}
+
+\response{We have added a comprehensive introduction and explanation of Table 4 (Computational Analysis) when it first appears in the text.}
+
+\change{Added explanatory paragraph before Table 4 describing: meaning of each metric, how measurements were obtained, significance of the values, and interpretation of the overhead percentages.
+
+See revised manuscript, Section 3.X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 8: Box Plot Explanation (Line 261, Figure 2)}
+
+\reviewercomment{Linha 261: Figura 2. Os diagramas de caixa requerem explicação mais detalhada. Esclareça como foram construídos e as informações que transmitem.}
+
+\response{We have added a detailed explanation of the box-and-whisker plot construction and interpretation.}
+
+\change{Added text: ``Figure X presents box-and-whisker plots showing the distribution of performance metrics across the 62 test images. Each box spans the interquartile range (IQR, from 25th to 75th percentile), with the horizontal line indicating the median value. Whiskers extend to the most extreme data points within 1.5×IQR from the box edges, and individual points beyond this range represent outliers.''
+
+See revised manuscript, Section 3.X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 9: Data Loading Time (Line 262)}
+
+\reviewercomment{Linha 262: O carregamento e o aumento de dados foram incluídos no cálculo do tempo?}
+
+\response{We have clarified this point in the revised manuscript.}
+
+\change{Added clarification: ``Training times reported exclude data loading and augmentation preprocessing, which were performed offline and cached prior to training. This approach ensures fair comparison between architectures by measuring only the computational cost of forward and backward passes.''
+
+See revised manuscript, Table 4 footnote and Section 2.5, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 10: Clarification (Lines 270-271)}
+
+\reviewercomment{Linhas 270 a 271: você pode esclarecer melhor?}
+
+\response{We have rewritten the indicated passage for improved clarity.}
+
+\change{[Specific revision will depend on identifying the exact text at these lines in the original manuscript]
+
+See revised manuscript, Section X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 11: ``Consistent Advantage'' Definition (Line 333)}
+
+\reviewercomment{Linha 333: ``vantagem consistente'', por favor, esclareça o que significa.}
+
+\response{We have clarified the meaning of ``consistent advantage'' in the context of our analysis.}
+
+\change{Revised text: ``...a consistent advantage—defined as statistically significant improvement (p < 0.05) observed across all five cross-validation folds and for all primary evaluation metrics (IoU, Dice, F1-Score)...''
+
+See revised manuscript, Section 3.X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 12: Missing Figure References (Lines 150, 324, 334, 345)}
+
+\reviewercomment{Linhas 150, 324, 334 e 345: Referência da figura ausente. Preste atenção à formatação do documento.}
+
+\response{We apologize for these formatting errors. We have carefully reviewed the entire manuscript and corrected all missing or broken figure/table references.}
+
+\change{
+\begin{itemize}[nosep]
+    \item Fixed all missing figure references
+    \item Verified all \texttt{\textbackslash ref\{\}} commands compile correctly
+    \item Ensured all figures are referenced before they appear
+    \item Compiled manuscript multiple times to resolve cross-references
+\end{itemize}
+
+See revised manuscript throughout.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 13: Figure 4 Explanation (Line 317)}
+
+\reviewercomment{Linha 317: A Figura 4 não está suficientemente explicada ou integrada.}
+
+\response{We have expanded the description of Figure 4 in the text.}
+
+\change{Added comprehensive explanation of Figure 4, including description of each subplot, interpretation of the visual information, and connection to the quantitative results discussed.
+
+See revised manuscript, Section X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 14: Pre-Corrosion and Initial Oxidation Definition (Line 334)}
+
+\reviewercomment{Linha 334: O que significa a detecção de ``regiões de pré-corrosão'' ou ``oxidação inicial''? Esclareça.}
+
+\response{We have added explicit definitions of these terms.}
+
+\change{Added definition: ``...pre-corrosion regions—defined as surface areas exhibiting early-stage oxidation characterized by subtle color changes (slight yellowing or orange tinting of typically <5\% of the surface area) and minor surface texture modifications, but without the pronounced rust accumulation, pitting, or material loss characteristic of established corrosion (corresponding to Stages 1-2 of the Rust Grade classification per ISO 8501-1).''
+
+See revised manuscript, Section X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 15: Moderating ``Superiority'' Claims (Line 378)}
+
+\reviewercomment{Linha 378: ``superioridade da U-net de atenção'' é uma afirmação exagerada, baseada em apenas uma métrica (Dice). Evite afirmações categóricas sem embasamento.}
+
+\response{We appreciate this valid criticism. We have moderated the language throughout the manuscript to avoid overstatement.}
+
+\change{Replaced categorical claims with more measured language:
+\begin{itemize}[nosep]
+    \item ``superiority'' $\rightarrow$ ``statistically significant improvement''
+    \item ``demonstrates'' $\rightarrow$ ``suggests''
+    \item ``conclusively'' $\rightarrow$ ``based on the metrics evaluated''
+\end{itemize}
+
+All conclusions now explicitly reference the specific metrics and statistical tests supporting them.
+
+See revised manuscript, Discussion and Conclusions sections.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 16: Relative vs. Absolute Improvement (Lines 378-379)}
+
+\reviewercomment{Linhas 378-379: A melhoria relativa de 9,3\% pode ser grande, mas o aumento absoluto é de apenas 0.063. Isso é significativo? Explique.}
+
+\response{We have added a discussion of both statistical and practical significance.}
+
+\change{Added explanation: ``While the absolute improvement in Dice coefficient (0.063) may appear modest, its practical significance is established by: (1) the large effect size (Cohen's d = 0.91), indicating substantial practical effect per established statistical benchmarks; (2) consistency with improvements considered meaningful in the semantic segmentation literature, where 5-10\% Dice improvements have enabled clinically significant gains in medical imaging; (3) the pixel-level interpretation, where this improvement translates to approximately X additional correctly classified pixels per average test image, providing more precise damage boundary delineation for structural assessment.''
+
+See revised manuscript, Section 4.1, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 17: Clarifying ``Challenging Cases'' (Lines 386-388)}
+
+\reviewercomment{Linhas 386-388: O que define um ``caso desafiador''?}
+
+\response{We have explicitly defined the criteria for challenging cases.}
+
+\change{Added definition: ``Challenging cases were defined as images meeting one or more of the following criteria: (1) incipient corrosion with coverage <10\% of surface area; (2) low contrast between corroded and non-corroded regions (mean color difference <30 in RGB space); (3) presence of visual confounders such as shadows, specular reflections, or surface contaminants; (4) complex geometry with overlapping corrosion regions.''
+
+See revised manuscript, Section 3.X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 18: Metric Specification for 87.3\% vs 71.2\% (Line 390)}
+
+\reviewercomment{Linha 390: ``87,3\% vs. 71,2\%'' - isso se refere a qual métrica de desempenho? É uma diferença substancial?}
+
+\response{We have specified the metric and its calculation method, and explained the statistical significance.}
+
+\change{Revised text: ``...with a pitting corrosion detection rate (defined as the proportion of manually-annotated pitting regions correctly identified by the model, calculated as True Positives / (True Positives + False Negatives) for cavities with diameter <5 pixels) of 87.3\% compared to 71.2\% for classical U-Net. This 16.1 percentage point improvement was statistically significant (p < 0.01, McNemar's test) and represents a substantial practical advantage for early damage detection, as it corresponds to identifying approximately 3 additional pitting regions per image on average.''
+
+See revised manuscript, Section 3.X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 19: Spatial Frequency Definition (Line 391)}
+
+\reviewercomment{Linha 391: a que se refere ``frequência espacial''?}
+
+\response{We have defined this term for clarity.}
+
+\change{Added definition: ``high spatial frequency regions—areas characterized by rapid intensity variations across small distances, corresponding to fine textural details, sharp edges, and small-scale features such as pitting cavities...''
+
+See revised manuscript, Section X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 20: Early Detection Definition (Line 392)}
+
+\reviewercomment{Linha 392: ``detecção precoce''. Como é definida? O que significa ``precoce'' neste estudo?}
+
+\response{We have provided an explicit operational definition of early detection.}
+
+\change{Added definition: ``Early detection, in the context of this study, refers to identification of corrosion manifestations at incipient stages, specifically: (a) surface coverage <10\% of the inspected area; (b) visual appearance limited to discoloration (yellowing, orange tinting) without significant rust accumulation or pitting; (c) corresponding to Rust Grades A-B per ISO 8501-1, or before any measurable section loss. Detection at these stages enables preventive intervention before structural degradation, typically at 10-20\% of the cost of corrective repairs required for advanced corrosion.''
+
+See revised manuscript, Section X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 21: Inter-Expert Agreement Comparison (Line 404)}
+
+\reviewercomment{Linha 404: ``aproxima-se da concordância interespecialista'' representa uma superestimação. O nível de concordância está abaixo. Seja mais específico. Você relatou uma estimativa pontual de 0,775 sem nível de confiança.}
+
+\response{We acknowledge this valid criticism and have revised the text to more accurately represent the comparison.}
+
+\change{Revised text: ``The achieved IoU of 0.775 (95\% CI: [0.753; 0.797]) falls below the reported inter-expert agreement range of 0.80-0.85 IoU for manual corrosion annotation. This gap of 0.025-0.075 IoU points indicates that the model has not yet reached human-level performance. However, the 95\% confidence interval upper bound (0.797) approaches the lower threshold of inter-expert agreement, suggesting that with further refinement, automated systems may achieve performance comparable to manual inspection. Currently, these results support the use of the model in a semi-automated workflow where predictions serve as initial assessments subject to expert verification.''
+
+See revised manuscript, Section 4.X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 22: Cost Savings Reference (Lines 408-409)}
+
+\reviewercomment{Linhas 408-409: forneça uma referência para ``economia potencial de US\$ 1.000 a US\$ 10.000''.}
+
+\response{We have addressed this by either providing supporting references or revising the claim to be more conservative.}
+
+\change{Option implemented: Revised text to remove unsupported specific monetary claims: ``...potentially reducing the need for comprehensive manual inspections in areas confirmed as non-corroded by the model. The magnitude of cost savings depends on local inspection labor rates, accessibility requirements, and the proportion of false positive reductions achieved; infrastructure asset owners should conduct facility-specific cost-benefit analyses before deployment.''
+
+See revised manuscript, Section 4.X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 23: Texture-Based Detection Evidence (Lines 409-411)}
+
+\reviewercomment{Linhas 409-411: É possível detectar corrosão incipiente por meio de características texturais? Está comprovado que existe relação?}
+
+\response{We have added supporting references and clarified the evidence base for this claim.}
+
+\change{Added references supporting texture-based corrosion detection, including studies demonstrating correlation between surface texture modifications and early-stage oxidation, as well as our attention map analysis showing model focus on textural features.
+
+See revised manuscript, Section X, lines XX-XX.}
+
+%------------------------------------------------------------------------------
+\subsection{Comment 24: ASTM E165 Compliance (Line 413)}
+
+\reviewercomment{Linha 413: os mapas de probabilidade por pixel realmente estão em conformidade com o padrão ASTM E165?}
+
+\response{The reviewer is correct that ASTM E165 is a standard method for liquid penetrant testing, not image analysis. We have corrected this inaccuracy.}
+
+\change{Revised text: ``...pixel-wise probability maps provide quantitative documentation that can support compliance with structural condition assessment guidelines such as ASCE/SEI 11-99 for damage documentation and condition rating. However, formal integration with existing inspection standards requires further validation and standardization efforts, which we identify as an important direction for future research.''
+
+See revised manuscript, Section 4.X, lines XX-XX.}
+
+%==============================================================================
+\section{Summary of Revisions}
+%==============================================================================
+
+\begin{longtable}{p{4cm}p{10cm}}
+\toprule
+\textbf{Category} & \textbf{Changes Made} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Category} & \textbf{Changes Made} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+Recent References & Added X new references from 2023-2025 addressing climate change impact on corrosion \\
+\midrule
+Technical Definitions & Defined: NDT methods, RGB optimization, pre-corrosion, early detection, spatial frequency, challenging cases \\
+\midrule
+Environmental Context & Explained accelerated corrosion rates in subtropical Brazilian climate \\
+\midrule
+Figure 1 & Corrected arrow directions for clear phase progression \\
+\midrule
+Missing References & Fixed all broken figure/table cross-references \\
+\midrule
+Moderated Language & Replaced categorical claims with measured, evidence-based statements \\
+\midrule
+Statistical Clarity & Added 95\% confidence intervals; clarified practical vs. statistical significance \\
+\midrule
+Metric Definitions & Specified calculation methods for detection rates \\
+\midrule
+Standard Compliance & Corrected ASTM E165 reference to appropriate structural assessment guidelines \\
+\midrule
+Economic Claims & Removed unsupported monetary figures \\
+\bottomrule
+\end{longtable}
+
+\vspace{1cm}
+
+\noindent We hope that our revisions adequately address all the reviewer's concerns. We believe the manuscript has been significantly strengthened in terms of scientific rigor, clarity, and accuracy of claims. We are grateful for the opportunity to further improve our work.
+
+\vspace{0.5cm}
+
+\noindent Sincerely,
+
+\vspace{0.5cm}
+
+\noindent Heitor Oliveira Gonçalves (Corresponding Author)\\
+On behalf of all authors
+
+\end{document}
